@@ -1,0 +1,74 @@
+{
+  "video": "\\\\seascifsinprl00\\amcg98\\github\\humanoid-internship-challenge\\videos\\test_001.MOV",
+  "calibration": "\\\\seascifsinprl00\\amcg98\\github\\humanoid-internship-challenge\\results\\camera_calibration_portrait\\calibration.json",
+  "opencv_version": "5.0.0",
+  "family": "25h9",
+  "tag_sizes_m": {
+    "0": 0.1,
+    "1": 0.1
+  },
+  "reference_id": 0,
+  "moving_id": 1,
+  "frames_processed": 570,
+  "frames_tracked": 396,
+  "tracked_fraction": 0.6947368421052632,
+  "detections_by_id": {
+    "0": 490,
+    "1": 426
+  },
+  "pose_rejections_by_id": {
+    "0": 0,
+    "1": 9
+  },
+  "video_size": [
+    1080,
+    1920
+  ],
+  "fps": 29.978962131837307,
+  "orientation_metadata_degrees": 90.0,
+  "timestamp_source": "decoder CAP_PROP_POS_MSEC",
+  "calibration_fit": "center-crop",
+  "effective_camera_matrix": [
+    [
+      1478.695775693422,
+      0.0,
+      534.6533308165357
+    ],
+    [
+      0.0,
+      1478.518435579084,
+      943.57713777567
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "distortion_coefficients": [
+    0.14445221218774465,
+    -0.6176850089157994,
+    -0.004645152629005706,
+    -0.0018028728675994522,
+    0.9130748342378547
+  ],
+  "max_reprojection_error_px": 3.0,
+  "coordinate_frame": "ID0 centre; x from corner0 to corner1; y from corner3 to corner0; z=x cross y (out of printed face). OpenCV decoded corner convention.",
+  "relative_transform": "T_ID0_ID1 = inverse(T_camera_ID0) @ T_camera_ID1",
+  "limitations": [
+    "Still-photo intrinsics with assumed video crop; metric positions are provisional.",
+    "Planar pose ambiguity can cause flips; ambiguity gaps are logged (small gap means weakly distinguished poses).",
+    "Missing/rejected frames are blank, without interpolation or stale reference reuse.",
+    "No temporal filtering is applied; moving paper should be kept flat."
+  ],
+  "position_min_m": [
+    0.04958348732220444,
+    -0.26835718626612015,
+    0.08667242310694727
+  ],
+  "position_max_m": [
+    0.28245167050863346,
+    0.16453075639405113,
+    0.42771810075174066
+  ]
+}

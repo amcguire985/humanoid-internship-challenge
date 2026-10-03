@@ -1,0 +1,263 @@
+"""Track ID1 relative to ID0; poses map marker coordinates into camera coordinates."""
+import argparse
+import csv
+import json
+from pathlib import Path
+
+import cv2
+import numpy as np
+
+
+def fit_intrinsics(matrix, source_size, target_size, mode):
+    """Adjust pixel coordinates assuming a resize or a centred crop then resize."""
+    sw, sh = source_size
+    tw, th = target_size
+    k = np.array(matrix, dtype=float, copy=True)
+    if mode == "strict":
+        if (sw, sh) != (tw, th):
+            raise ValueError("Video resolution differs from calibration; select a fit model explicitly")
+        return k
+    if mode == "resize":
+        sx, sy, ox, oy = tw / sw, th / sh, 0, 0
+    else:
+        sx = sy = max(tw / sw, th / sh)
+        ox, oy = (sw * sx - tw) / 2, (sh * sy - th) / 2
+    k[0, :] *= sx
+    k[1, :] *= sy
+    k[0, 2] -= ox
+    k[1, 2] -= oy
+    return k
+
+
+def marker_points(side):
+    # IPPE_SQUARE order. Axes follow the decoded OpenCV marker corner convention.
+    h = side / 2
+    return np.array([[-h, h, 0], [h, h, 0], [h, -h, 0], [-h, -h, 0]], dtype=np.float64)
+
+
+def estimate_pose(corners, side, matrix, distortion):
+    obj = marker_points(side)
+    image = np.asarray(corners, dtype=np.float64).reshape(4, 2)
+    count, rotations, translations, _ = cv2.solvePnPGeneric(
+        obj, image, matrix, distortion, flags=cv2.SOLVEPNP_IPPE_SQUARE)
+    candidates = []
+    if not count:
+        return None
+    for r, t in zip(rotations, translations):
+        rotation = cv2.Rodrigues(r)[0]
+        if np.any((rotation @ obj.T + t.reshape(3, 1))[2] <= 0):
+            continue
+        projected = cv2.projectPoints(obj, r, t, matrix, distortion)[0].reshape(4, 2)
+        error = float(np.sqrt(np.mean(np.sum((projected - image) ** 2, axis=1))))
+        transform = np.eye(4)
+        transform[:3, :3] = rotation
+        transform[:3, 3] = t.ravel()
+        candidates.append((error, transform, r, t))
+    if not candidates:
+        return None
+    candidates.sort(key=lambda item: item[0])
+    best = candidates[0]
+    gap = candidates[1][0] - best[0] if len(candidates) > 1 else None
+    return {"error": best[0], "transform": best[1], "rvec": best[2],
+            "tvec": best[3], "ambiguity_gap": gap}
+
+
+def relative_transform(reference, moving):
+    result = np.eye(4)
+    result[:3, :3] = reference[:3, :3].T @ moving[:3, :3]
+    result[:3, 3] = reference[:3, :3].T @ (moving[:3, 3] - reference[:3, 3])
+    return result
+
+
+def plot_trajectory(rows, output):
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    xyz = np.array([[r.get(f"{axis}_m", np.nan) for axis in "xyz"] for r in rows]) * 100
+    valid = np.isfinite(xyz).all(axis=1)
+    fig = plt.figure(figsize=(9, 8))
+    space = fig.add_subplot(111, projection="3d")
+    space.plot(*(xyz[:, i] for i in range(3)), linewidth=1.2, label="ID1 trajectory")
+    space.scatter(0, 0, 0, color="black", marker="*", s=150, label="ID0 (origin)")
+    if valid.any():
+        first, last = np.flatnonzero(valid)[[0, -1]]
+        space.scatter(*xyz[first], color="green", s=45, label="Start")
+        space.scatter(*xyz[last], color="red", s=45, label="End")
+    # Include ID0 and use the same physical scale on all three axes.
+    extent = np.vstack((np.zeros((1, 3)), xyz[valid]))
+    low, high = extent.min(axis=0), extent.max(axis=0)
+    centre = (low + high) / 2
+    radius = max(float(np.max(high - low)) * 0.55, 1.0)
+    space.set_xlim(centre[0] - radius, centre[0] + radius)
+    space.set_ylim(centre[1] - radius, centre[1] + radius)
+    space.set_zlim(centre[2] - radius, centre[2] + radius)
+    space.set_box_aspect((1, 1, 1))
+    space.set(xlabel="x (cm)", ylabel="y (cm)", zlabel="z (cm)",
+              title="ID1 relative to ID0\nProvisional still-photo calibration")
+    space.legend()
+    fig.tight_layout()
+    fig.savefig(output / "trajectory.png", dpi=180)
+    plt.close(fig)
+
+
+
+def main():
+    root = Path(__file__).resolve().parents[1]
+    p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument("--video", type=Path, default=root / "videos/test_001.MOV")
+    p.add_argument("--calibration", type=Path, default=root / "results/camera_calibration_portrait/calibration.json")
+    p.add_argument("--tag-size", type=float, default=0.10, help="Outer black-square side in metres")
+    p.add_argument("--reference-size", type=float, help="Override ID0 side in metres")
+    p.add_argument("--moving-size", type=float, help="Override ID1 side in metres")
+    p.add_argument("--reference-id", type=int, default=0)
+    p.add_argument("--moving-id", type=int, default=1)
+    p.add_argument("--family", choices=["16h5", "25h9", "36h10", "36h11"], default="25h9")
+    p.add_argument("--calibration-fit", choices=["center-crop", "resize", "strict"], default="center-crop")
+    p.add_argument("--max-reprojection-error", type=float, default=3.0, help="Pose acceptance threshold in pixels")
+    p.add_argument("--output", type=Path, default=root / "results/test_001_tracking")
+    p.add_argument("--no-video", action="store_true")
+    a = p.parse_args()
+    sizes = {a.reference_id: a.reference_size if a.reference_size is not None else a.tag_size,
+             a.moving_id: a.moving_size if a.moving_size is not None else a.tag_size}
+    if min(sizes.values()) <= 0 or a.max_reprojection_error <= 0 or a.reference_id == a.moving_id:
+        p.error("Sizes/error limit must be positive and IDs must differ")
+    calibration = json.loads(a.calibration.read_text(encoding="utf-8-sig"))
+    cap = cv2.VideoCapture(str(a.video))
+    if not cap.isOpened():
+        raise RuntimeError(f"Cannot open {a.video}")
+    cap.set(cv2.CAP_PROP_ORIENTATION_AUTO, 1)
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    if not np.isfinite(fps) or fps <= 0:
+        cap.release()
+        raise RuntimeError("Video has no usable frame rate")
+    rotation_meta = cap.get(cv2.CAP_PROP_ORIENTATION_META)
+    ok, frame = cap.read()
+    if not ok:
+        cap.release()
+        raise RuntimeError("Video contains no readable frames")
+    height, width = frame.shape[:2]
+    source = calibration["image_size"]
+    if (source[0] > source[1]) != (width > height):
+        cap.release()
+        raise ValueError("Calibration and decoded video orientations differ; choose matching calibration")
+    matrix = fit_intrinsics(calibration["camera_matrix"], source, (width, height), a.calibration_fit)
+    distortion = np.array(calibration["distortion_coefficients"], dtype=float)
+    params = cv2.aruco.DetectorParameters()
+    params.cornerRefinementMethod = cv2.aruco.CORNER_REFINE_SUBPIX
+    detector = cv2.aruco.ArucoDetector(
+        cv2.aruco.getPredefinedDictionary(getattr(cv2.aruco, "DICT_APRILTAG_" + a.family)), params)
+    a.output.mkdir(parents=True, exist_ok=True)
+    writer = None
+    if not a.no_video:
+        writer = cv2.VideoWriter(str(a.output / "annotated.mp4"), cv2.VideoWriter_fourcc(*"mp4v"), fps, (width, height))
+        if not writer.isOpened():
+            cap.release()
+            raise RuntimeError("Could not open MP4 writer; use --no-video")
+    rows, index, detections, rejected = [], 0, {key: 0 for key in sizes}, {key: 0 for key in sizes}
+    fields = ["frame", "time_s", "status", "reference_detected", "moving_detected",
+              "reference_error_px", "moving_error_px", "reference_ambiguity_gap_px",
+              "moving_ambiguity_gap_px", "x_m", "y_m", "z_m", "distance_m",
+              "relative_rx_rad", "relative_ry_rad", "relative_rz_rad"]
+    snapshot_saved = False
+    try:
+        while ok:
+            if frame.shape[:2] != (height, width):
+                raise RuntimeError("Video dimensions changed during decoding")
+            # Decoder presentation timestamps preserve variable frame timing.
+            time_s = cap.get(cv2.CAP_PROP_POS_MSEC) / 1000
+            row = {"frame": index, "time_s": time_s, "status": "missing_tag"}
+            corners, ids, _ = detector.detectMarkers(cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY))
+            poses = {}
+            found = set() if ids is None else set(int(i) for i in ids.ravel())
+            row["reference_detected"] = int(a.reference_id in found)
+            row["moving_detected"] = int(a.moving_id in found)
+            if ids is not None:
+                cv2.aruco.drawDetectedMarkers(frame, corners, ids)
+                for tag_id, side in sizes.items():
+                    locations = np.flatnonzero(ids.ravel() == tag_id)
+                    if not len(locations):
+                        continue
+                    detections[tag_id] += 1
+                    if len(locations) != 1:
+                        row["status"] = "duplicate_id"
+                        continue
+                    pose = estimate_pose(corners[locations[0]], side, matrix, distortion)
+                    label = "reference" if tag_id == a.reference_id else "moving"
+                    if pose is None:
+                        rejected[tag_id] += 1
+                        row["status"] = "invalid_pose"
+                        continue
+                    row[label + "_error_px"] = pose["error"]
+                    row[label + "_ambiguity_gap_px"] = pose["ambiguity_gap"]
+                    if pose["error"] > a.max_reprojection_error:
+                        rejected[tag_id] += 1
+                        row["status"] = "high_reprojection_error"
+                        continue
+                    poses[tag_id] = pose
+                    cv2.drawFrameAxes(frame, matrix, distortion, pose["rvec"], pose["tvec"], side * 0.6)
+            if all(tag_id in poses for tag_id in sizes):
+                relative = relative_transform(poses[a.reference_id]["transform"], poses[a.moving_id]["transform"])
+                xyz = relative[:3, 3]
+                rotation = cv2.Rodrigues(relative[:3, :3])[0].ravel()
+                row.update(status="tracked", x_m=float(xyz[0]), y_m=float(xyz[1]), z_m=float(xyz[2]),
+                           distance_m=float(np.linalg.norm(xyz)),
+                           relative_rx_rad=float(rotation[0]), relative_ry_rad=float(rotation[1]),
+                           relative_rz_rad=float(rotation[2]))
+                text = "ID1 in ID0: x={:+.1f} y={:+.1f} z={:+.1f} cm".format(*(xyz * 100))
+            else:
+                text = "Relative pose unavailable: " + row["status"]
+            cv2.rectangle(frame, (0, 0), (width, 95), (20, 20, 20), -1)
+            cv2.putText(frame, text, (15, 35), cv2.FONT_HERSHEY_SIMPLEX, 0.65, (255, 255, 255), 2)
+            cv2.putText(frame, f"{time_s:.2f}s | provisional calibration | tag size configurable",
+                        (15, 72), cv2.FONT_HERSHEY_SIMPLEX, 0.55, (180, 220, 255), 1)
+            if not snapshot_saved and row["status"] == "tracked":
+                cv2.imwrite(str(a.output / "preview.jpg"), frame)
+                snapshot_saved = True
+            if writer is not None:
+                writer.write(frame)
+            rows.append(row)
+            index += 1
+            if index % 100 == 0:
+                print(f"Processed {index} frames", flush=True)
+            ok, frame = cap.read()
+    finally:
+        cap.release()
+        if writer is not None:
+            writer.release()
+    with (a.output / "trajectory.csv").open("w", newline="", encoding="utf-8") as handle:
+        csv_writer = csv.DictWriter(handle, fieldnames=fields)
+        csv_writer.writeheader()
+        csv_writer.writerows(rows)
+    tracked = [r for r in rows if r["status"] == "tracked"]
+    summary = {
+        "video": str(a.video), "calibration": str(a.calibration), "opencv_version": cv2.__version__,
+        "family": a.family, "tag_sizes_m": sizes, "reference_id": a.reference_id,
+        "moving_id": a.moving_id, "frames_processed": len(rows), "frames_tracked": len(tracked),
+        "tracked_fraction": len(tracked) / len(rows), "detections_by_id": detections,
+        "pose_rejections_by_id": rejected, "video_size": [width, height], "fps": fps,
+        "orientation_metadata_degrees": rotation_meta, "timestamp_source": "decoder CAP_PROP_POS_MSEC",
+        "calibration_fit": a.calibration_fit, "effective_camera_matrix": matrix.tolist(),
+        "distortion_coefficients": distortion.tolist(), "max_reprojection_error_px": a.max_reprojection_error,
+        "coordinate_frame": "ID0 centre; x from corner0 to corner1; y from corner3 to corner0; z=x cross y (out of printed face). OpenCV decoded corner convention.",
+        "relative_transform": "T_ID0_ID1 = inverse(T_camera_ID0) @ T_camera_ID1",
+        "limitations": [
+            "Still-photo intrinsics with assumed video crop; metric positions are provisional.",
+            "Planar pose ambiguity can cause flips; ambiguity gaps are logged (small gap means weakly distinguished poses).",
+            "Missing/rejected frames are blank, without interpolation or stale reference reuse.",
+            "No temporal filtering is applied; moving paper should be kept flat.",
+        ],
+    }
+    if tracked:
+        xyz = np.array([[r[k] for k in ["x_m", "y_m", "z_m"]] for r in tracked])
+        summary["position_min_m"] = xyz.min(axis=0).tolist()
+        summary["position_max_m"] = xyz.max(axis=0).tolist()
+    (a.output / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
+    plot_trajectory(rows, a.output)
+    print(f"Tracked {len(tracked)}/{len(rows)} frames ({summary['tracked_fraction']:.1%}); saved to {a.output}")
+    if not tracked:
+        raise RuntimeError("No usable relative poses; inspect detections and tag family")
+
+
+if __name__ == "__main__":
+    main()
+

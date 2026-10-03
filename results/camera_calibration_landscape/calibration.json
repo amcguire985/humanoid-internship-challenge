@@ -1,0 +1,174 @@
+{
+  "camera_matrix": [
+    [
+      1561.004987792776,
+      0.0,
+      1020.5983295379543
+    ],
+    [
+      0.0,
+      1560.4112879579745,
+      776.510539213483
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "distortion_coefficients": [
+    0.14116762611443548,
+    -0.581488041160407,
+    -0.00025193970627592095,
+    -0.0009098059794901401,
+    0.8416433923459204
+  ],
+  "distortion_order": [
+    "k1",
+    "k2",
+    "p1",
+    "p2",
+    "k3"
+  ],
+  "image_size": [
+    2048,
+    1536
+  ],
+  "image_orientation": "Stored pixels; EXIF orientation ignored",
+  "inner_corners": [
+    6,
+    9
+  ],
+  "square_size_m": 0.03,
+  "rms_reprojection_error_px": 0.9969984896241875,
+  "intrinsic_standard_deviations": [
+    5.073543608746675,
+    5.302638786262657,
+    3.930832654869366,
+    3.541276661033764,
+    0.016151088966953657,
+    0.10923816675845377,
+    0.0006457965318005797,
+    0.0009672068790843483,
+    0.2173794314258718,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "per_image": [
+    {
+      "image": "IMG_0039.JPEG",
+      "rms_reprojection_error_px": 1.1284898227046596,
+      "rotation_vector": [
+        -0.5508981411413184,
+        -0.6063719271704078,
+        -1.473371617372731
+      ],
+      "translation_m": [
+        -0.1049499976804839,
+        0.008187574149224462,
+        0.3126130641165697
+      ]
+    },
+    {
+      "image": "IMG_0040.JPEG",
+      "rms_reprojection_error_px": 1.3729115481072105,
+      "rotation_vector": [
+        0.26134945020773104,
+        0.4188628889304858,
+        -1.5238492079551758
+      ],
+      "translation_m": [
+        -0.10930789808250384,
+        0.09920551411131698,
+        0.3726988547145108
+      ]
+    },
+    {
+      "image": "IMG_0042.JPEG",
+      "rms_reprojection_error_px": 0.44475644116017354,
+      "rotation_vector": [
+        0.07621778523372859,
+        -0.09843469502488338,
+        1.5646170626492186
+      ],
+      "translation_m": [
+        0.09914480025116587,
+        -0.11740863936501689,
+        0.6492282786706143
+      ]
+    },
+    {
+      "image": "IMG_0043.JPEG",
+      "rms_reprojection_error_px": 0.3836711160428595,
+      "rotation_vector": [
+        0.06970077477748704,
+        -0.10521789135464425,
+        1.5590847892728097
+      ],
+      "translation_m": [
+        0.07476257930002903,
+        -0.11412007015759289,
+        0.8020424263400944
+      ]
+    },
+    {
+      "image": "IMG_0044.JPEG",
+      "rms_reprojection_error_px": 1.2110502571947157,
+      "rotation_vector": [
+        0.05705215590894274,
+        -0.017305233335149807,
+        1.5664469234469924
+      ],
+      "translation_m": [
+        0.11154674147104553,
+        -0.08254973280982927,
+        0.2582267668106624
+      ]
+    }
+  ],
+  "skipped_images": [
+    {
+      "image": "IMG_0031.JPEG",
+      "reason": "Other image orientation"
+    },
+    {
+      "image": "IMG_0032.JPEG",
+      "reason": "Other image orientation"
+    },
+    {
+      "image": "IMG_0033.JPEG",
+      "reason": "Other image orientation"
+    },
+    {
+      "image": "IMG_0034.JPEG",
+      "reason": "Other image orientation"
+    },
+    {
+      "image": "IMG_0035.JPEG",
+      "reason": "Other image orientation"
+    },
+    {
+      "image": "IMG_0036.JPEG",
+      "reason": "Other image orientation"
+    },
+    {
+      "image": "IMG_0037.JPEG",
+      "reason": "Other image orientation"
+    },
+    {
+      "image": "IMG_0038.JPEG",
+      "reason": "Other image orientation"
+    },
+    {
+      "image": "IMG_0041.JPEG",
+      "reason": "Board not detected"
+    }
+  ]
+}
