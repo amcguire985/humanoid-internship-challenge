@@ -539,3 +539,12 @@ The small functions in `describe_object_trajectory.py` are:
 - `compute_metrics`: calculate net displacement, lift, path, duration and endpoints.
 - `plot_results`: render input coordinates, relative 3D path and phase-marked speed.
 - `main`: connect the steps, expose tuning options, and export CSV/JSON.
+
+### LIBERO object-motion following test
+
+Run `python scripts/replay_libero_transport.py` in the LIBERO environment to
+follow the processed test_006 object motion in the exploration scene. Edit
+`config/libero_transport.json` for axis permutation, signs and scale. Results,
+per-step actions and tracking plots go to `results/libero_transport/`.
+See [experiment details](docs/LIBERO_TRAJECTORY.md) for source/frame conventions,
+controller scaling, gap handling and interpretation.

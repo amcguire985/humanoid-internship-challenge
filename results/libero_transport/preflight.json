@@ -1,0 +1,106 @@
+{
+  "source": "/home/student/robot_challenge/humanoid_internship_challenge/results/test_006_slower_raw/object/cube_center/gap_filled_10_frames/gentle_smoothing/savgol_7.csv",
+  "source_info": {
+    "source_rows": 1264,
+    "replayed_source_rows": 1022,
+    "source_stop_reason": "missing_source_position",
+    "columns": [
+      "frame",
+      "time_s",
+      "status",
+      "candidate_count",
+      "candidate_tag_ids",
+      "source_tag_id",
+      "source_instance",
+      "world_source_id",
+      "error_px",
+      "ambiguity_gap_px",
+      "max_candidate_disagreement_m",
+      "x_m",
+      "y_m",
+      "z_m",
+      "distance_m",
+      "source_status",
+      "pose_source",
+      "smoothing_method"
+    ],
+    "position_columns": [
+      "x_m",
+      "y_m",
+      "z_m"
+    ],
+    "units": "metres",
+    "time_units": "seconds",
+    "median_sample_rate_hz": 30.000000000000107,
+    "source_start_position": [
+      0.06119609554098575,
+      0.18356605488209846,
+      0.019600795790572393
+    ],
+    "source_start_time_s": 0.0,
+    "replayed_source_duration_s": 34.05833333333334,
+    "source_frame": "ID0: x corner0->corner1, y corner3->corner0, z outward from tag"
+  },
+  "mapping_matrix": [
+    [
+      0.5,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.5,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.5
+    ]
+  ],
+  "settings": {
+    "axis_permutation": [
+      0,
+      1,
+      2
+    ],
+    "axis_signs": [
+      1,
+      1,
+      1
+    ],
+    "scale_factors": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "time_scale": 2.0,
+    "action_clip": 0.5,
+    "gripper": -1.0,
+    "workspace_min": [
+      -0.6,
+      -0.6,
+      0.7
+    ],
+    "workspace_max": [
+      0.6,
+      0.6,
+      1.5
+    ],
+    "max_source_gap_s": 0.15,
+    "max_eef_speed_m_s": 0.1,
+    "settle_seconds": 1.0,
+    "mapping_description": "Robot XYZ = signs * scales * human_relative[axis_permutation]. Initial hypothesis: tag +Z is up; horizontal axes aligned by choice, not calibration."
+  },
+  "mapped_min_m": [
+    -0.007665597164820497,
+    -0.017439515230406183,
+    -0.005857492952417818
+  ],
+  "mapped_max_m": [
+    0.13375374304698245,
+    0.026112267441957077,
+    0.12263414616863208
+  ],
+  "simulation_executed": false
+}
