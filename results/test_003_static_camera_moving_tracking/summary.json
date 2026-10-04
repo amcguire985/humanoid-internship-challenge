@@ -1,0 +1,74 @@
+{
+  "video": "videos\\test_003_static_camera_moving.MOV",
+  "calibration": "\\\\seascifsinprl00\\amcg98\\github\\humanoid-internship-challenge\\results\\camera_calibration_portrait\\calibration.json",
+  "opencv_version": "5.0.0",
+  "family": "25h9",
+  "tag_sizes_m": {
+    "0": 0.078,
+    "1": 0.078
+  },
+  "reference_id": 0,
+  "moving_id": 1,
+  "frames_processed": 405,
+  "frames_tracked": 324,
+  "tracked_fraction": 0.8,
+  "detections_by_id": {
+    "0": 350,
+    "1": 351
+  },
+  "pose_rejections_by_id": {
+    "0": 2,
+    "1": 5
+  },
+  "video_size": [
+    1080,
+    1920
+  ],
+  "fps": 29.97779422649889,
+  "orientation_metadata_degrees": 90.0,
+  "timestamp_source": "decoder CAP_PROP_POS_MSEC",
+  "calibration_fit": "strict",
+  "effective_camera_matrix": [
+    [
+      1696.724014292068,
+      0.0,
+      540.2609226190232
+    ],
+    [
+      0.0,
+      1693.6894568044038,
+      960.7331939892553
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "distortion_coefficients": [
+    0.1819331723538089,
+    -1.1494253786699697,
+    0.00031417817167967826,
+    -0.0028344316406435782,
+    2.546448210446669
+  ],
+  "max_reprojection_error_px": 3.0,
+  "coordinate_frame": "ID0 centre; x from corner0 to corner1; y from corner3 to corner0; z=x cross y (out of printed face). OpenCV decoded corner convention.",
+  "relative_transform": "T_ID0_ID1 = inverse(T_camera_ID0) @ T_camera_ID1",
+  "limitations": [
+    "Metric accuracy depends on matching the calibrated recording mode and measured tag sizes.",
+    "Planar pose ambiguity can cause flips; ambiguity gaps are logged (small gap means weakly distinguished poses).",
+    "Missing/rejected frames are blank, without interpolation or stale reference reuse.",
+    "No temporal filtering is applied; moving paper should be kept flat."
+  ],
+  "position_min_m": [
+    -0.2958281050880961,
+    -0.016911789623694978,
+    -0.08512487818191121
+  ],
+  "position_max_m": [
+    -0.2678155393221657,
+    0.011611290102217972,
+    0.06681630763596207
+  ]
+}

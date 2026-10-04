@@ -1,0 +1,47 @@
+{
+  "source": "results\\test_006_slower_raw\\object\\cube_center\\trajectory.csv",
+  "frames": 1264,
+  "max_missing_frames": 10,
+  "max_endpoint_span_s": null,
+  "smoothing": false,
+  "outlier_rejection": false,
+  "observed_frames": 1240,
+  "interpolated_frames": 6,
+  "remaining_missing_frames": 18,
+  "available_frames": 1246,
+  "gaps": [
+    {
+      "first_missing_index": 1022,
+      "last_missing_index": 1039,
+      "missing_frames": 18,
+      "endpoint_span_s": 0.6333333333333329,
+      "filled": false
+    },
+    {
+      "first_missing_index": 1119,
+      "last_missing_index": 1122,
+      "missing_frames": 4,
+      "endpoint_span_s": 0.1666666666666643,
+      "filled": true
+    },
+    {
+      "first_missing_index": 1126,
+      "last_missing_index": 1126,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666666288,
+      "filled": true
+    },
+    {
+      "first_missing_index": 1132,
+      "last_missing_index": 1132,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666666998,
+      "filled": true
+    }
+  ],
+  "notes": [
+    "Linear position interpolation uses decoder timestamps and future observations.",
+    "Leading/trailing gaps and bounded gaps longer than the limit remain blank.",
+    "Original observations and source provenance are preserved; no orientation is invented."
+  ]
+}

@@ -1,0 +1,161 @@
+{
+  "source": "results\\test_001_static_tracking\\trajectory.csv",
+  "settings": {
+    "trajectory": "results\\test_001_static_tracking\\trajectory.csv",
+    "output": null,
+    "max_speed": 2.0,
+    "max_angular_speed": 720.0,
+    "max_gap_frames": 3,
+    "max_gap_span": 0.15,
+    "window": 7,
+    "order": 2,
+    "butterworth_hz": 3.0,
+    "stationary": [
+      [
+        0.0,
+        100.0
+      ]
+    ]
+  },
+  "rejected_frames": 0,
+  "interpolated_frames": 0,
+  "interpolated_gaps": [],
+  "unfilled_gaps": [],
+  "filter_passthrough_notes": {
+    "savgol": [],
+    "butterworth": []
+  },
+  "metric_notes": [
+    "Stationary jitter uses explicit intervals and common accepted raw samples, including any hand-inferred poses.",
+    "Path length and velocity exclude gaps. Compare common-edge path length to avoid changes in coverage.",
+    "Maximum deviation includes rejected raw spikes; accepted_raw reports deviation excluding them.",
+    "Isolated spike rejection does not detect sustained bad poses. Inferred object poses are not measurements."
+  ],
+  "variants": {
+    "raw": {
+      "available_frames": 169,
+      "path_edges": 168,
+      "path_length_m": 0.16366861701758237,
+      "common_edge_path_length_m": 0.16366861701758237,
+      "common_edges": 168,
+      "peak_velocity_m_s": 0.14817210250246043,
+      "stationary": [
+        {
+          "start_s": 0.0,
+          "end_s": 100.0,
+          "samples": 169,
+          "position_std_mm": [
+            0.10277037594834307,
+            0.19004537534416488,
+            1.7989566381833377
+          ],
+          "orientation_rms_deg": 0.49120914972243024
+        }
+      ],
+      "max_deviation_all_raw_mm": 0.0,
+      "max_orientation_deviation_all_raw_deg": 0.0,
+      "max_deviation_accepted_raw_mm": 0.0,
+      "max_orientation_deviation_accepted_raw_deg": 0.0
+    },
+    "cleaned": {
+      "available_frames": 169,
+      "path_edges": 168,
+      "path_length_m": 0.16366861701758237,
+      "common_edge_path_length_m": 0.16366861701758237,
+      "common_edges": 168,
+      "peak_velocity_m_s": 0.14817210250246043,
+      "stationary": [
+        {
+          "start_s": 0.0,
+          "end_s": 100.0,
+          "samples": 169,
+          "position_std_mm": [
+            0.10277037594834307,
+            0.19004537534416488,
+            1.7989566381833377
+          ],
+          "orientation_rms_deg": 0.49120914972243024
+        }
+      ],
+      "max_deviation_all_raw_mm": 0.0,
+      "max_orientation_deviation_all_raw_deg": 0.0,
+      "max_deviation_accepted_raw_mm": 0.0,
+      "max_orientation_deviation_accepted_raw_deg": 0.0
+    },
+    "interpolated": {
+      "available_frames": 169,
+      "path_edges": 168,
+      "path_length_m": 0.16366861701758237,
+      "common_edge_path_length_m": 0.16366861701758237,
+      "common_edges": 168,
+      "peak_velocity_m_s": 0.14817210250246043,
+      "stationary": [
+        {
+          "start_s": 0.0,
+          "end_s": 100.0,
+          "samples": 169,
+          "position_std_mm": [
+            0.10277037594834307,
+            0.19004537534416488,
+            1.7989566381833377
+          ],
+          "orientation_rms_deg": 0.49120914972243024
+        }
+      ],
+      "max_deviation_all_raw_mm": 0.0,
+      "max_orientation_deviation_all_raw_deg": 0.0,
+      "max_deviation_accepted_raw_mm": 0.0,
+      "max_orientation_deviation_accepted_raw_deg": 0.0
+    },
+    "savgol": {
+      "available_frames": 169,
+      "path_edges": 168,
+      "path_length_m": 0.08163514578397876,
+      "common_edge_path_length_m": 0.08163514578397876,
+      "common_edges": 168,
+      "peak_velocity_m_s": 0.056275465216200304,
+      "stationary": [
+        {
+          "start_s": 0.0,
+          "end_s": 100.0,
+          "samples": 169,
+          "position_std_mm": [
+            0.08680561704239849,
+            0.15865359360163786,
+            1.6202216766362285
+          ],
+          "orientation_rms_deg": 0.42453964744367223
+        }
+      ],
+      "max_deviation_all_raw_mm": 3.2820341438603484,
+      "max_orientation_deviation_all_raw_deg": 0.728301033028615,
+      "max_deviation_accepted_raw_mm": 3.2820341438603484,
+      "max_orientation_deviation_accepted_raw_deg": 0.728301033028615
+    },
+    "butterworth": {
+      "available_frames": 169,
+      "path_edges": 168,
+      "path_length_m": 0.039694438084048156,
+      "common_edge_path_length_m": 0.039694438084048156,
+      "common_edges": 168,
+      "peak_velocity_m_s": 0.024503471408339913,
+      "stationary": [
+        {
+          "start_s": 0.0,
+          "end_s": 100.0,
+          "samples": 169,
+          "position_std_mm": [
+            0.07738061175427438,
+            0.14156428150288208,
+            1.4949836307700342
+          ],
+          "orientation_rms_deg": 0.39201259659925963
+        }
+      ],
+      "max_deviation_all_raw_mm": 3.396383374059113,
+      "max_orientation_deviation_all_raw_deg": 0.6903336370440964,
+      "max_deviation_accepted_raw_mm": 3.396383374059113,
+      "max_orientation_deviation_accepted_raw_deg": 0.6903336370440964
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "source": "results\\test_006_slower_raw\\object\\cube_center\\gap_filled_10_frames\\interpolated.csv",
+  "frames": 1264,
+  "available_frames": 1246,
+  "additional_gap_filling": false,
+  "outlier_rejection": false,
+  "max_adjacent_span_s": 0.15,
+  "notes": [
+    "Position-only smoothing; provenance labels retained.",
+    "Filters reset at unfilled gaps and timestamp jumps above 0.15 seconds.",
+    "Quadratic local fits use actual timestamps; short segments pass through.",
+    "SG uses future samples; EMA is causal but its input gap filling uses future samples.",
+    "Displacement from input measures filter changes, not physical accuracy."
+  ],
+  "variants": {
+    "savgol_5": {
+      "method": "savgol",
+      "strength": 5,
+      "rms_change_mm": 3.0096871216386756,
+      "max_change_mm": 26.367300234628612,
+      "observed_rms_change_mm": 3.0168065287730434
+    },
+    "savgol_7": {
+      "method": "savgol",
+      "strength": 7,
+      "rms_change_mm": 3.790873780606014,
+      "max_change_mm": 36.539218937980834,
+      "observed_rms_change_mm": 3.79979680970064
+    },
+    "ema_0.03s": {
+      "method": "ema",
+      "strength": 0.03,
+      "rms_change_mm": 2.122430695304911,
+      "max_change_mm": 16.643240077242805,
+      "observed_rms_change_mm": 2.116247218641745
+    },
+    "ema_0.05s": {
+      "method": "ema",
+      "strength": 0.05,
+      "rms_change_mm": 3.5552909549529237,
+      "max_change_mm": 26.362358706246237,
+      "observed_rms_change_mm": 3.535427855303702
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "source": "results\\test_006_slower_raw\\hand\\hand_center\\trajectory.csv",
+  "frames": 1264,
+  "observed_frames": 626,
+  "interpolated_frames": 97,
+  "remaining_missing_frames": 541,
+  "processed_pose_fraction": 0.571993670886076,
+  "settings": {
+    "max_missing_frames": 10,
+    "max_endpoint_span_s": 0.4,
+    "smoothing": false
+  },
+  "notes": [
+    "Offline linear position interpolation uses bounding future observations.",
+    "Observed positions are unchanged. Leading, trailing and over-limit gaps remain blank.",
+    "No orientation is available in centre trajectories."
+  ]
+}

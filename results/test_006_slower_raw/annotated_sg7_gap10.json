@@ -1,0 +1,30 @@
+{
+  "output": "results\\test_006_slower_raw\\annotated_sg7_gap10.mp4",
+  "frames": 1264,
+  "fps": 29.979,
+  "video_size": [
+    1080,
+    1920
+  ],
+  "counts": {
+    "Hand": {
+      "observed": 626,
+      "interpolated": 97,
+      "missing": 541,
+      "projected": 723
+    },
+    "Cube": {
+      "observed": 1240,
+      "interpolated": 6,
+      "missing": 18,
+      "projected": 1246
+    }
+  },
+  "smoothing": "SG7 quadratic",
+  "gap_fill_max_frames": 10,
+  "notes": [
+    "Raw detected tag outlines/axes retained; centre crosses and trails use smoothed world positions.",
+    "Circles are thin for interpolated samples; missing centres are not drawn.",
+    "Camera pose comes from current stationary tag detections; trails are reprojected with current camera pose."
+  ]
+}

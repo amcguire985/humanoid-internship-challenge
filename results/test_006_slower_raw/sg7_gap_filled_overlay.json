@@ -1,0 +1,26 @@
+{
+  "video": "\\\\seascifsinprl00\\amcg98\\github\\humanoid-internship-challenge\\videos\\test_006_slower.MOV",
+  "output": "results\\test_006_slower_raw\\sg7_gap_filled_annotated.mp4",
+  "frames": 1264,
+  "fps": 29.978654439086093,
+  "frame_size": [
+    1080,
+    1920
+  ],
+  "smoothing": "savgol_7",
+  "max_gap_frames": 10,
+  "counts": {
+    "Hand": {
+      "observed": 626,
+      "interpolated": 97,
+      "missing": 541
+    },
+    "Cube": {
+      "observed": 1240,
+      "interpolated": 6,
+      "missing": 18
+    }
+  },
+  "projection": "Current-frame stationary-tag camera pose; historical world centres reprojected into current camera.",
+  "audio": false
+}

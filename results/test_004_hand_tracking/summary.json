@@ -1,0 +1,91 @@
+{
+  "video": "videos\\test_004_hand.MOV",
+  "calibration": "\\\\seascifsinprl00\\amcg98\\github\\humanoid-internship-challenge\\results\\camera_calibration_portrait\\calibration.json",
+  "opencv_version": "5.0.0",
+  "family": "Standard41h12",
+  "tag_sizes_m": {
+    "0": 0.03333333333333333,
+    "1": 0.03333333333333333,
+    "2": 0.03333333333333333
+  },
+  "input_tag_sizes_m": {
+    "0": 0.06,
+    "1": 0.06,
+    "2": 0.06
+  },
+  "tag_size_convention": "full-pattern",
+  "reference_id": 0,
+  "moving_id": 1,
+  "frames_processed": 568,
+  "frames_tracked": 448,
+  "tracked_fraction": 0.7887323943661971,
+  "detections_by_id": {
+    "0": 500,
+    "1": 497,
+    "2": 193
+  },
+  "pose_rejections_by_id": {
+    "0": 0,
+    "1": 0,
+    "2": 0
+  },
+  "video_size": [
+    1080,
+    1920
+  ],
+  "fps": 29.978888106966924,
+  "orientation_metadata_degrees": 90.0,
+  "timestamp_source": "decoder CAP_PROP_POS_MSEC",
+  "calibration_fit": "strict",
+  "effective_camera_matrix": [
+    [
+      1696.724014292068,
+      0.0,
+      540.2609226190232
+    ],
+    [
+      0.0,
+      1693.6894568044038,
+      960.7331939892553
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "distortion_coefficients": [
+    0.1819331723538089,
+    -1.1494253786699697,
+    0.00031417817167967826,
+    -0.0028344316406435782,
+    2.546448210446669
+  ],
+  "max_reprojection_error_px": 3.0,
+  "coordinate_frame": "ID0 centre; x from corner0 to corner1; y from corner3 to corner0; z=x cross y (out of printed face). OpenCV decoded corner convention.",
+  "relative_transform": "T_ID0_ID1 = inverse(T_camera_ID0) @ T_camera_ID1",
+  "limitations": [
+    "Metric accuracy depends on matching the calibrated recording mode and measured tag sizes.",
+    "Planar pose ambiguity can cause flips; ambiguity gaps are logged (small gap means weakly distinguished poses).",
+    "Missing/rejected frames are blank, without interpolation or stale reference reuse.",
+    "No temporal filtering is applied; moving paper should be kept flat."
+  ],
+  "object_id": 2,
+  "object_status_counts": {
+    "inferred_hand": 272,
+    "missing_object": 45,
+    "missing_world": 68,
+    "tracked": 183
+  },
+  "object_occlusion_assumption": "Absent ID2 is assumed rigidly attached to ID1 using the last simultaneous accepted hand/object observation. Requires current world and hand poses. Direct object observations take priority.",
+  "position_min_m": [
+    -0.21968877477502774,
+    -0.10430197288324224,
+    0.10249081556420704
+  ],
+  "position_max_m": [
+    0.08120550132218687,
+    0.231519518246042,
+    0.5254910587924526
+  ]
+}

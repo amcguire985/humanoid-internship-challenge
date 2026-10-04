@@ -1,0 +1,109 @@
+{
+  "source": "results\\test_004_hand_tracking\\trajectory.csv",
+  "settings": {
+    "tau_seconds": [
+      0.05
+    ],
+    "max_missing_frames": 3,
+    "max_endpoint_span_s": 0.15,
+    "known_distance_m": null
+  },
+  "frames": 568,
+  "raw_pose_fraction": 0.7887323943661971,
+  "inferred_hand_frames": 0,
+  "interpolated_frames": 2,
+  "processed_pose_fraction": 0.7922535211267606,
+  "notes": [
+    "Offline interpolation uses future observations.",
+    "Jitter metrics use original observed timestamps and assume static relative pose.",
+    "Smoothness uses adjacent available poses, including interpolation; it is not accuracy."
+  ],
+  "variants": {
+    "raw": {
+      "available_frames": 448,
+      "observed_frames_scored": 448,
+      "position_std_mm": [
+        88.24940986267863,
+        99.90034239748542,
+        117.6986789552431
+      ],
+      "mean_position_m": [
+        -0.09650835325965297,
+        0.07697476422595065,
+        0.24780897879091338
+      ],
+      "orientation_rms_deg": 18.08966785296916,
+      "rms_speed_m_s": 2.256444382908647,
+      "rms_angular_speed_deg_s": 369.3161849210234,
+      "rms_acceleration_m_s2": 116.03482971600505,
+      "mean_shift_from_raw_mm": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "interpolated": {
+      "available_frames": 450,
+      "observed_frames_scored": 448,
+      "position_std_mm": [
+        88.24940986267863,
+        99.90034239748542,
+        117.6986789552431
+      ],
+      "mean_position_m": [
+        -0.09650835325965297,
+        0.07697476422595065,
+        0.24780897879091338
+      ],
+      "orientation_rms_deg": 18.08966785296916,
+      "rms_speed_m_s": 2.2469875391953633,
+      "rms_angular_speed_deg_s": 367.91327094871986,
+      "rms_acceleration_m_s2": 115.72223348119365,
+      "mean_shift_from_raw_mm": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "ema_0.05s": {
+      "available_frames": 450,
+      "observed_frames_scored": 448,
+      "position_std_mm": [
+        79.51457528237665,
+        98.23242454861398,
+        117.19907044315279
+      ],
+      "mean_position_m": [
+        -0.09680261805041622,
+        0.07734818892791148,
+        0.24855818973439434
+      ],
+      "orientation_rms_deg": 16.526938720330698,
+      "rms_speed_m_s": 0.9233297409556713,
+      "rms_angular_speed_deg_s": 151.2683454706557,
+      "rms_acceleration_m_s2": 41.8864873902718,
+      "mean_shift_from_raw_mm": [
+        -0.29426479076324896,
+        0.3734247019608339,
+        0.7492109434809602
+      ]
+    }
+  },
+  "holdout_interpolation": {
+    "1": {
+      "frames_scored": 108,
+      "position_rmse_mm": 74.5451656136534,
+      "orientation_rmse_deg": 12.43311324801994
+    },
+    "2": {
+      "frames_scored": 172,
+      "position_rmse_mm": 72.21863821282035,
+      "orientation_rmse_deg": 11.500632120856356
+    },
+    "3": {
+      "frames_scored": 213,
+      "position_rmse_mm": 65.78457377004334,
+      "orientation_rmse_deg": 11.252169045309637
+    }
+  }
+}

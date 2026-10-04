@@ -1,0 +1,320 @@
+{
+  "source": "results\\test_004_hand_tracking\\object\\trajectory.csv",
+  "settings": {
+    "trajectory": "results\\test_004_hand_tracking\\object\\trajectory.csv",
+    "output": null,
+    "max_speed": 2.0,
+    "max_angular_speed": 720.0,
+    "max_gap_frames": 3,
+    "max_gap_span": 0.15,
+    "window": 7,
+    "order": 2,
+    "butterworth_hz": 3.0,
+    "stationary": null
+  },
+  "rejected_frames": 29,
+  "interpolated_frames": 25,
+  "interpolated_gaps": [
+    {
+      "start_frame": 13,
+      "end_frame": 13,
+      "frames": 1,
+      "endpoint_span_s": 0.06666666666666665,
+      "rejected_frames": 1
+    },
+    {
+      "start_frame": 17,
+      "end_frame": 17,
+      "frames": 1,
+      "endpoint_span_s": 0.06666666666666676,
+      "rejected_frames": 1
+    },
+    {
+      "start_frame": 25,
+      "end_frame": 25,
+      "frames": 1,
+      "endpoint_span_s": 0.06666666666666665,
+      "rejected_frames": 1
+    },
+    {
+      "start_frame": 32,
+      "end_frame": 33,
+      "frames": 2,
+      "endpoint_span_s": 0.10166666666666657,
+      "rejected_frames": 2
+    },
+    {
+      "start_frame": 56,
+      "end_frame": 57,
+      "frames": 2,
+      "endpoint_span_s": 0.09999999999999987,
+      "rejected_frames": 2
+    },
+    {
+      "start_frame": 60,
+      "end_frame": 61,
+      "frames": 2,
+      "endpoint_span_s": 0.09999999999999987,
+      "rejected_frames": 2
+    },
+    {
+      "start_frame": 84,
+      "end_frame": 84,
+      "frames": 1,
+      "endpoint_span_s": 0.06666666666666643,
+      "rejected_frames": 1
+    },
+    {
+      "start_frame": 102,
+      "end_frame": 102,
+      "frames": 1,
+      "endpoint_span_s": 0.06666666666666643,
+      "rejected_frames": 1
+    },
+    {
+      "start_frame": 218,
+      "end_frame": 218,
+      "frames": 1,
+      "endpoint_span_s": 0.06666666666666643,
+      "rejected_frames": 1
+    },
+    {
+      "start_frame": 276,
+      "end_frame": 277,
+      "frames": 2,
+      "endpoint_span_s": 0.09999999999999964,
+      "rejected_frames": 2
+    },
+    {
+      "start_frame": 296,
+      "end_frame": 296,
+      "frames": 1,
+      "endpoint_span_s": 0.0666666666666682,
+      "rejected_frames": 1
+    },
+    {
+      "start_frame": 305,
+      "end_frame": 305,
+      "frames": 1,
+      "endpoint_span_s": 0.06666666666666643,
+      "rejected_frames": 1
+    },
+    {
+      "start_frame": 440,
+      "end_frame": 440,
+      "frames": 1,
+      "endpoint_span_s": 0.06666666666666643,
+      "rejected_frames": 1
+    },
+    {
+      "start_frame": 477,
+      "end_frame": 477,
+      "frames": 1,
+      "endpoint_span_s": 0.06666666666666643,
+      "rejected_frames": 1
+    },
+    {
+      "start_frame": 489,
+      "end_frame": 489,
+      "frames": 1,
+      "endpoint_span_s": 0.06666666666666643,
+      "rejected_frames": 1
+    },
+    {
+      "start_frame": 535,
+      "end_frame": 536,
+      "frames": 2,
+      "endpoint_span_s": 0.09999999999999787,
+      "rejected_frames": 2
+    },
+    {
+      "start_frame": 542,
+      "end_frame": 542,
+      "frames": 1,
+      "endpoint_span_s": 0.06666666666666643,
+      "rejected_frames": 1
+    },
+    {
+      "start_frame": 550,
+      "end_frame": 550,
+      "frames": 1,
+      "endpoint_span_s": 0.06666666666666643,
+      "rejected_frames": 1
+    },
+    {
+      "start_frame": 553,
+      "end_frame": 553,
+      "frames": 1,
+      "endpoint_span_s": 0.06666666666666643,
+      "rejected_frames": 1
+    },
+    {
+      "start_frame": 556,
+      "end_frame": 556,
+      "frames": 1,
+      "endpoint_span_s": 0.06666666666666998,
+      "rejected_frames": 1
+    }
+  ],
+  "unfilled_gaps": [
+    {
+      "start_frame": 67,
+      "end_frame": 73,
+      "frames": 7,
+      "endpoint_span_s": 0.2666666666666675,
+      "rejected_frames": 0
+    },
+    {
+      "start_frame": 114,
+      "end_frame": 117,
+      "frames": 4,
+      "endpoint_span_s": 0.16666666666666652,
+      "rejected_frames": 4
+    },
+    {
+      "start_frame": 120,
+      "end_frame": 129,
+      "frames": 10,
+      "endpoint_span_s": 0.3666666666666667,
+      "rejected_frames": 0
+    },
+    {
+      "start_frame": 132,
+      "end_frame": 164,
+      "frames": 33,
+      "endpoint_span_s": 1.1333333333333337,
+      "rejected_frames": 0
+    },
+    {
+      "start_frame": 192,
+      "end_frame": 209,
+      "frames": 18,
+      "endpoint_span_s": 0.6333333333333337,
+      "rejected_frames": 0
+    },
+    {
+      "start_frame": 238,
+      "end_frame": 243,
+      "frames": 6,
+      "endpoint_span_s": 0.23500000000000032,
+      "rejected_frames": 0
+    },
+    {
+      "start_frame": 245,
+      "end_frame": 272,
+      "frames": 28,
+      "endpoint_span_s": 0.9666666666666668,
+      "rejected_frames": 0
+    },
+    {
+      "start_frame": 390,
+      "end_frame": 400,
+      "frames": 11,
+      "endpoint_span_s": 0.3999999999999986,
+      "rejected_frames": 0
+    }
+  ],
+  "filter_passthrough_notes": {
+    "savgol": [
+      {
+        "start_frame": 118,
+        "reason": "fewer than three samples"
+      },
+      {
+        "start_frame": 130,
+        "reason": "fewer than three samples"
+      },
+      {
+        "start_frame": 244,
+        "reason": "fewer than three samples"
+      }
+    ],
+    "butterworth": [
+      {
+        "start_frame": 118,
+        "reason": "fewer than three samples"
+      },
+      {
+        "start_frame": 130,
+        "reason": "fewer than three samples"
+      },
+      {
+        "start_frame": 244,
+        "reason": "fewer than three samples"
+      }
+    ]
+  },
+  "metric_notes": [
+    "Stationary jitter uses explicit intervals and common accepted raw samples, including any hand-inferred poses.",
+    "Path length and velocity exclude gaps. Compare common-edge path length to avoid changes in coverage.",
+    "Maximum deviation includes rejected raw spikes; accepted_raw reports deviation excluding them.",
+    "Isolated spike rejection does not detect sustained bad poses. Inferred object poses are not measurements."
+  ],
+  "variants": {
+    "raw": {
+      "available_frames": 455,
+      "path_edges": 447,
+      "path_length_m": 11.59570667517811,
+      "common_edge_path_length_m": 5.723896235297008,
+      "common_edges": 397,
+      "peak_velocity_m_s": 7.953857359088228,
+      "stationary": [],
+      "max_deviation_all_raw_mm": 0.0,
+      "max_orientation_deviation_all_raw_deg": 0.0,
+      "max_deviation_accepted_raw_mm": 0.0,
+      "max_orientation_deviation_accepted_raw_deg": 0.0
+    },
+    "cleaned": {
+      "available_frames": 426,
+      "path_edges": 397,
+      "path_length_m": 5.723896235297008,
+      "common_edge_path_length_m": 5.723896235297008,
+      "common_edges": 397,
+      "peak_velocity_m_s": 6.467547427509831,
+      "stationary": [],
+      "max_deviation_all_raw_mm": 0.0,
+      "max_orientation_deviation_all_raw_deg": 0.0,
+      "max_deviation_accepted_raw_mm": 0.0,
+      "max_orientation_deviation_accepted_raw_deg": 0.0
+    },
+    "interpolated": {
+      "available_frames": 451,
+      "path_edges": 442,
+      "path_length_m": 6.407311081962764,
+      "common_edge_path_length_m": 5.723896235297008,
+      "common_edges": 397,
+      "peak_velocity_m_s": 6.467547427509831,
+      "stationary": [],
+      "max_deviation_all_raw_mm": 161.91758599786584,
+      "max_orientation_deviation_all_raw_deg": 29.38466685973961,
+      "max_deviation_accepted_raw_mm": 0.0,
+      "max_orientation_deviation_accepted_raw_deg": 0.0
+    },
+    "savgol": {
+      "available_frames": 451,
+      "path_edges": 442,
+      "path_length_m": 5.104438953046612,
+      "common_edge_path_length_m": 4.474419250230006,
+      "common_edges": 397,
+      "peak_velocity_m_s": 3.761610163733609,
+      "stationary": [],
+      "max_deviation_all_raw_mm": 175.61159985111294,
+      "max_orientation_deviation_all_raw_deg": 31.741895176821473,
+      "max_deviation_accepted_raw_mm": 75.17491191138771,
+      "max_orientation_deviation_accepted_raw_deg": 19.470814905010705
+    },
+    "butterworth": {
+      "available_frames": 451,
+      "path_edges": 442,
+      "path_length_m": 3.5958632022504506,
+      "common_edge_path_length_m": 3.1921820427615044,
+      "common_edges": 397,
+      "peak_velocity_m_s": 3.761610163733609,
+      "stationary": [],
+      "max_deviation_all_raw_mm": 146.07952128821515,
+      "max_orientation_deviation_all_raw_deg": 29.18311704781912,
+      "max_deviation_accepted_raw_mm": 89.74678226757685,
+      "max_orientation_deviation_accepted_raw_deg": 24.311373146899175
+    }
+  }
+}

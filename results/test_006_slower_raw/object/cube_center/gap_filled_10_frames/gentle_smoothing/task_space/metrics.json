@@ -1,0 +1,1661 @@
+{
+  "total_horizontal_displacement_m": 0.17378451254194746,
+  "horizontal_path_length_m": 1.7805375516148896,
+  "maximum_vertical_lift_m": 0.24912286437368392,
+  "total_3d_path_length_m": 2.676388236720595,
+  "trajectory_duration_s": 42.13,
+  "start_time_s": 0.0,
+  "end_time_s": 42.13,
+  "start_position_m": [
+    0.06119609554098575,
+    0.18356605488209846,
+    0.019600795790572393
+  ],
+  "end_position_m": [
+    0.18924970146555686,
+    0.06607847762749278,
+    0.0160978812120067
+  ],
+  "approximate_pickup_time_s": 4.403333333333333,
+  "approximate_placement_time_s": 39.32833333333333,
+  "source": "results\\test_006_slower_raw\\object\\cube_center\\gap_filled_10_frames\\gentle_smoothing\\savgol_7.csv",
+  "loading": {
+    "input_rows": 1264,
+    "valid_rows": 1246,
+    "skipped_rows": 18,
+    "max_adjacent_span_s": 0.09999999999999964,
+    "segments": 2
+  },
+  "phase_intervals": [
+    {
+      "phase": "stationary_before_pickup",
+      "start_time_s": 0.0,
+      "end_time_s": 4.37,
+      "start_index": 0,
+      "end_index": 131
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 4.403333333333333,
+      "end_time_s": 4.470000000000001,
+      "start_index": 132,
+      "end_index": 134
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 4.503333333333334,
+      "end_time_s": 4.503333333333334,
+      "start_index": 135,
+      "end_index": 135
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 4.536666666666667,
+      "end_time_s": 4.57,
+      "start_index": 136,
+      "end_index": 137
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 4.6033333333333335,
+      "end_time_s": 4.6033333333333335,
+      "start_index": 138,
+      "end_index": 138
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 4.636666666666667,
+      "end_time_s": 4.770000000000001,
+      "start_index": 139,
+      "end_index": 143
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 4.803333333333334,
+      "end_time_s": 4.803333333333334,
+      "start_index": 144,
+      "end_index": 144
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 4.836666666666667,
+      "end_time_s": 4.903333333333333,
+      "start_index": 145,
+      "end_index": 147
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 4.936666666666668,
+      "end_time_s": 4.936666666666668,
+      "start_index": 148,
+      "end_index": 148
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 4.970000000000001,
+      "end_time_s": 5.036666666666667,
+      "start_index": 149,
+      "end_index": 151
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 5.07,
+      "end_time_s": 5.07,
+      "start_index": 152,
+      "end_index": 152
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 5.1033333333333335,
+      "end_time_s": 5.17,
+      "start_index": 153,
+      "end_index": 155
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 5.203333333333334,
+      "end_time_s": 5.203333333333334,
+      "start_index": 156,
+      "end_index": 156
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 5.236666666666667,
+      "end_time_s": 5.303333333333334,
+      "start_index": 157,
+      "end_index": 159
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 5.336666666666667,
+      "end_time_s": 5.37,
+      "start_index": 160,
+      "end_index": 161
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 5.403333333333333,
+      "end_time_s": 5.436666666666668,
+      "start_index": 162,
+      "end_index": 163
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 5.470000000000001,
+      "end_time_s": 5.503333333333334,
+      "start_index": 164,
+      "end_index": 165
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 5.536666666666667,
+      "end_time_s": 5.536666666666667,
+      "start_index": 166,
+      "end_index": 166
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 5.57,
+      "end_time_s": 5.57,
+      "start_index": 167,
+      "end_index": 167
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 5.6033333333333335,
+      "end_time_s": 5.6033333333333335,
+      "start_index": 168,
+      "end_index": 168
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 5.636666666666667,
+      "end_time_s": 5.636666666666667,
+      "start_index": 169,
+      "end_index": 169
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 5.67,
+      "end_time_s": 5.838333333333334,
+      "start_index": 170,
+      "end_index": 175
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 5.871666666666667,
+      "end_time_s": 5.871666666666667,
+      "start_index": 176,
+      "end_index": 176
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 5.905,
+      "end_time_s": 5.9383333333333335,
+      "start_index": 177,
+      "end_index": 178
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 5.971666666666667,
+      "end_time_s": 6.005000000000001,
+      "start_index": 179,
+      "end_index": 180
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 6.038333333333334,
+      "end_time_s": 6.038333333333334,
+      "start_index": 181,
+      "end_index": 181
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 6.071666666666667,
+      "end_time_s": 6.271666666666667,
+      "start_index": 182,
+      "end_index": 188
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 6.305000000000001,
+      "end_time_s": 6.405,
+      "start_index": 189,
+      "end_index": 192
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 6.4383333333333335,
+      "end_time_s": 6.4383333333333335,
+      "start_index": 193,
+      "end_index": 193
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 6.471666666666667,
+      "end_time_s": 6.471666666666667,
+      "start_index": 194,
+      "end_index": 194
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 6.505000000000001,
+      "end_time_s": 6.671666666666667,
+      "start_index": 195,
+      "end_index": 200
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 6.705,
+      "end_time_s": 6.738333333333334,
+      "start_index": 201,
+      "end_index": 202
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 6.771666666666667,
+      "end_time_s": 6.871666666666667,
+      "start_index": 203,
+      "end_index": 206
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 6.905,
+      "end_time_s": 6.971666666666667,
+      "start_index": 207,
+      "end_index": 209
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 7.005000000000001,
+      "end_time_s": 7.071666666666667,
+      "start_index": 210,
+      "end_index": 212
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 7.105,
+      "end_time_s": 7.105,
+      "start_index": 213,
+      "end_index": 213
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 7.138333333333334,
+      "end_time_s": 7.671666666666667,
+      "start_index": 214,
+      "end_index": 230
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 7.705,
+      "end_time_s": 7.705,
+      "start_index": 231,
+      "end_index": 231
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 7.738333333333334,
+      "end_time_s": 7.738333333333334,
+      "start_index": 232,
+      "end_index": 232
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 7.771666666666667,
+      "end_time_s": 7.805000000000001,
+      "start_index": 233,
+      "end_index": 234
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 7.838333333333334,
+      "end_time_s": 7.838333333333334,
+      "start_index": 235,
+      "end_index": 235
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 7.871666666666667,
+      "end_time_s": 7.871666666666667,
+      "start_index": 236,
+      "end_index": 236
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 7.905,
+      "end_time_s": 7.971666666666668,
+      "start_index": 237,
+      "end_index": 239
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 8.005,
+      "end_time_s": 8.071666666666667,
+      "start_index": 240,
+      "end_index": 242
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 8.106666666666667,
+      "end_time_s": 8.506666666666668,
+      "start_index": 243,
+      "end_index": 255
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 8.540000000000003,
+      "end_time_s": 8.540000000000003,
+      "start_index": 256,
+      "end_index": 256
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 8.573333333333334,
+      "end_time_s": 8.573333333333334,
+      "start_index": 257,
+      "end_index": 257
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 8.606666666666667,
+      "end_time_s": 8.606666666666667,
+      "start_index": 258,
+      "end_index": 258
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 8.64,
+      "end_time_s": 9.173333333333334,
+      "start_index": 259,
+      "end_index": 275
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 9.206666666666667,
+      "end_time_s": 9.206666666666667,
+      "start_index": 276,
+      "end_index": 276
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 9.24,
+      "end_time_s": 9.273333333333333,
+      "start_index": 277,
+      "end_index": 278
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 9.306666666666667,
+      "end_time_s": 9.406666666666668,
+      "start_index": 279,
+      "end_index": 282
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 9.440000000000001,
+      "end_time_s": 9.440000000000001,
+      "start_index": 283,
+      "end_index": 283
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 9.473333333333334,
+      "end_time_s": 9.473333333333334,
+      "start_index": 284,
+      "end_index": 284
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 9.506666666666668,
+      "end_time_s": 11.108333333333334,
+      "start_index": 285,
+      "end_index": 333
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 11.141666666666667,
+      "end_time_s": 11.208333333333334,
+      "start_index": 334,
+      "end_index": 336
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 11.241666666666667,
+      "end_time_s": 11.341666666666667,
+      "start_index": 337,
+      "end_index": 340
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 11.375,
+      "end_time_s": 11.408333333333333,
+      "start_index": 341,
+      "end_index": 342
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 11.441666666666668,
+      "end_time_s": 11.708333333333334,
+      "start_index": 343,
+      "end_index": 351
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 11.741666666666667,
+      "end_time_s": 11.741666666666667,
+      "start_index": 352,
+      "end_index": 352
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 11.775,
+      "end_time_s": 11.875,
+      "start_index": 353,
+      "end_index": 356
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 11.908333333333333,
+      "end_time_s": 11.941666666666668,
+      "start_index": 357,
+      "end_index": 358
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 11.975000000000001,
+      "end_time_s": 12.008333333333335,
+      "start_index": 359,
+      "end_index": 360
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 12.041666666666668,
+      "end_time_s": 12.108333333333334,
+      "start_index": 361,
+      "end_index": 363
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 12.141666666666667,
+      "end_time_s": 12.71,
+      "start_index": 364,
+      "end_index": 381
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 12.743333333333334,
+      "end_time_s": 12.743333333333334,
+      "start_index": 382,
+      "end_index": 382
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 12.776666666666667,
+      "end_time_s": 13.476666666666668,
+      "start_index": 383,
+      "end_index": 404
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 13.510000000000002,
+      "end_time_s": 13.510000000000002,
+      "start_index": 405,
+      "end_index": 405
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 13.543333333333335,
+      "end_time_s": 14.943333333333335,
+      "start_index": 406,
+      "end_index": 448
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 14.976666666666668,
+      "end_time_s": 14.976666666666668,
+      "start_index": 449,
+      "end_index": 449
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 15.011666666666668,
+      "end_time_s": 15.045000000000002,
+      "start_index": 450,
+      "end_index": 451
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 15.078333333333335,
+      "end_time_s": 15.111666666666668,
+      "start_index": 452,
+      "end_index": 453
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 15.145000000000001,
+      "end_time_s": 15.178333333333335,
+      "start_index": 454,
+      "end_index": 455
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 15.211666666666668,
+      "end_time_s": 15.378333333333334,
+      "start_index": 456,
+      "end_index": 461
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 15.411666666666667,
+      "end_time_s": 15.511666666666668,
+      "start_index": 462,
+      "end_index": 465
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 15.545000000000002,
+      "end_time_s": 15.578333333333335,
+      "start_index": 466,
+      "end_index": 467
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 15.611666666666668,
+      "end_time_s": 16.978333333333335,
+      "start_index": 468,
+      "end_index": 509
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 17.011666666666667,
+      "end_time_s": 17.078333333333333,
+      "start_index": 510,
+      "end_index": 512
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 17.111666666666668,
+      "end_time_s": 17.111666666666668,
+      "start_index": 513,
+      "end_index": 513
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 17.145,
+      "end_time_s": 17.178333333333335,
+      "start_index": 514,
+      "end_index": 515
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 17.211666666666666,
+      "end_time_s": 17.713333333333335,
+      "start_index": 516,
+      "end_index": 531
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 17.746666666666666,
+      "end_time_s": 17.78,
+      "start_index": 532,
+      "end_index": 533
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 17.813333333333336,
+      "end_time_s": 17.813333333333336,
+      "start_index": 534,
+      "end_index": 534
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 17.846666666666668,
+      "end_time_s": 17.846666666666668,
+      "start_index": 535,
+      "end_index": 535
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 17.880000000000003,
+      "end_time_s": 17.880000000000003,
+      "start_index": 536,
+      "end_index": 536
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 17.913333333333334,
+      "end_time_s": 17.913333333333334,
+      "start_index": 537,
+      "end_index": 537
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 17.94666666666667,
+      "end_time_s": 17.94666666666667,
+      "start_index": 538,
+      "end_index": 538
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 17.98,
+      "end_time_s": 18.046666666666667,
+      "start_index": 539,
+      "end_index": 541
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 18.080000000000005,
+      "end_time_s": 18.080000000000005,
+      "start_index": 542,
+      "end_index": 542
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 18.113333333333333,
+      "end_time_s": 18.44666666666667,
+      "start_index": 543,
+      "end_index": 553
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 18.48,
+      "end_time_s": 18.48,
+      "start_index": 554,
+      "end_index": 554
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 18.513333333333335,
+      "end_time_s": 18.546666666666667,
+      "start_index": 555,
+      "end_index": 556
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 18.580000000000005,
+      "end_time_s": 18.580000000000005,
+      "start_index": 557,
+      "end_index": 557
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 18.613333333333333,
+      "end_time_s": 18.64666666666667,
+      "start_index": 558,
+      "end_index": 559
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 18.68,
+      "end_time_s": 20.115000000000002,
+      "start_index": 560,
+      "end_index": 603
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 20.148333333333333,
+      "end_time_s": 20.148333333333333,
+      "start_index": 604,
+      "end_index": 604
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 20.18166666666667,
+      "end_time_s": 20.281666666666666,
+      "start_index": 605,
+      "end_index": 608
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 20.315,
+      "end_time_s": 20.315,
+      "start_index": 609,
+      "end_index": 609
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 20.348333333333336,
+      "end_time_s": 20.748333333333335,
+      "start_index": 610,
+      "end_index": 622
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 20.781666666666666,
+      "end_time_s": 20.815,
+      "start_index": 623,
+      "end_index": 624
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 20.848333333333336,
+      "end_time_s": 21.148333333333333,
+      "start_index": 625,
+      "end_index": 634
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 21.18166666666667,
+      "end_time_s": 21.18166666666667,
+      "start_index": 635,
+      "end_index": 635
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 21.215,
+      "end_time_s": 21.215,
+      "start_index": 636,
+      "end_index": 636
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 21.248333333333335,
+      "end_time_s": 21.281666666666666,
+      "start_index": 637,
+      "end_index": 638
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 21.315,
+      "end_time_s": 21.78166666666667,
+      "start_index": 639,
+      "end_index": 653
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 21.815,
+      "end_time_s": 21.848333333333336,
+      "start_index": 654,
+      "end_index": 655
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 21.881666666666668,
+      "end_time_s": 23.05,
+      "start_index": 656,
+      "end_index": 691
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 23.083333333333336,
+      "end_time_s": 23.116666666666667,
+      "start_index": 692,
+      "end_index": 693
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 23.150000000000002,
+      "end_time_s": 23.683333333333334,
+      "start_index": 694,
+      "end_index": 710
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 23.71666666666667,
+      "end_time_s": 23.75,
+      "start_index": 711,
+      "end_index": 712
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 23.783333333333335,
+      "end_time_s": 23.983333333333334,
+      "start_index": 713,
+      "end_index": 719
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 24.01666666666667,
+      "end_time_s": 24.05,
+      "start_index": 720,
+      "end_index": 721
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 24.083333333333336,
+      "end_time_s": 24.150000000000002,
+      "start_index": 722,
+      "end_index": 724
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 24.183333333333334,
+      "end_time_s": 24.183333333333334,
+      "start_index": 725,
+      "end_index": 725
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 24.218333333333334,
+      "end_time_s": 24.518333333333334,
+      "start_index": 726,
+      "end_index": 735
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 24.55166666666667,
+      "end_time_s": 24.618333333333336,
+      "start_index": 736,
+      "end_index": 738
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 24.651666666666667,
+      "end_time_s": 24.651666666666667,
+      "start_index": 739,
+      "end_index": 739
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 24.685000000000002,
+      "end_time_s": 24.685000000000002,
+      "start_index": 740,
+      "end_index": 740
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 24.718333333333334,
+      "end_time_s": 26.686666666666667,
+      "start_index": 741,
+      "end_index": 800
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 26.720000000000002,
+      "end_time_s": 26.78666666666667,
+      "start_index": 801,
+      "end_index": 803
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 26.82,
+      "end_time_s": 26.853333333333335,
+      "start_index": 804,
+      "end_index": 805
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 26.886666666666667,
+      "end_time_s": 26.92,
+      "start_index": 806,
+      "end_index": 807
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 26.953333333333337,
+      "end_time_s": 26.953333333333337,
+      "start_index": 808,
+      "end_index": 808
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 26.986666666666668,
+      "end_time_s": 27.253333333333334,
+      "start_index": 809,
+      "end_index": 817
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 27.28666666666667,
+      "end_time_s": 27.28666666666667,
+      "start_index": 818,
+      "end_index": 818
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 27.32,
+      "end_time_s": 27.32,
+      "start_index": 819,
+      "end_index": 819
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 27.353333333333335,
+      "end_time_s": 27.42,
+      "start_index": 820,
+      "end_index": 822
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 27.453333333333337,
+      "end_time_s": 27.453333333333337,
+      "start_index": 823,
+      "end_index": 823
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 27.486666666666668,
+      "end_time_s": 27.486666666666668,
+      "start_index": 824,
+      "end_index": 824
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 27.520000000000003,
+      "end_time_s": 27.553333333333335,
+      "start_index": 825,
+      "end_index": 826
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 27.58666666666667,
+      "end_time_s": 27.58666666666667,
+      "start_index": 827,
+      "end_index": 827
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 27.62,
+      "end_time_s": 27.62,
+      "start_index": 828,
+      "end_index": 828
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 27.653333333333336,
+      "end_time_s": 27.686666666666667,
+      "start_index": 829,
+      "end_index": 830
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 27.720000000000002,
+      "end_time_s": 27.720000000000002,
+      "start_index": 831,
+      "end_index": 831
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 27.753333333333334,
+      "end_time_s": 27.753333333333334,
+      "start_index": 832,
+      "end_index": 832
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 27.78666666666667,
+      "end_time_s": 27.82,
+      "start_index": 833,
+      "end_index": 834
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 27.853333333333335,
+      "end_time_s": 27.886666666666667,
+      "start_index": 835,
+      "end_index": 836
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 27.92,
+      "end_time_s": 27.953333333333337,
+      "start_index": 837,
+      "end_index": 838
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 27.986666666666668,
+      "end_time_s": 27.986666666666668,
+      "start_index": 839,
+      "end_index": 839
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 28.020000000000003,
+      "end_time_s": 28.08666666666667,
+      "start_index": 840,
+      "end_index": 842
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 28.12,
+      "end_time_s": 28.153333333333336,
+      "start_index": 843,
+      "end_index": 844
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 28.186666666666667,
+      "end_time_s": 28.186666666666667,
+      "start_index": 845,
+      "end_index": 845
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 28.220000000000002,
+      "end_time_s": 28.220000000000002,
+      "start_index": 846,
+      "end_index": 846
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 28.253333333333334,
+      "end_time_s": 28.253333333333334,
+      "start_index": 847,
+      "end_index": 847
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 28.28666666666667,
+      "end_time_s": 28.386666666666667,
+      "start_index": 848,
+      "end_index": 851
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 28.42,
+      "end_time_s": 28.520000000000003,
+      "start_index": 852,
+      "end_index": 855
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 28.553333333333335,
+      "end_time_s": 28.553333333333335,
+      "start_index": 856,
+      "end_index": 856
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 28.58666666666667,
+      "end_time_s": 28.653333333333336,
+      "start_index": 857,
+      "end_index": 859
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 28.686666666666667,
+      "end_time_s": 28.720000000000002,
+      "start_index": 860,
+      "end_index": 861
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 28.753333333333334,
+      "end_time_s": 28.921666666666667,
+      "start_index": 862,
+      "end_index": 867
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 28.955000000000005,
+      "end_time_s": 29.055000000000003,
+      "start_index": 868,
+      "end_index": 871
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 29.088333333333335,
+      "end_time_s": 29.155,
+      "start_index": 872,
+      "end_index": 874
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 29.188333333333336,
+      "end_time_s": 29.288333333333334,
+      "start_index": 875,
+      "end_index": 878
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 29.32166666666667,
+      "end_time_s": 29.32166666666667,
+      "start_index": 879,
+      "end_index": 879
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 29.355,
+      "end_time_s": 29.355,
+      "start_index": 880,
+      "end_index": 880
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 29.388333333333335,
+      "end_time_s": 29.388333333333335,
+      "start_index": 881,
+      "end_index": 881
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 29.421666666666667,
+      "end_time_s": 29.421666666666667,
+      "start_index": 882,
+      "end_index": 882
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 29.455000000000005,
+      "end_time_s": 29.455000000000005,
+      "start_index": 883,
+      "end_index": 883
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 29.488333333333337,
+      "end_time_s": 29.555000000000003,
+      "start_index": 884,
+      "end_index": 886
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 29.588333333333335,
+      "end_time_s": 29.621666666666673,
+      "start_index": 887,
+      "end_index": 888
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 29.655,
+      "end_time_s": 29.655,
+      "start_index": 889,
+      "end_index": 889
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 29.688333333333336,
+      "end_time_s": 29.688333333333336,
+      "start_index": 890,
+      "end_index": 890
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 29.721666666666668,
+      "end_time_s": 29.721666666666668,
+      "start_index": 891,
+      "end_index": 891
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 29.755000000000003,
+      "end_time_s": 29.855,
+      "start_index": 892,
+      "end_index": 895
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 29.888333333333335,
+      "end_time_s": 29.888333333333335,
+      "start_index": 896,
+      "end_index": 896
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 29.921666666666667,
+      "end_time_s": 29.988333333333337,
+      "start_index": 897,
+      "end_index": 899
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 30.02166666666667,
+      "end_time_s": 30.055000000000003,
+      "start_index": 900,
+      "end_index": 901
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 30.088333333333335,
+      "end_time_s": 30.255000000000003,
+      "start_index": 902,
+      "end_index": 907
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 30.288333333333334,
+      "end_time_s": 30.288333333333334,
+      "start_index": 908,
+      "end_index": 908
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 30.32166666666667,
+      "end_time_s": 30.52166666666667,
+      "start_index": 909,
+      "end_index": 915
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 30.555000000000003,
+      "end_time_s": 30.555000000000003,
+      "start_index": 916,
+      "end_index": 916
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 30.588333333333335,
+      "end_time_s": 30.788333333333334,
+      "start_index": 917,
+      "end_index": 923
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 30.82166666666667,
+      "end_time_s": 30.855,
+      "start_index": 924,
+      "end_index": 925
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 30.888333333333335,
+      "end_time_s": 31.02166666666667,
+      "start_index": 926,
+      "end_index": 930
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 31.055000000000003,
+      "end_time_s": 31.088333333333335,
+      "start_index": 931,
+      "end_index": 932
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 31.121666666666673,
+      "end_time_s": 31.121666666666673,
+      "start_index": 933,
+      "end_index": 933
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 31.15666666666667,
+      "end_time_s": 31.15666666666667,
+      "start_index": 934,
+      "end_index": 934
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 31.19,
+      "end_time_s": 31.256666666666668,
+      "start_index": 935,
+      "end_index": 937
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 31.290000000000003,
+      "end_time_s": 31.290000000000003,
+      "start_index": 938,
+      "end_index": 938
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 31.323333333333334,
+      "end_time_s": 31.423333333333336,
+      "start_index": 939,
+      "end_index": 942
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 31.456666666666667,
+      "end_time_s": 31.523333333333337,
+      "start_index": 943,
+      "end_index": 945
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 31.55666666666667,
+      "end_time_s": 31.55666666666667,
+      "start_index": 946,
+      "end_index": 946
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 31.590000000000003,
+      "end_time_s": 31.590000000000003,
+      "start_index": 947,
+      "end_index": 947
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 31.623333333333335,
+      "end_time_s": 31.623333333333335,
+      "start_index": 948,
+      "end_index": 948
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 31.65666666666667,
+      "end_time_s": 31.823333333333334,
+      "start_index": 949,
+      "end_index": 954
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 31.85666666666667,
+      "end_time_s": 31.85666666666667,
+      "start_index": 955,
+      "end_index": 955
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 31.89,
+      "end_time_s": 31.956666666666667,
+      "start_index": 956,
+      "end_index": 958
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 31.990000000000002,
+      "end_time_s": 32.05666666666667,
+      "start_index": 959,
+      "end_index": 961
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 32.09,
+      "end_time_s": 32.09,
+      "start_index": 962,
+      "end_index": 962
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 32.123333333333335,
+      "end_time_s": 32.123333333333335,
+      "start_index": 963,
+      "end_index": 963
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 32.156666666666666,
+      "end_time_s": 32.156666666666666,
+      "start_index": 964,
+      "end_index": 964
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 32.190000000000005,
+      "end_time_s": 32.190000000000005,
+      "start_index": 965,
+      "end_index": 965
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 32.223333333333336,
+      "end_time_s": 32.223333333333336,
+      "start_index": 966,
+      "end_index": 966
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 32.25666666666667,
+      "end_time_s": 32.75666666666667,
+      "start_index": 967,
+      "end_index": 982
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 32.79,
+      "end_time_s": 32.79,
+      "start_index": 983,
+      "end_index": 983
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 32.82333333333334,
+      "end_time_s": 33.09,
+      "start_index": 984,
+      "end_index": 992
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 33.123333333333335,
+      "end_time_s": 33.123333333333335,
+      "start_index": 993,
+      "end_index": 993
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 33.156666666666666,
+      "end_time_s": 33.458333333333336,
+      "start_index": 994,
+      "end_index": 1003
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 33.49166666666667,
+      "end_time_s": 33.525000000000006,
+      "start_index": 1004,
+      "end_index": 1005
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 33.55833333333334,
+      "end_time_s": 33.825,
+      "start_index": 1006,
+      "end_index": 1014
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 33.858333333333334,
+      "end_time_s": 34.05833333333334,
+      "start_index": 1015,
+      "end_index": 1021
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 34.69166666666667,
+      "end_time_s": 35.125,
+      "start_index": 1022,
+      "end_index": 1035
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 35.15833333333334,
+      "end_time_s": 35.15833333333334,
+      "start_index": 1036,
+      "end_index": 1036
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 35.19166666666667,
+      "end_time_s": 35.325,
+      "start_index": 1037,
+      "end_index": 1041
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 35.358333333333334,
+      "end_time_s": 35.358333333333334,
+      "start_index": 1042,
+      "end_index": 1042
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 35.391666666666666,
+      "end_time_s": 35.525000000000006,
+      "start_index": 1043,
+      "end_index": 1047
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 35.55833333333334,
+      "end_time_s": 35.55833333333334,
+      "start_index": 1048,
+      "end_index": 1048
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 35.59166666666667,
+      "end_time_s": 35.760000000000005,
+      "start_index": 1049,
+      "end_index": 1054
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 35.79333333333334,
+      "end_time_s": 35.79333333333334,
+      "start_index": 1055,
+      "end_index": 1055
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 35.82666666666667,
+      "end_time_s": 35.82666666666667,
+      "start_index": 1056,
+      "end_index": 1056
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 35.86,
+      "end_time_s": 35.96,
+      "start_index": 1057,
+      "end_index": 1060
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 35.99333333333333,
+      "end_time_s": 36.02666666666667,
+      "start_index": 1061,
+      "end_index": 1062
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 36.06,
+      "end_time_s": 36.22666666666667,
+      "start_index": 1063,
+      "end_index": 1068
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 36.260000000000005,
+      "end_time_s": 36.29333333333334,
+      "start_index": 1069,
+      "end_index": 1070
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 36.32666666666667,
+      "end_time_s": 36.39333333333334,
+      "start_index": 1071,
+      "end_index": 1073
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 36.42666666666667,
+      "end_time_s": 36.46,
+      "start_index": 1074,
+      "end_index": 1075
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 36.49333333333333,
+      "end_time_s": 36.52666666666667,
+      "start_index": 1076,
+      "end_index": 1077
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 36.56,
+      "end_time_s": 36.693333333333335,
+      "start_index": 1078,
+      "end_index": 1082
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 36.72666666666667,
+      "end_time_s": 37.093333333333334,
+      "start_index": 1083,
+      "end_index": 1094
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 37.12666666666667,
+      "end_time_s": 37.12666666666667,
+      "start_index": 1095,
+      "end_index": 1095
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 37.16000000000001,
+      "end_time_s": 38.595000000000006,
+      "start_index": 1096,
+      "end_index": 1139
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 38.62833333333334,
+      "end_time_s": 38.86166666666667,
+      "start_index": 1140,
+      "end_index": 1147
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 38.895,
+      "end_time_s": 38.928333333333335,
+      "start_index": 1148,
+      "end_index": 1149
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 38.961666666666666,
+      "end_time_s": 38.961666666666666,
+      "start_index": 1150,
+      "end_index": 1150
+    },
+    {
+      "phase": "stationary_during_transport",
+      "start_time_s": 38.995000000000005,
+      "end_time_s": 38.995000000000005,
+      "start_index": 1151,
+      "end_index": 1151
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 39.028333333333336,
+      "end_time_s": 39.028333333333336,
+      "start_index": 1152,
+      "end_index": 1152
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 39.06166666666667,
+      "end_time_s": 39.095000000000006,
+      "start_index": 1153,
+      "end_index": 1154
+    },
+    {
+      "phase": "lift",
+      "start_time_s": 39.12833333333334,
+      "end_time_s": 39.195,
+      "start_index": 1155,
+      "end_index": 1157
+    },
+    {
+      "phase": "horizontal_transport",
+      "start_time_s": 39.22833333333334,
+      "end_time_s": 39.22833333333334,
+      "start_index": 1158,
+      "end_index": 1158
+    },
+    {
+      "phase": "lower",
+      "start_time_s": 39.26166666666667,
+      "end_time_s": 39.295,
+      "start_index": 1159,
+      "end_index": 1160
+    },
+    {
+      "phase": "stationary_after_placement",
+      "start_time_s": 39.32833333333333,
+      "end_time_s": 42.13,
+      "start_index": 1161,
+      "end_index": 1245
+    }
+  ],
+  "thresholds": {
+    "stationary_speed_m_s": 0.03,
+    "vertical_speed_m_s": 0.03,
+    "min_motion_duration_s": 0.2,
+    "vertical_axis": "z"
+  },
+  "notes": [
+    "Threshold phases are approximate; no contact or grasp is inferred.",
+    "Horizontal displacement is net start-to-end displacement; horizontal path is reported separately.",
+    "Paths and velocities never connect missing-data segments. Duration includes unavailable intervals.",
+    "Stationary labels describe quiet samples outside sustained movement; brief noise bursts there are ignored.",
+    "World vertical must match the selected axis. No LIBERO mapping or robot control is applied."
+  ]
+}
