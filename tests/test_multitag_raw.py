@@ -23,6 +23,15 @@ class MultiTagTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             cube_center(np.eye(4), 0)
 
+    def test_target_is_excluded_from_world_registration(self):
+        frames = [{0: [self.pose([0, 0, 1])], 1: [self.pose([.2, 0, 1])],
+                   2: [self.pose([.4, 0, 1], error=.01)]}]
+        layout = register_world(frames, (0, 1))
+        self.assertEqual(set(layout), {0, 1})
+        _, source = camera_world(frames[0], layout)
+        self.assertIn(source, (0, 1))
+        self.assertEqual(camera_world({2: frames[0][2]}, layout), (None, None))
+
     def test_registration_chain_and_camera_motion(self):
         frames = [{0: [self.pose([0, 0, 1])], 1: [self.pose([.2, 0, 1])]},
                   {1: [self.pose([.5, 0, 2])], 2: [self.pose([.5, .3, 2])]}]

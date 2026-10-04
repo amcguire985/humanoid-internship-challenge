@@ -44,8 +44,17 @@ def run(a):
         raise ValueError('Hand edge must be finite and positive')
     if a.reference_id != 0:
         raise ValueError('Multi-tag raw mode uses ID0 as the origin')
-    sizes = {i: a.world_size if i < 4 else a.body_size for i in range(9)}
-    if min(sizes.values()) <= 0:
+    groups = {'world': a.world_ids, 'object': a.cube_ids, 'hand': a.hand_ids,
+              'target': [] if a.target_id is None else [a.target_id]}
+    all_ids = [i for ids in groups.values() for i in ids]
+    if len(set(all_ids)) != len(all_ids) or any(i < 0 for i in all_ids):
+        raise ValueError('Tag groups must have distinct nonnegative IDs')
+    if 0 not in a.world_ids:
+        raise ValueError('World IDs must include ID0 as the origin')
+    sizes = {i: a.world_size if group == 'world' else
+             (a.target_size if a.target_size is not None else a.world_size) if group == 'target'
+             else a.body_size for group, ids in groups.items() for i in ids}
+    if any(not np.isfinite(size) or size <= 0 for size in sizes.values()):
         raise ValueError('Tag sizes must be positive')
     if a.tag_size_convention == 'full-pattern':
         if a.family != 'Standard41h12':
@@ -100,7 +109,7 @@ def run(a):
                     raw.append(record)
             frames.append(observations)
             times.append(timestamp)
-            cv2.putText(frame, f'{timestamp:.2f}s | RAW IDs 0-3 world, 4-6 cube, 7-8 wrist', (15, 35),
+            cv2.putText(frame, f'{timestamp:.2f}s | world {a.world_ids} object {a.cube_ids} target {a.target_id}', (15, 35),
                         cv2.FONT_HERSHEY_SIMPLEX, .55, (0, 0, 255), 2)
             if index == 0:
                 cv2.imwrite(str(a.output / 'preview.jpg'), frame)
@@ -113,7 +122,7 @@ def run(a):
         cap.release()
         if writer is not None:
             writer.release()
-    layout = register_world(frames)
+    layout = register_world(frames, a.world_ids)
     trajectory_fields = ['frame', 'time_s', 'status', 'world_source_id', 'detection_count',
                          'error_px', 'ambiguity_gap_px', *pose_fields(np.eye(4))]
     def write_csv(path, rows, fields):
@@ -136,7 +145,7 @@ def run(a):
             record.update({'world_' + k: v for k, v in pose_fields(np.linalg.inv(world) @ camera).items()})
     write_csv(a.output / 'detections.csv', raw, raw_fields)
     coverage = {}
-    for tag_id in range(4, 9):
+    for tag_id in groups['object'] + groups['hand'] + groups['target']:
         rows = []
         for index, observations in enumerate(frames):
             world, source_id = camera_world(observations, layout)
@@ -147,27 +156,32 @@ def run(a):
                 row.update(status='tracked', error_px=poses[0]['error'], ambiguity_gap_px=poses[0]['ambiguity_gap'])
                 row.update(pose_fields(np.linalg.inv(world) @ poses[0]['transform']))
             rows.append(row)
-        output = a.output / ('object' if tag_id < 7 else 'hand') / f'id{tag_id}'
+        group = next(group for group, ids in groups.items() if tag_id in ids)
+        output = a.output / group / f'id{tag_id}'
         output.mkdir(parents=True, exist_ok=True)
         write_csv(output / 'trajectory.csv', rows, trajectory_fields)
         plot_trajectory(rows, output, f'ID{tag_id} tag centre (raw)', 'ID0 world')
         coverage[tag_id] = sum(row['status'] == 'tracked' for row in rows)
     summary = dict(video=str(a.video), calibration=str(a.calibration), frames_processed=len(frames),
-                   family=a.family, tag_size_convention=a.tag_size_convention, pose_tag_sizes_m=sizes,
+                   tag_groups=groups, family=a.family, tag_size_convention=a.tag_size_convention, pose_tag_sizes_m=sizes,
                    input_world_size_m=a.world_size, input_body_size_m=a.body_size,
                    registered_world_ids=sorted(layout), world_tag_transforms={i: t.tolist() for i, t in layout.items()},
                    tracked_frames_by_id=coverage, gap_filling=False, temporal_filtering=False,
                    reprojection_threshold_rejection=False, hand_object_inference=False,
+                   video_size=[width, height], fps=fps, calibration_fit=a.calibration_fit,
+                   input_target_size_m=a.target_size if a.target_size is not None else a.world_size,
                    effective_camera_matrix=matrix.tolist(), distortion_coefficients=distortion.tolist(),
                    world_registration='First co-visible positive-depth poses per edge; fixed registration to ID0. Lowest-error current world tag supplies camera pose; no temporal averaging.',
-                   limitations=['Cube outputs are face-tag centres, not a fused cube centre. Opposite faces share IDs and cannot be identified from ID alone.',
+                   limitations=['Metric accuracy depends on calibrated recording mode, crop model and measured tag sizes.',
+                                'Cube outputs are face-tag centres, not a fused cube centre. Opposite faces share IDs and cannot be identified from ID alone.',
                                 'Wrist outputs are individual tag centres, not a shared wrist frame. Curvature violates planar PnP.',
                                 'Raw pose errors and planar ambiguity are retained. World-registration errors and source switches can cause offsets.',
                                 'Missing observations remain blank. Disconnected world tags cannot supply an ID0 reference.'])
     (a.output / 'summary.json').write_text(json.dumps(summary, indent=2) + '\n', encoding='utf-8')
-    if a.cube_edge is not None:
-        export_cube_center(a.output, a.cube_edge)
-    export_hand_center(a.output, a.hand_edge)
+    if a.cube_edge is not None and a.cube_ids:
+        export_body_center(a.output, a.cube_edge, a.cube_ids, f'object/id{a.cube_ids[0]}', 'object/cube_center', 'cube_center', 'Cube')
+    if a.hand_ids:
+        export_body_center(a.output, a.hand_edge, a.hand_ids, f'hand/id{a.hand_ids[0]}', 'hand/hand_center', 'hand_center', 'Hand')
     print(f'Raw tracking saved to {a.output}; coverage {coverage}; world IDs {sorted(layout)}', flush=True)
 
 

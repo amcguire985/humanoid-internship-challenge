@@ -1,0 +1,268 @@
+{
+  "pickup_to_release_path_length": 0.2736879961907941,
+  "pickup_to_release_duration": 4.336666666666667,
+  "object_start_position": [
+    -0.24396009898685883,
+    -0.030793472260239176,
+    0.03688090385997596
+  ],
+  "goal_position": [
+    -0.12767583028296864,
+    -0.21552658586838072,
+    0.0225
+  ],
+  "final_object_position": [
+    -0.09290257950363981,
+    -0.17998000241389336,
+    0.045652559180806816
+  ],
+  "start_sample_time": 0.0,
+  "final_sample_time": 13.276666666666667,
+  "task_displacement": [
+    0.11628426870389019,
+    -0.18473311360814154,
+    -0.014380903859975959
+  ],
+  "start_to_goal_distance": 0.2187582336900418,
+  "final_placement_error": 0.05485234326507565,
+  "final_planar_placement_error": 0.04972663838476242,
+  "final_inside_goal_region": true,
+  "final_distance_outside_goal_region": 0.0,
+  "final_goal_height_error": 0.023152559180806817,
+  "max_lift_height": 0.07912846459707416,
+  "max_lift_height_entire_clip": 0.07912846459707416,
+  "transport_path_length": 0.10210603736408803,
+  "transport_duration": 1.5683333333333334,
+  "transport_observed_duration": 1.5683333333333334,
+  "average_transport_speed": 0.06510480597072563,
+  "maximum_transport_speed": 0.1090587064118434,
+  "transport_complete": true,
+  "pickup_time": 3.7700000000000005,
+  "transport_start": 4.836666666666667,
+  "transport_end": 6.405,
+  "release_time": 8.106666666666667,
+  "automatic_phase_estimates": {
+    "pickup_time": 3.7700000000000005,
+    "transport_start": 4.836666666666667,
+    "transport_end": 6.405,
+    "release_time": 8.106666666666667
+  },
+  "quality": {
+    "detection_rates": {
+      "world": 1.0,
+      "object": 1.0,
+      "goal": 0.8270676691729323
+    },
+    "detection_rates_by_id": {
+      "0": 1.0,
+      "1": 0.43358395989974935,
+      "4": 0.9197994987468672,
+      "5": 1.0,
+      "6": 0.37343358395989973,
+      "2": 0.8270676691729323
+    },
+    "detection_missing_gaps": {
+      "world": {
+        "longest_missing_gap_frames": 0,
+        "longest_missing_gap_s": 0.0,
+        "gaps": []
+      },
+      "object": {
+        "longest_missing_gap_frames": 0,
+        "longest_missing_gap_s": 0.0,
+        "gaps": []
+      },
+      "goal": {
+        "longest_missing_gap_frames": 50,
+        "longest_missing_gap_s": 1.7016666666666689,
+        "gaps": [
+          {
+            "first_index": 236,
+            "last_index": 285,
+            "frames": 50,
+            "span_s": 1.7016666666666689
+          },
+          {
+            "first_index": 297,
+            "last_index": 315,
+            "frames": 19,
+            "span_s": 0.6683333333333312
+          }
+        ]
+      }
+    },
+    "raw_world_relative_object_rate": 1.0,
+    "retained_measurement_percentage": 100.0,
+    "processed_coverage_percentage": 100.0,
+    "rejected_frames": 0,
+    "interpolated_frames": 0,
+    "raw_missing": {
+      "longest_missing_gap_frames": 0,
+      "longest_missing_gap_s": 0.0,
+      "gaps": []
+    },
+    "filtered_missing": {
+      "longest_missing_gap_frames": 0,
+      "longest_missing_gap_s": 0.0,
+      "gaps": []
+    },
+    "goal_estimation": {
+      "accepted_samples": 113,
+      "method": "Fixed componentwise median of transformed goal observations; yaw-only / z=0 projection",
+      "coplanar_with_world": true,
+      "goal_area_center": [
+        -0.12767583028296864,
+        -0.21552658586838072,
+        0.0
+      ],
+      "desired_object_center_height_m": 0.0225,
+      "anchor_before_time": 3.7700000000000005,
+      "stationary_during_manipulation": true,
+      "scatter_p95_m": 0.003320378174400469,
+      "max_scatter_m": 0.00589532955562359,
+      "raw_plane_z_median_m": 0.03166975820414403,
+      "raw_plane_tilt_median_deg": 3.5771010707225694,
+      "anchor_source": "pre_pickup"
+    },
+    "review_flags": [
+      "Release lacks a sustained adjacent stationary period; estimated motion end only.",
+      "Lowering begins away from the goal region; placement label is based on height motion only.",
+      "Landscape still-photo calibration / crop has not been validated for this video recording mode.",
+      "Height axis is a configured proxy, not a verified gravity direction."
+    ],
+    "usable_for_retargeting": false
+  },
+  "coordinate_frame_convention": "W is ID0 centre: +X decoded corner0 to corner1; +Y corner3 to corner0; +Z out of printed face. Standard41 corners reordered [1,0,3,2] for OpenCV IPPE. W_T_tag = inverse(C_T_W) @ C_T_tag. World ID1 is registered to ID0. World axes are not gravity-calibrated. Object centre = face centre minus edge/2 along outward tag Z; common object orientation is unspecified.",
+  "parameters": {
+    "goal_object_offset": [
+      -0.09,
+      0.09,
+      0.0
+    ],
+    "goal_offset_frame": "goal_tag",
+    "goal_offset_verified": true,
+    "goal_coplanar": true,
+    "goal_center_height": 0.0225,
+    "vertical_axis": "z",
+    "vertical_sign": 1,
+    "vertical_verified": false,
+    "calibration_verified": false,
+    "max_reprojection_error": 3.0,
+    "max_speed": 2.0,
+    "max_gap_frames": 3,
+    "max_gap_span": 0.15,
+    "smoothing_window": 7,
+    "stationary_speed": 0.03,
+    "vertical_speed": 0.03,
+    "min_motion_duration": 0.2,
+    "stationary_duration": 0.3,
+    "goal_radius": 0.06,
+    "max_goal_scatter": 0.02,
+    "min_coverage": 0.9,
+    "phase_overrides": {}
+  },
+  "interpolation_gaps": [],
+  "goal_region": {
+    "shape": "circle",
+    "radius_m": 0.06,
+    "diameter_m": 0.12,
+    "center_world": [
+      -0.12767583028296864,
+      -0.21552658586838072,
+      0.0
+    ],
+    "center_offset_goal_tag": [
+      -0.09,
+      0.09,
+      0.0
+    ],
+    "membership": "Projected block centre within radius; no footprint or contact test",
+    "plane": "W z=0"
+  },
+  "tracking_configuration": {
+    "tag_groups": {
+      "world": [
+        0,
+        1
+      ],
+      "object": [
+        4,
+        5,
+        6
+      ],
+      "hand": [],
+      "target": [
+        2
+      ]
+    },
+    "family": "Standard41h12",
+    "pose_tag_sizes_m": {
+      "0": 0.03333333333333333,
+      "1": 0.03333333333333333,
+      "4": 0.022222222222222223,
+      "5": 0.022222222222222223,
+      "6": 0.022222222222222223,
+      "2": 0.03333333333333333
+    },
+    "world_registration": "First co-visible positive-depth poses per edge; fixed registration to ID0. Lowest-error current world tag supplies camera pose; no temporal averaging.",
+    "registered_world_ids": [
+      0,
+      1
+    ],
+    "effective_camera_matrix": [
+      [
+        1463.4421760557275,
+        0.0,
+        956.8109339418322
+      ],
+      [
+        0.0,
+        1462.8855824606012,
+        547.9786305126403
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "distortion_coefficients": [
+      0.14116762611443548,
+      -0.581488041160407,
+      -0.00025193970627592095,
+      -0.0009098059794901401,
+      0.8416433923459204
+    ],
+    "cube_center": {
+      "edge_m": 0.045,
+      "frames_tracked": 399,
+      "method": "Face centre minus 22.5 mm outward normal; select lowest-reprojection-error current face, no averaging or temporal filtering.",
+      "face_labels": {
+        "4": "initial camera-facing face",
+        "5": "initial top face",
+        "6": "third orthogonal face"
+      },
+      "assumptions": [
+        "Tags centred on each face and flush with the cube surface.",
+        "Decoded tag z axis points outward on every face, including opposite faces."
+      ],
+      "orientation_exported": false,
+      "orientation_reason": "Decoded in-plane mounting rotations and face association are unspecified."
+    }
+  },
+  "sources": {
+    "tracking": "results\\test_007_block_only_raw",
+    "object": "results\\test_007_block_only_raw\\object\\cube_center\\trajectory.csv",
+    "video": "videos\\test_007_block_only.MOV",
+    "calibration": "results\\camera_calibration_landscape\\calibration.json"
+  },
+  "notes": [
+    "Raw inputs preserved. Object positions are cube centres, goal is a fixed robust anchor.",
+    "Goal offset locates the surface circle in goal-tag coordinates; goal_center_height separately locates the desired block centre. Coplanar mode enforces W z=0 and yaw-only orientation and locks the anchor before pickup.",
+    "valid_measurement means accepted measured input; object columns may be smoothed. Raw columns preserve measurements.",
+    "Pickup/release are object-motion estimates, not grasp/contact detections; override in phase_overrides.",
+    "transport.csv covers pickup through release, including invalid rows. transport_progress normalizes the inner transport phase and is blank outside it or at unavailable samples.",
+    "transport_* metrics use transport_start through transport_end; pickup_to_release_* cover the full carrying interval. Paths/speeds never bridge missing samples; duration includes gaps.",
+    "Lift values are relative to first retained object position and the configured signed height axis."
+  ]
+}

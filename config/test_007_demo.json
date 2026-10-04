@@ -1,0 +1,28 @@
+{
+  "goal_object_offset": [
+    -0.09,
+    0.09,
+    0.0
+  ],
+  "goal_offset_frame": "goal_tag",
+  "goal_offset_verified": true,
+  "vertical_axis": "z",
+  "vertical_sign": 1,
+  "vertical_verified": false,
+  "calibration_verified": false,
+  "max_reprojection_error": 3.0,
+  "max_speed": 2.0,
+  "max_gap_frames": 3,
+  "max_gap_span": 0.15,
+  "smoothing_window": 7,
+  "stationary_speed": 0.03,
+  "vertical_speed": 0.03,
+  "min_motion_duration": 0.2,
+  "stationary_duration": 0.3,
+  "goal_radius": 0.06,
+  "max_goal_scatter": 0.02,
+  "min_coverage": 0.9,
+  "phase_overrides": {},
+  "goal_coplanar": true,
+  "goal_center_height": 0.0225
+}

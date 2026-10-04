@@ -539,3 +539,111 @@ The small functions in `describe_object_trajectory.py` are:
 - `compute_metrics`: calculate net displacement, lift, path, duration and endpoints.
 - `plot_results`: render input coordinates, relative 3D path and phase-marked speed.
 - `main`: connect the steps, expose tuning options, and export CSV/JSON.
+
+
+## World and target tracking (test_007)
+
+```powershell
+.\.venv\Scripts\python.exe scripts/track_apriltags.py --multi-tag-raw --video videos/test_007_block_only.MOV --calibration results/camera_calibration_landscape/calibration.json --family Standard41h12 --tag-size-convention full-pattern --world-ids 0 1 --target-id 2 --hand-ids --world-size 0.060 --body-size 0.040 --cube-edge 0.045 --calibration-fit center-crop --output results/test_007_block_only_raw
+```
+
+IDs 0 and 1 supply the stationary world reference; ID0 remains the origin.
+ID2 is the target and never supplies a camera/world reference. Object IDs 4?6
+and the 45 mm cube geometry are retained. No wrist tags are requested.
+Target trajectory and plot are in `target/id2/`; object face trajectories are
+in `object/id4`?`object/id6`, and the object centre is in `object/cube_center/`.
+All outputs are raw, with missing observations left blank.
+
+This run assumes the previous 60 mm full-pattern world size also applies to
+the target (override with `--target-size`) and retains 40 mm object patterns.
+The new video is landscape 1920?1080. It uses the existing landscape still-photo
+calibration with a center-crop model, rather than the portrait video calibration.
+Validate distances or calibrate the landscape recording mode before treating
+these coordinates as accurate metric supervision.
+
+
+## Task-level human demonstration extraction
+
+The current processing objective is an object/goal-relative task description for
+later retargeting. It requires no hand or wrist observations. Run AprilTag tracking
+with the command above, then:
+
+```powershell
+.\.venv\Scripts\python.exe scripts/process_task_demo.py results/test_007_block_only_raw --config config/test_007_demo.json
+```
+
+Outputs in `results/test_007_block_only_raw/task_demo/`:
+
+- `processed_demo.csv`: every source frame, world object centre, positions relative
+  to start and goal, speed, phase, normalized transport progress, raw coordinates,
+  measurement validity, processed validity, interpolation and rejection flags.
+- `raw_trajectory.csv`: unchanged measured positions; `cleaned_trajectory.csv`:
+  accepted measurements before interpolation/smoothing.
+- `transport.csv`: all frames between approximate pickup and release, including
+  invalid rows. Its progress field is time-normalized from `transport_start` to
+  `transport_end`, the inner phase between initial lift and final lowering.
+- `metadata.json`: positions, displacement, timestamps, inner transport and full
+  pickup-to-release metrics, detection rates, retained coverage, missing gaps,
+  fixed-goal scatter, review flags, parameters and tracking provenance.
+- `trajectory_3d.png`, `position_time.png`, `speed_phases.png`, `top_down.png`.
+
+`process_task_demo.py` reuses `filter_trajectory.reject_spikes` for isolated
+position excursions (no object orientation is invented), `fill_position_gaps`
+for bounded interpolation, `smooth_positions` for SG smoothing, and existing
+velocity/run helpers for segmentation. Defaults reject object-centre samples
+above 3 px reprojection error, reject isolated spikes above 2 m/s, fill at most
+3 missing frames with at most 0.15 s between endpoints, and apply a seven-sample
+quadratic fit. Unfilled gaps and timestamp jumps split filters, velocities and
+paths. The raw cached tracking files are preserved. World registration retains
+the original tracker's fixed co-observation estimate and current reference choice;
+this processing step cannot correct a biased reference or sustained wrong pose.
+
+World axes follow ID0's printed orientation: X corner0?corner1, Y corner3?corner0,
+Z out of the tag face. The new preview suggests ID0 is flat on the table, but
+there is no gravity calibration. `vertical_axis`, `vertical_sign` and
+`vertical_verified` keep height assumptions explicit. The supplied landscape
+still-photo calibration is also flagged as unverified for this recording mode.
+
+Edit `config/test_007_demo.json` to change `goal_object_offset`, which is in metres
+in **goal-tag coordinates**. Each observation uses
+`p_goal_tag + R_world_goal @ goal_object_offset`; a componentwise median forms a
+fixed offline goal anchor. The goal is assumed stationary and needs accepted
+world-relative poses somewhere in the clip. Missing goal observations are not
+synthesized: detection gaps and goal scatter remain in metadata. The goal area is a 12 cm diameter circle, offset `[-0.09,0.09,0]` metres in
+goal-tag coordinates. `goal_coplanar: true` projects measured tag poses to world
+z=0 with yaw-only rotation, removing spurious tilt/height from the fixed goal.
+The anchor uses pre-pickup measurements, with stationary-goal observations during
+manipulation as a fallback if pre-pickup detection is unavailable. It is fixed
+throughout processing. `goal_center_height: 0.0225` separately specifies the
+desired centre height for the existing 45 mm cube. Circle membership tests the
+projected object centre, without requiring its whole footprint to fit. Planar
+placement error and height error are reported separately; being inside the
+circle alone does not establish release or tabletop contact. `goal_offset_verified`
+is true for the user-specified surface geometry; gravity and calibration remain
+unverified. Both 3D and top-down plots show the circle.
+
+Phase heuristics use sustained speed above `stationary_speed`, signed height
+velocity above `vertical_speed`, and stationary brackets of `stationary_duration`.
+The initial lift uses the early quarter of the detected motion interval; final
+lowering uses its latter half. Goal proximity supports placement confidence;
+lowering away from the goal remains labelled but is flagged. Quiet samples
+outside the motion interval are pre/post phases. Pickup/release denote motion
+transitions, not observed contact. Uncertain estimates remain available with
+review flags. Override any bounds explicitly, for example:
+
+```json
+"phase_overrides": {
+  "pickup_time": 3.8,
+  "transport_start": 5.0,
+  "transport_end": 8.0,
+  "release_time": 9.0
+}
+```
+
+Overrides must be ordered and within the recording. Setting a bound to null
+marks it unavailable. `valid_measurement` describes accepted raw evidence;
+`valid_processed` describes available filtered positions. An interpolated sample
+may be valid for processing without being a measurement. All distances are
+metres and times seconds. Review flags deliberately prevent the demonstration
+being labelled usable for retargeting until geometry/calibration, coverage and
+phase confidence have been checked. No robot control or learning is included.

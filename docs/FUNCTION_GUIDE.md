@@ -152,3 +152,24 @@ Run all tests with `.venv/Scripts/python.exe -m unittest discover -s tests -v`.
 These thresholds are interpretable but can produce short alternating phases near
 thresholds. Review event times against the recording. A phase name is not evidence
 of contact, grasp success, or a robot action. No LIBERO mapping is applied.
+
+
+## Task-level demo processor
+
+`process_task_demo.py` consumes the cached raw tracking run (including the object
+cube-centre and goal-tag trajectories); it never needs wrist poses.
+
+- `validate_config`: validates filtering, goal geometry, signed height axis and phase overrides.
+- `clean_trajectory`: reuses position spike rejection, bounded gap filling and SG smoothing.
+- `compute_goal_position`: rotates goal-local surface offsets, optionally projects to world-coplanar yaw/XY, and locks a pre-pickup target; adds block-centre height separately.
+- `goal_planar_distance`: computes circle membership from projected object centres, independently of height.
+- `trajectory_velocity`: computes velocity only inside available continuous segments.
+- `segment_task_phases`: estimates object-motion bounds and lift/transport/lower phases; applies overrides.
+- `missing_gap_metrics`: counts all missing runs, including clip ends.
+- `compute_task_metrics`: computes normalization anchors, placement error, lift and gap-aware transport metrics.
+- `export_processed_demo`: preserves every frame and evidence flags, plus raw and carrying trajectories.
+- `plot_demo`: renders world-space trajectory, positions, speed boundaries and top-down projection.
+- `run` / `main`: validate cached frame alignment, compute quality metrics and export the artifacts.
+
+See README and `config/test_007_demo.json` for the current recording's explicit
+unverified height, target-offset and landscape-calibration assumptions.
