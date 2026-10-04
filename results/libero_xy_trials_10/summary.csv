@@ -1,0 +1,7 @@
+trial,requested_dx,requested_dy,applied_dx,applied_dy,success,libero_success,grasp_acquired,lifted,grasp_lost,remained_after_release,steps,eef_rmse_mm,maximum_eef_error_mm,final_target_error_mm,failure_phase,failure_reason
+1,0,0,0.0,0.0,True,True,True,True,False,True,2129,1.8942951047154877,15.895130336885988,11.659473614760104,,
+2,0.02,0,0.02,0.0,True,True,True,True,False,True,2141,1.878901979977489,15.876724160144757,11.631180947610034,,
+3,-0.02,0,-0.02,0.0,True,True,True,True,False,True,2121,1.9228639711105284,16.503631919032266,11.208640907161342,,
+4,0,0.02,0.0,0.02,True,True,True,True,False,True,2163,1.9147298824726646,16.4702086128365,11.169225848073175,,
+5,0,-0.02,0.0,-0.02,True,True,True,True,False,True,2099,1.8885928521783684,15.89848114578734,11.640262092853078,,
+6,0.02,0.02,0.02,0.02,True,True,True,True,False,True,2178,1.9182640616940663,17.129163511147265,10.65955518943016,,

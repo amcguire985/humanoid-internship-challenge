@@ -1,0 +1,19 @@
+{
+  "status": "stopped_at_user_request",
+  "completed_trials": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "interrupted_trials": [
+    7
+  ],
+  "not_run": [
+    8,
+    9,
+    10
+  ]
+}

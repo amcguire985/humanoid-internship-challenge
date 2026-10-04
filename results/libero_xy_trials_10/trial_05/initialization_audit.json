@@ -1,0 +1,36 @@
+{
+  "only_bowl_xy_changed": true,
+  "object_z_unchanged": true,
+  "object_orientation_unchanged": true,
+  "robot_configuration_unchanged": true,
+  "target_and_other_object_poses_unchanged": true,
+  "velocities_unchanged": true,
+  "actual_perturbed_object_start": [
+    -0.06390143206336037,
+    0.18345985704175619,
+    0.8984041501882478
+  ],
+  "fixed_target_anchor": [
+    0.07287702006820722,
+    0.21238385502430443,
+    0.9024998346662079
+  ],
+  "bowl_free_joint_qpos": [
+    -0.06390143206336037,
+    0.18345985704175619,
+    0.8984041501882478,
+    0.7071067829265477,
+    -2.7755353437344595e-05,
+    3.3351593347629462e-06,
+    0.7071067788939557
+  ],
+  "robot_arm_qpos": [
+    -7.778589328205276e-06,
+    -0.18998760752503868,
+    -1.7379629484181446e-05,
+    -2.491704283261854,
+    6.533349296318725e-06,
+    2.304296581420441,
+    0.7854599292802148
+  ]
+}

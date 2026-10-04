@@ -96,6 +96,45 @@ class TaskDemoTests(unittest.TestCase):
         self.assertEqual(m['transport_path_length'],0)
         self.assertFalse(m['transport_complete'])
 
+    def test_video_annotations_snap_to_source_frames(self):
+        t,p,goal=self.demo()
+        c=validate_config(dict(phase_overrides=dict(transport_start=2.013,
+                              transport_end=3.013,release_time=4.113)))
+        labels,_,bounds,automatic,progress,_=segment_task_phases(t,p,goal,c)
+        self.assertEqual(bounds['transport_start'],t[40])
+        self.assertEqual(bounds['transport_end'],t[60])
+        self.assertEqual(bounds['release_time'],t[82])
+        self.assertEqual(progress[40],0.)
+        self.assertEqual(progress[60],1.)
+        self.assertEqual(labels[60],'transport')
+        self.assertNotEqual(bounds['release_time'],automatic['release_time'])
+        # Reject a bad recording-time annotation before snapping could hide it.
+        c['phase_overrides']['release_time']=t[-1]+.001
+        with self.assertRaises(ValueError): segment_task_phases(t,p,goal,c)
+        keep=(t<=2.) | (t>=3.)
+        c['phase_overrides']=dict(transport_start=2.5,transport_end=3.5,release_time=4.1)
+        with self.assertRaises(ValueError): segment_task_phases(t[keep],p[keep],goal,c)
+
+    def test_reviewed_test007_includes_slow_lowering_and_hold(self):
+        import json
+        root=Path(__file__).resolve().parents[1]
+        c=validate_config(json.loads((root/'config/test_007_demo.json').read_text()))
+        with (root/'results/test_007_block_only_raw/task_demo/processed_demo.csv').open() as handle:
+            rows=list(csv.DictReader(handle))
+        t=np.array([float(r['time']) for r in rows])
+        p=np.array([[float(r['object_'+a]) for a in 'xyz'] for r in rows])
+        goal=np.array([float(rows[0]['goal_'+a]) for a in 'xyz'])
+        labels,_,bounds,automatic,progress,_=segment_task_phases(t,p,goal,c)
+        self.assertAlmostEqual(bounds['transport_start'],4.336666666666667)
+        self.assertAlmostEqual(bounds['transport_end'],10.306666666666667)
+        self.assertGreater(bounds['release_time'],bounds['transport_end'])
+        self.assertLess(automatic['transport_end'],6.5)
+        for time in (4.5,6.5,8.5,10.2):
+            self.assertEqual(labels[np.argmin(abs(t-time))],'transport')
+        self.assertEqual(np.isfinite(progress).sum(),180)
+        self.assertEqual(np.nanmin(progress),0.)
+        self.assertEqual(np.nanmax(progress),1.)
+
     def test_export_preserves_invalid_transport_rows(self):
         t,p,goal=self.demo(); p[45:50]=np.nan; c=validate_config({})
         c['phase_overrides']=dict(pickup_time=1.,transport_start=2.,transport_end=3.,release_time=4.)

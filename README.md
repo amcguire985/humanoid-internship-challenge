@@ -640,7 +640,13 @@ review flags. Override any bounds explicitly, for example:
 }
 ```
 
-Overrides must be ordered and within the recording. Setting a bound to null
+Overrides must be ordered and within the recording. Non-null annotations snap
+to the nearest source timestamp (annotations in long timestamp gaps are rejected).
+Named semantic annotations `grasp_time_seconds`, `release_time_seconds`,
+`transport_start_time_seconds`, and `transport_end_time_seconds` take precedence
+over legacy overrides when non-null. Requested and effective times are retained
+in `phase_boundary_sources`; optional
+`phase_override_reason` records the review rationale. Setting a bound to null
 marks it unavailable. `valid_measurement` describes accepted raw evidence;
 `valid_processed` describes available filtered positions. An interpolated sample
 may be valid for processing without being a measurement. All distances are
@@ -648,6 +654,13 @@ metres and times seconds. Review flags deliberately prevent the demonstration
 being labelled usable for retargeting until geometry/calibration, coverage and
 phase confidence have been checked. No robot control or learning is included.
 
+
+The reviewed test_007 configuration uses transport **4.336667–10.306667 s**
+(requested 4.33–10.30 s), including carrying, lowering, and the final hold.
+Release is annotated at **10.508333 s**. The automatic 6.405 s transport end
+confused a mid-carry descent with placement, and the 8.107 s release estimate
+missed slow lowering. Original automatic estimates remain in metadata. See
+[video review and boundary comparison](results/test_007_block_only_raw/task_demo/phase_review.md).
 
 ## LIBERO object-motion following test
 
@@ -657,3 +670,32 @@ follow the processed test_006 object motion in the exploration scene. Edit
 per-step actions and tracking plots go to `results/libero_transport/`.
 See [experiment details](docs/LIBERO_TRAJECTORY.md) for source/frame conventions,
 controller scaling, gap handling and interpretation.
+
+### Task-centric human object retargeting (geometry only)
+
+`python scripts/retarget_libero_object.py` maps the processed test_007 inner
+transport interval onto the black-bowl-to-plate task, then tracks an offset EEF
+path with the existing normalized OSC controller and open gripper. See
+[the mapping, input limitations, configuration, and run instructions](docs/LIBERO_RETARGETING.md).
+Outputs are saved under `results/libero_retarget/`.
+
+### Scripted Panda grasp, human transport, and release
+
+`python scripts/scripted_libero_pick_place.py` runs one controlled physical
+manipulation attempt using `config/libero_pick_place.json`. Named manual human
+events (`grasp_time_seconds`, `release_time_seconds`, and optional transport
+start/end fields) live in `config/test_007_demo.json`; the script reads them at
+run time. See [state machine, geometry, controller conventions, and diagnostics](docs/LIBERO_PICK_PLACE.md).
+
+The [validated pick-and-place result](results/libero_pick_place_attempt_003/README.md)
+completed release and retraction with LIBERO success (EEF RMSE 1.89 mm). Earlier
+attempts and their diagnostics are retained separately.
+
+### Ten controlled bowl XY trials
+
+`scripts/libero_xy_trials.py` validates and runs ten specified initial bowl XY
+perturbations with the successful scene and unchanged manipulation settings.
+See the [experiment protocol](docs/LIBERO_XY_TRIALS.md) and
+[results and per-trial outcomes](results/libero_xy_trials_10/README.md).
+The requested +4 cm X pose intersects the plate; its validated replacement is
++2.50671875 cm along the same X direction. All other requested offsets are kept.

@@ -1,6 +1,6 @@
 {
-  "pickup_to_release_path_length": 0.2736879961907941,
-  "pickup_to_release_duration": 4.336666666666667,
+  "pickup_to_release_path_length": 0.33693800488329295,
+  "pickup_to_release_duration": 6.738333333333334,
   "object_start_position": [
     -0.24396009898685883,
     -0.030793472260239176,
@@ -12,9 +12,9 @@
     0.0225
   ],
   "final_object_position": [
-    -0.09290257950363981,
-    -0.17998000241389336,
-    0.045652559180806816
+    -0.09290257950363978,
+    -0.17998000241389323,
+    0.0456525591808068
   ],
   "start_sample_time": 0.0,
   "final_sample_time": 13.276666666666667,
@@ -24,28 +24,60 @@
     -0.014380903859975959
   ],
   "start_to_goal_distance": 0.2187582336900418,
-  "final_placement_error": 0.05485234326507565,
-  "final_planar_placement_error": 0.04972663838476242,
+  "final_placement_error": 0.05485234326507575,
+  "final_planar_placement_error": 0.049726638384762545,
   "final_inside_goal_region": true,
   "final_distance_outside_goal_region": 0.0,
-  "final_goal_height_error": 0.023152559180806817,
+  "final_goal_height_error": 0.023152559180806803,
   "max_lift_height": 0.07912846459707416,
   "max_lift_height_entire_clip": 0.07912846459707416,
-  "transport_path_length": 0.10210603736408803,
-  "transport_duration": 1.5683333333333334,
-  "transport_observed_duration": 1.5683333333333334,
-  "average_transport_speed": 0.06510480597072563,
-  "maximum_transport_speed": 0.1090587064118434,
+  "transport_path_length": 0.30243890144337787,
+  "transport_duration": 5.97,
+  "transport_observed_duration": 5.97,
+  "average_transport_speed": 0.05065978248632795,
+  "maximum_transport_speed": 0.10905870641184416,
   "transport_complete": true,
   "pickup_time": 3.7700000000000005,
-  "transport_start": 4.836666666666667,
-  "transport_end": 6.405,
-  "release_time": 8.106666666666667,
+  "transport_start": 4.336666666666667,
+  "transport_end": 10.306666666666667,
+  "release_time": 10.508333333333335,
   "automatic_phase_estimates": {
     "pickup_time": 3.7700000000000005,
     "transport_start": 4.836666666666667,
     "transport_end": 6.405,
     "release_time": 8.106666666666667
+  },
+  "automatic_phase_review_flags": [
+    "Release lacks a sustained adjacent stationary period; estimated motion end only.",
+    "Lowering begins away from the goal region; placement label is based on height motion only."
+  ],
+  "manual_event_annotations": {
+    "grasp_time_seconds": 3.77,
+    "release_time_seconds": 10.5,
+    "transport_start_time_seconds": 4.33,
+    "transport_end_time_seconds": 10.3
+  },
+  "phase_boundary_sources": {
+    "pickup_time": {
+      "source": "manual_override",
+      "requested_time_s": 3.77,
+      "time_s": 3.7700000000000005
+    },
+    "transport_start": {
+      "source": "manual_override",
+      "requested_time_s": 4.33,
+      "time_s": 4.336666666666667
+    },
+    "transport_end": {
+      "source": "manual_override",
+      "requested_time_s": 10.3,
+      "time_s": 10.306666666666667
+    },
+    "release_time": {
+      "source": "manual_override",
+      "requested_time_s": 10.5,
+      "time_s": 10.508333333333335
+    }
   },
   "quality": {
     "detection_rates": {
@@ -125,8 +157,8 @@
       "anchor_source": "pre_pickup"
     },
     "review_flags": [
-      "Release lacks a sustained adjacent stationary period; estimated motion end only.",
-      "Lowering begins away from the goal region; placement label is based on height motion only.",
+      "Automatic phase estimate (manual overrides applied): Release lacks a sustained adjacent stationary period; estimated motion end only.",
+      "Automatic phase estimate (manual overrides applied): Lowering begins away from the goal region; placement label is based on height motion only.",
       "Landscape still-photo calibration / crop has not been validated for this video recording mode.",
       "Height axis is a configured proxy, not a verified gravity direction."
     ],
@@ -159,7 +191,12 @@
     "goal_radius": 0.06,
     "max_goal_scatter": 0.02,
     "min_coverage": 0.9,
-    "phase_overrides": {}
+    "phase_overrides": {},
+    "phase_override_reason": "Video-reviewed correction: transport includes carrying, lowering, and the final hold, from approximately 4.33 s through 10.30 s; hand opening/release is approximately 10.5 s. Automatic height reversal at 6.405 s and speed cutoff at 8.107 s truncate the action. Boundaries are annotations, not contact detections.",
+    "grasp_time_seconds": 3.77,
+    "release_time_seconds": 10.5,
+    "transport_start_time_seconds": 4.33,
+    "transport_end_time_seconds": 10.3
   },
   "interpolation_gaps": [],
   "goal_region": {
@@ -251,8 +288,8 @@
     }
   },
   "sources": {
-    "tracking": "results\\test_007_block_only_raw",
-    "object": "results\\test_007_block_only_raw\\object\\cube_center\\trajectory.csv",
+    "tracking": "results/test_007_block_only_raw",
+    "object": "results/test_007_block_only_raw/object/cube_center/trajectory.csv",
     "video": "videos\\test_007_block_only.MOV",
     "calibration": "results\\camera_calibration_landscape\\calibration.json"
   },
@@ -261,6 +298,7 @@
     "Goal offset locates the surface circle in goal-tag coordinates; goal_center_height separately locates the desired block centre. Coplanar mode enforces W z=0 and yaw-only orientation and locks the anchor before pickup.",
     "valid_measurement means accepted measured input; object columns may be smoothed. Raw columns preserve measurements.",
     "Pickup/release are object-motion estimates, not grasp/contact detections; override in phase_overrides.",
+    "Manual phase overrides are snapped to the nearest source timestamp; requested times and rationale are retained in parameters. Automatic estimates remain unchanged for comparison.",
     "transport.csv covers pickup through release, including invalid rows. transport_progress normalizes the inner transport phase and is blank outside it or at unavailable samples.",
     "transport_* metrics use transport_start through transport_end; pickup_to_release_* cover the full carrying interval. Paths/speeds never bridge missing samples; duration includes gaps.",
     "Lift values are relative to first retained object position and the configured signed height axis."

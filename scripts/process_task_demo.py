@@ -26,7 +26,41 @@ DEFAULTS = dict(goal_object_offset=[0., 0., 0.], goal_offset_frame='goal_tag',
                 max_reprojection_error=3., max_speed=2., max_gap_frames=3,
                 max_gap_span=.15, smoothing_window=7, stationary_speed=.03,
                 vertical_speed=.03, min_motion_duration=.2, stationary_duration=.3,
-                goal_radius=.05, max_goal_scatter=.02, min_coverage=.9, phase_overrides={})
+                goal_radius=.05, max_goal_scatter=.02, min_coverage=.9, phase_overrides={},
+                phase_override_reason=None, grasp_time_seconds=None, release_time_seconds=None,
+                transport_start_time_seconds=None, transport_end_time_seconds=None)
+
+
+# Named semantic annotations override legacy phase_overrides when non-null.
+EVENT_BOUNDARIES = dict(grasp_time_seconds='pickup_time', release_time_seconds='release_time',
+                        transport_start_time_seconds='transport_start', transport_end_time_seconds='transport_end')
+
+
+def manual_phase_overrides(config):
+    overrides = dict(config.get('phase_overrides', {}))
+    for event, boundary in EVENT_BOUNDARIES.items():
+        if config.get(event) is not None:
+            overrides[boundary] = config[event]
+    return overrides
+
+
+def resolve_phase_bounds(t, automatic, config):
+    overrides = manual_phase_overrides(config)
+    bounds = dict(automatic)
+    requested = {**bounds, **overrides}
+    keys = ('pickup_time', 'transport_start', 'transport_end', 'release_time')
+    known = [requested[k] for k in keys if requested[k] is not None]
+    if any(value < t[0] or value > t[-1] for value in known) or any(b < a for a, b in zip(known[:-1], known[1:])):
+        raise ValueError('Phase timestamps must be ordered pickup <= transport_start <= transport_end <= release within recording')
+    for key, value in overrides.items():
+        if value is None:
+            bounds[key] = None
+        else:
+            index = int(np.argmin(np.abs(t-value)))
+            if abs(t[index]-value) > config['max_gap_span']:
+                raise ValueError('Phase override lies in an unresolved timestamp gap: '+key)
+            bounds[key] = float(t[index])
+    return bounds
 
 
 def read_csv(path):
@@ -63,9 +97,11 @@ def validate_config(config):
     allowed = {'pickup_time', 'transport_start', 'transport_end', 'release_time'}
     if not isinstance(c['phase_overrides'], dict) or set(c['phase_overrides']) - allowed:
         raise ValueError('Unknown phase override')
-    for value in c['phase_overrides'].values():
+    for value in list(c['phase_overrides'].values()) + [c[k] for k in EVENT_BOUNDARIES]:
         if value is not None and (not np.isfinite(value) or value < 0):
             raise ValueError('Phase overrides must be null or finite nonnegative seconds')
+    if c['phase_override_reason'] is not None and not isinstance(c['phase_override_reason'], str):
+        raise ValueError('Phase override reason must be text or null')
     return c
 
 
@@ -177,7 +213,9 @@ def segment_task_phases(t, p, goal, c):
         active = (np.arange(len(t)) >= first) & (np.arange(len(t)) <= last) & moving
         lifts = np.flatnonzero(active & (vz > c['vertical_speed']))
         lowers = np.flatnonzero(active & (vz < -c['vertical_speed']))
-        # Only the initial lift and final lowering define transport bounds; intermediate reversals stay transport.
+        # Height-window heuristics only: a mid-carry descent or slow lowering can
+        # be mistaken for placement/release. Retain estimates for review and use
+        # explicit video annotations when those semantics are ambiguous.
         early_lifts = lifts[t[lifts] <= t[first] + max(.5, .25*(t[last]-t[first]))]
         late_lowers = lowers[t[lowers] >= t[first] + .5*(t[last]-t[first])]
         bounds['transport_start'] = float(t[early_lifts[-1]]) if len(early_lifts) else float(t[first])
@@ -189,10 +227,7 @@ def segment_task_phases(t, p, goal, c):
     else:
         notes.append('No sustained object motion detected; task timestamps unavailable.')
     estimated = bounds.copy()
-    bounds.update(c['phase_overrides'])
-    known = [bounds[k] for k in ('pickup_time', 'transport_start', 'transport_end', 'release_time') if bounds[k] is not None]
-    if any(value < t[0] or value > t[-1] for value in known) or any(b < a for a, b in zip(known[:-1], known[1:])):
-        raise ValueError('Phase timestamps must be ordered pickup <= transport_start <= transport_end <= release within recording')
+    bounds = resolve_phase_bounds(t, estimated, c)
     labels = np.full(len(t), 'stationary', dtype=object)
     pickup, ts, te, release = [bounds[k] for k in ('pickup_time', 'transport_start', 'transport_end', 'release_time')]
     if pickup is not None and release is not None:
@@ -285,10 +320,10 @@ def export_processed_demo(output, t, raw, cleaned, p, goal, labels, speed, progr
     manipulation = [r for r in records if pickup is not None and release is not None and pickup <= r['time'] <= release]
     for name, selected in [('processed_demo.csv',records), ('transport.csv',manipulation)]:
         with (output/name).open('w',newline='',encoding='utf-8') as handle:
-            writer=csv.DictWriter(handle,fieldnames=fields); writer.writeheader(); writer.writerows(selected)
+            writer=csv.DictWriter(handle,fieldnames=fields,lineterminator='\n'); writer.writeheader(); writer.writerows(selected)
     for name, values in [('raw_trajectory.csv',raw), ('cleaned_trajectory.csv',cleaned)]:
         with (output/name).open('w',newline='',encoding='utf-8') as handle:
-            writer=csv.writer(handle); writer.writerow(['time','x_world','y_world','z_world'])
+            writer=csv.writer(handle,lineterminator='\n'); writer.writerow(['time','x_world','y_world','z_world'])
             writer.writerows([float(t[i]),*[finite(v) for v in values[i]]] for i in range(len(t)))
 
 
@@ -319,8 +354,12 @@ def plot_demo(output, t, raw, p, goal, speed, labels, bounds, c):
     for group in groups: ax.plot(t[group],speed[group],color='black',linewidth=.9)
     ax.axhline(c['stationary_speed'],linestyle='--',color='gray',label='Stationary threshold')
     for key,value in bounds.items():
-        if value is not None: ax.axvline(value,label=f'{key}: {value:.2f}s',alpha=.7)
-    ax.set(xlabel='Time (s)',ylabel='Speed (m/s)',title='Approximate object-motion boundaries'); ax.legend(fontsize=8); ax.grid(alpha=.3)
+        if value is not None:
+            reviewed=' (reviewed)' if key in manual_phase_overrides(c) else ' (automatic)'
+            ax.axvline(value,label=f'{key}: {value:.2f}s{reviewed}',alpha=.7)
+    if bounds['transport_start'] is not None and bounds['transport_end'] is not None:
+        ax.axvspan(bounds['transport_start'],bounds['transport_end'],color='tab:green',alpha=.12,label='Selected transport')
+    ax.set(xlabel='Time (s)',ylabel='Speed (m/s)',title='Object-motion phase boundaries'); ax.legend(fontsize=8); ax.grid(alpha=.3)
     fig.tight_layout(); fig.savefig(output/'speed_phases.png',dpi=160); plt.close(fig)
     horizontal=[j for j in range(3) if j!='xyz'.index(c['vertical_axis'])]
     fig,ax=plt.subplots(figsize=(8,7))
@@ -389,7 +428,7 @@ def run(source, output, config):
                  interpolated_frames=int(np.sum(provenance=='interpolated')),
                  raw_missing=missing_gap_metrics(t,raw_valid), filtered_missing=missing_gap_metrics(t,valid),
                  goal_estimation=goal_info)
-    flags=notes.copy()
+    flags=[('Automatic phase estimate (manual overrides applied): '+note) if manual_phase_overrides(c) else note for note in notes]
     if not c['calibration_verified']: flags.append('Landscape still-photo calibration / crop has not been validated for this video recording mode.')
     if not c['vertical_verified']: flags.append('Height axis is a configured proxy, not a verified gravity direction.')
     if not c['goal_offset_verified']: flags.append('Desired centre offset from goal tag is a geometry assumption.')
@@ -399,7 +438,14 @@ def run(source, output, config):
     if not metrics['final_inside_goal_region']: flags.append('Final position lies outside configured goal radius.')
     quality['review_flags']=flags
     quality['usable_for_retargeting']=not flags
-    report={**metrics,**bounds, 'automatic_phase_estimates':estimated, 'quality':quality,
+    report={**metrics,**bounds, 'automatic_phase_estimates':estimated,
+            'automatic_phase_review_flags':notes,
+            'manual_event_annotations':{k:c[k] for k in EVENT_BOUNDARIES},
+            'phase_boundary_sources':{
+                key:dict(source='manual_override' if key in manual_phase_overrides(c) else 'automatic',
+                         requested_time_s=manual_phase_overrides(c).get(key), time_s=value)
+                for key,value in bounds.items()},
+            'quality':quality,
             'coordinate_frame_convention':CONVENTION,'parameters':c,'interpolation_gaps':gaps,
             'goal_region':dict(shape='circle',radius_m=c['goal_radius'],diameter_m=2*c['goal_radius'],
                                center_world=goal_info['goal_area_center'],center_offset_goal_tag=c['goal_object_offset'],
@@ -411,6 +457,7 @@ def run(source, output, config):
                      'Goal offset locates the surface circle in goal-tag coordinates; goal_center_height separately locates the desired block centre. Coplanar mode enforces W z=0 and yaw-only orientation and locks the anchor before pickup.',
                      'valid_measurement means accepted measured input; object columns may be smoothed. Raw columns preserve measurements.',
                      'Pickup/release are object-motion estimates, not grasp/contact detections; override in phase_overrides.',
+                     'Manual phase overrides are snapped to the nearest source timestamp; requested times and rationale are retained in parameters. Automatic estimates remain unchanged for comparison.',
                      'transport.csv covers pickup through release, including invalid rows. transport_progress normalizes the inner transport phase and is blank outside it or at unavailable samples.',
                      'transport_* metrics use transport_start through transport_end; pickup_to_release_* cover the full carrying interval. Paths/speeds never bridge missing samples; duration includes gaps.',
                      'Lift values are relative to first retained object position and the configured signed height axis.']}

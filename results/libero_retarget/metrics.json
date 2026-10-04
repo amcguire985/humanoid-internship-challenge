@@ -1,0 +1,571 @@
+{
+  "steps": 1168,
+  "completed": true,
+  "mean_error_m": 0.0016046649229580952,
+  "rmse_m": 0.0018366616427994487,
+  "maximum_error_m": 0.0032965722727157985,
+  "final_position_error_m": 0.00023227529399149203,
+  "clipped_steps": 0,
+  "stop_reason": null,
+  "stages": {
+    "scene_settle": {
+      "steps": 20,
+      "completed": true,
+      "mean_error_m": 1.9791093908326688e-12,
+      "rmse_m": 2.0660744338427332e-12,
+      "maximum_error_m": 2.3905697363474194e-12,
+      "final_position_error_m": 2.0398136974518286e-12,
+      "clipped_steps": 0
+    },
+    "approach": {
+      "steps": 521,
+      "completed": true,
+      "mean_error_m": 0.0018018481290772638,
+      "rmse_m": 0.0020399028742946303,
+      "maximum_error_m": 0.003073502186789568,
+      "final_position_error_m": 0.0006531552301666248,
+      "clipped_steps": 0
+    },
+    "transport": {
+      "steps": 607,
+      "completed": true,
+      "mean_error_m": 0.0015332493610788571,
+      "rmse_m": 0.0017080589966473139,
+      "maximum_error_m": 0.0032965722727157985,
+      "final_position_error_m": 0.00029326908255232796,
+      "clipped_steps": 0
+    },
+    "hold": {
+      "steps": 20,
+      "completed": true,
+      "mean_error_m": 0.00024016962756760485,
+      "rmse_m": 0.00024041935845871938,
+      "maximum_error_m": 0.0002761417075790319,
+      "final_position_error_m": 0.00023227529399149203,
+      "clipped_steps": 0
+    }
+  },
+  "retargeting": {
+    "axis_matrix": [
+      [
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "human_start": [
+      -0.2366257973769527,
+      -0.044039656109936424,
+      0.06357388480983904
+    ],
+    "human_goal": [
+      -0.12767583028296864,
+      -0.21552658586838072,
+      0.0225
+    ],
+    "sim_start": [
+      -0.06390143206336037,
+      0.20345985704175618,
+      0.8984041501882155
+    ],
+    "sim_goal": [
+      0.07287702006820722,
+      0.21238385502430443,
+      0.9024998346662079
+    ],
+    "human_start_to_goal_distance_m": 0.20727982637277978,
+    "libero_start_to_goal_distance_m": 0.13713043914041592,
+    "horizontal_scale_factor": 0.6746545852402234,
+    "lateral_scale_factor": 1.0,
+    "vertical_scale_factor": 1.0,
+    "human_transport_endpoint_progress": 0.9500420201007855,
+    "human_transport_endpoint_goal_error_m": 0.056631653506562234,
+    "endpoint_correction_m": [
+      0.010081156892373933,
+      -0.04933611301205068,
+      -0.022549309414472418
+    ],
+    "endpoint_correction_norm_m": 0.05517384458687023,
+    "start_error_m": 0.0,
+    "final_error_m": 0.0,
+    "maximum_lift_m": 0.07095248910300755,
+    "path_length_m": 0.2476653766182576
+  },
+  "requested_steps": 1168,
+  "time_scale_used": 5.068540057461949,
+  "control_frequency_hz": 20.0,
+  "fixed_orientation_matrix": [
+    [
+      0.9983867450712586,
+      0.000491829687169176,
+      -0.05677733147635984
+    ],
+    [
+      0.0004926243561614594,
+      -0.9999998786606145,
+      -8.148456952586369e-19
+    ],
+    [
+      -0.05677732458703333,
+      -2.7969896363106714e-05,
+      -0.9983868662149075
+    ]
+  ],
+  "eef_initial": [
+    -0.2084646605658239,
+    0.0,
+    1.1732794757296405
+  ],
+  "controller": {
+    "input_min": [
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0
+    ],
+    "input_max": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "output_min": [
+      -0.05,
+      -0.05,
+      -0.05,
+      -0.5,
+      -0.5,
+      -0.5
+    ],
+    "output_max": [
+      0.05,
+      0.05,
+      0.05,
+      0.5,
+      0.5,
+      0.5
+    ],
+    "action_min": [
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0
+    ],
+    "action_max": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "observation_keys": [
+    "robot0_joint_pos",
+    "robot0_joint_pos_cos",
+    "robot0_joint_pos_sin",
+    "robot0_joint_vel",
+    "robot0_eef_pos",
+    "robot0_eef_quat",
+    "robot0_gripper_qpos",
+    "robot0_gripper_qvel",
+    "akita_black_bowl_1_pos",
+    "akita_black_bowl_1_quat",
+    "akita_black_bowl_1_to_robot0_eef_pos",
+    "akita_black_bowl_1_to_robot0_eef_quat",
+    "akita_black_bowl_2_pos",
+    "akita_black_bowl_2_quat",
+    "akita_black_bowl_2_to_robot0_eef_pos",
+    "akita_black_bowl_2_to_robot0_eef_quat",
+    "cookies_1_pos",
+    "cookies_1_quat",
+    "cookies_1_to_robot0_eef_pos",
+    "cookies_1_to_robot0_eef_quat",
+    "glazed_rim_porcelain_ramekin_1_pos",
+    "glazed_rim_porcelain_ramekin_1_quat",
+    "glazed_rim_porcelain_ramekin_1_to_robot0_eef_pos",
+    "glazed_rim_porcelain_ramekin_1_to_robot0_eef_quat",
+    "plate_1_pos",
+    "plate_1_quat",
+    "plate_1_to_robot0_eef_pos",
+    "plate_1_to_robot0_eef_quat",
+    "robot0_proprio-state",
+    "object-state"
+  ],
+  "command_limited_steps": 0,
+  "maximum_orientation_error_rad": 0.0053689206733636315,
+  "final_eef_error_to_requested_goal_m": 0.00023227529399149203,
+  "simulated_object_displacement_m": 6.374900607397649e-13,
+  "task": "pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate",
+  "bddl": "/home/student/robot_challenge/LIBERO/libero/libero/bddl_files/libero_spatial/pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate.bddl",
+  "seed": 0,
+  "settings": {
+    "axis_permutation": [
+      0,
+      1,
+      2
+    ],
+    "axis_signs": [
+      1,
+      1,
+      1
+    ],
+    "horizontal_scale": 1.0,
+    "vertical_scale": 1.0,
+    "grasp_offset": [
+      0.0,
+      0.0,
+      0.18
+    ],
+    "target_offset": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "time_scale": 3.0,
+    "action_clip": 0.5,
+    "gripper": -1,
+    "workspace_min": [
+      -0.6,
+      -0.6,
+      0.85
+    ],
+    "workspace_max": [
+      0.6,
+      0.6,
+      1.5
+    ],
+    "max_source_gap_s": 0.15,
+    "max_eef_speed_m_s": 0.02,
+    "max_command_step_m": 0.025,
+    "approach_seconds": 3.0,
+    "start_tolerance_m": 0.005,
+    "settle_seconds": 1.0,
+    "scene_settle_seconds": 1.0
+  },
+  "source": "/home/student/robot_challenge/humanoid_internship_challenge/results/test_007_block_only_raw/task_demo/processed_demo.csv",
+  "source_metadata": {
+    "pickup_to_release_path_length": 0.33693800488329295,
+    "pickup_to_release_duration": 6.738333333333334,
+    "object_start_position": [
+      -0.24396009898685883,
+      -0.030793472260239176,
+      0.03688090385997596
+    ],
+    "goal_position": [
+      -0.12767583028296864,
+      -0.21552658586838072,
+      0.0225
+    ],
+    "final_object_position": [
+      -0.09290257950363978,
+      -0.17998000241389323,
+      0.0456525591808068
+    ],
+    "start_sample_time": 0.0,
+    "final_sample_time": 13.276666666666667,
+    "task_displacement": [
+      0.11628426870389019,
+      -0.18473311360814154,
+      -0.014380903859975959
+    ],
+    "start_to_goal_distance": 0.2187582336900418,
+    "final_placement_error": 0.05485234326507575,
+    "final_planar_placement_error": 0.049726638384762545,
+    "final_inside_goal_region": true,
+    "final_distance_outside_goal_region": 0.0,
+    "final_goal_height_error": 0.023152559180806803,
+    "max_lift_height": 0.07912846459707416,
+    "max_lift_height_entire_clip": 0.07912846459707416,
+    "transport_path_length": 0.30243890144337787,
+    "transport_duration": 5.97,
+    "transport_observed_duration": 5.97,
+    "average_transport_speed": 0.05065978248632795,
+    "maximum_transport_speed": 0.10905870641184416,
+    "transport_complete": true,
+    "pickup_time": 3.7700000000000005,
+    "transport_start": 4.336666666666667,
+    "transport_end": 10.306666666666667,
+    "release_time": 10.508333333333335,
+    "automatic_phase_estimates": {
+      "pickup_time": 3.7700000000000005,
+      "transport_start": 4.836666666666667,
+      "transport_end": 6.405,
+      "release_time": 8.106666666666667
+    },
+    "automatic_phase_review_flags": [
+      "Release lacks a sustained adjacent stationary period; estimated motion end only.",
+      "Lowering begins away from the goal region; placement label is based on height motion only."
+    ],
+    "phase_boundary_sources": {
+      "pickup_time": {
+        "source": "automatic",
+        "requested_time_s": null,
+        "time_s": 3.7700000000000005
+      },
+      "transport_start": {
+        "source": "manual_override",
+        "requested_time_s": 4.33,
+        "time_s": 4.336666666666667
+      },
+      "transport_end": {
+        "source": "manual_override",
+        "requested_time_s": 10.3,
+        "time_s": 10.306666666666667
+      },
+      "release_time": {
+        "source": "manual_override",
+        "requested_time_s": 10.5,
+        "time_s": 10.508333333333335
+      }
+    },
+    "quality": {
+      "detection_rates": {
+        "world": 1.0,
+        "object": 1.0,
+        "goal": 0.8270676691729323
+      },
+      "detection_rates_by_id": {
+        "0": 1.0,
+        "1": 0.43358395989974935,
+        "4": 0.9197994987468672,
+        "5": 1.0,
+        "6": 0.37343358395989973,
+        "2": 0.8270676691729323
+      },
+      "detection_missing_gaps": {
+        "world": {
+          "longest_missing_gap_frames": 0,
+          "longest_missing_gap_s": 0.0,
+          "gaps": []
+        },
+        "object": {
+          "longest_missing_gap_frames": 0,
+          "longest_missing_gap_s": 0.0,
+          "gaps": []
+        },
+        "goal": {
+          "longest_missing_gap_frames": 50,
+          "longest_missing_gap_s": 1.7016666666666689,
+          "gaps": [
+            {
+              "first_index": 236,
+              "last_index": 285,
+              "frames": 50,
+              "span_s": 1.7016666666666689
+            },
+            {
+              "first_index": 297,
+              "last_index": 315,
+              "frames": 19,
+              "span_s": 0.6683333333333312
+            }
+          ]
+        }
+      },
+      "raw_world_relative_object_rate": 1.0,
+      "retained_measurement_percentage": 100.0,
+      "processed_coverage_percentage": 100.0,
+      "rejected_frames": 0,
+      "interpolated_frames": 0,
+      "raw_missing": {
+        "longest_missing_gap_frames": 0,
+        "longest_missing_gap_s": 0.0,
+        "gaps": []
+      },
+      "filtered_missing": {
+        "longest_missing_gap_frames": 0,
+        "longest_missing_gap_s": 0.0,
+        "gaps": []
+      },
+      "goal_estimation": {
+        "accepted_samples": 113,
+        "method": "Fixed componentwise median of transformed goal observations; yaw-only / z=0 projection",
+        "coplanar_with_world": true,
+        "goal_area_center": [
+          -0.12767583028296864,
+          -0.21552658586838072,
+          0.0
+        ],
+        "desired_object_center_height_m": 0.0225,
+        "anchor_before_time": 3.7700000000000005,
+        "stationary_during_manipulation": true,
+        "scatter_p95_m": 0.003320378174400469,
+        "max_scatter_m": 0.00589532955562359,
+        "raw_plane_z_median_m": 0.03166975820414403,
+        "raw_plane_tilt_median_deg": 3.5771010707225694,
+        "anchor_source": "pre_pickup"
+      },
+      "review_flags": [
+        "Automatic phase estimate (manual overrides applied): Release lacks a sustained adjacent stationary period; estimated motion end only.",
+        "Automatic phase estimate (manual overrides applied): Lowering begins away from the goal region; placement label is based on height motion only.",
+        "Landscape still-photo calibration / crop has not been validated for this video recording mode.",
+        "Height axis is a configured proxy, not a verified gravity direction."
+      ],
+      "usable_for_retargeting": false
+    },
+    "coordinate_frame_convention": "W is ID0 centre: +X decoded corner0 to corner1; +Y corner3 to corner0; +Z out of printed face. Standard41 corners reordered [1,0,3,2] for OpenCV IPPE. W_T_tag = inverse(C_T_W) @ C_T_tag. World ID1 is registered to ID0. World axes are not gravity-calibrated. Object centre = face centre minus edge/2 along outward tag Z; common object orientation is unspecified.",
+    "parameters": {
+      "goal_object_offset": [
+        -0.09,
+        0.09,
+        0.0
+      ],
+      "goal_offset_frame": "goal_tag",
+      "goal_offset_verified": true,
+      "goal_coplanar": true,
+      "goal_center_height": 0.0225,
+      "vertical_axis": "z",
+      "vertical_sign": 1,
+      "vertical_verified": false,
+      "calibration_verified": false,
+      "max_reprojection_error": 3.0,
+      "max_speed": 2.0,
+      "max_gap_frames": 3,
+      "max_gap_span": 0.15,
+      "smoothing_window": 7,
+      "stationary_speed": 0.03,
+      "vertical_speed": 0.03,
+      "min_motion_duration": 0.2,
+      "stationary_duration": 0.3,
+      "goal_radius": 0.06,
+      "max_goal_scatter": 0.02,
+      "min_coverage": 0.9,
+      "phase_overrides": {
+        "transport_start": 4.33,
+        "transport_end": 10.3,
+        "release_time": 10.5
+      },
+      "phase_override_reason": "Video-reviewed correction: transport includes carrying, lowering, and the final hold, from approximately 4.33 s through 10.30 s; hand opening/release is approximately 10.5 s. Automatic height reversal at 6.405 s and speed cutoff at 8.107 s truncate the action. Boundaries are annotations, not contact detections."
+    },
+    "interpolation_gaps": [],
+    "goal_region": {
+      "shape": "circle",
+      "radius_m": 0.06,
+      "diameter_m": 0.12,
+      "center_world": [
+        -0.12767583028296864,
+        -0.21552658586838072,
+        0.0
+      ],
+      "center_offset_goal_tag": [
+        -0.09,
+        0.09,
+        0.0
+      ],
+      "membership": "Projected block centre within radius; no footprint or contact test",
+      "plane": "W z=0"
+    },
+    "tracking_configuration": {
+      "tag_groups": {
+        "world": [
+          0,
+          1
+        ],
+        "object": [
+          4,
+          5,
+          6
+        ],
+        "hand": [],
+        "target": [
+          2
+        ]
+      },
+      "family": "Standard41h12",
+      "pose_tag_sizes_m": {
+        "0": 0.03333333333333333,
+        "1": 0.03333333333333333,
+        "4": 0.022222222222222223,
+        "5": 0.022222222222222223,
+        "6": 0.022222222222222223,
+        "2": 0.03333333333333333
+      },
+      "world_registration": "First co-visible positive-depth poses per edge; fixed registration to ID0. Lowest-error current world tag supplies camera pose; no temporal averaging.",
+      "registered_world_ids": [
+        0,
+        1
+      ],
+      "effective_camera_matrix": [
+        [
+          1463.4421760557275,
+          0.0,
+          956.8109339418322
+        ],
+        [
+          0.0,
+          1462.8855824606012,
+          547.9786305126403
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "distortion_coefficients": [
+        0.14116762611443548,
+        -0.581488041160407,
+        -0.00025193970627592095,
+        -0.0009098059794901401,
+        0.8416433923459204
+      ],
+      "cube_center": {
+        "edge_m": 0.045,
+        "frames_tracked": 399,
+        "method": "Face centre minus 22.5 mm outward normal; select lowest-reprojection-error current face, no averaging or temporal filtering.",
+        "face_labels": {
+          "4": "initial camera-facing face",
+          "5": "initial top face",
+          "6": "third orthogonal face"
+        },
+        "assumptions": [
+          "Tags centred on each face and flush with the cube surface.",
+          "Decoded tag z axis points outward on every face, including opposite faces."
+        ],
+        "orientation_exported": false,
+        "orientation_reason": "Decoded in-plane mounting rotations and face association are unspecified."
+      }
+    },
+    "sources": {
+      "tracking": "results/test_007_block_only_raw",
+      "object": "results/test_007_block_only_raw/object/cube_center/trajectory.csv",
+      "video": "videos\\test_007_block_only.MOV",
+      "calibration": "results\\camera_calibration_landscape\\calibration.json"
+    },
+    "notes": [
+      "Raw inputs preserved. Object positions are cube centres, goal is a fixed robust anchor.",
+      "Goal offset locates the surface circle in goal-tag coordinates; goal_center_height separately locates the desired block centre. Coplanar mode enforces W z=0 and yaw-only orientation and locks the anchor before pickup.",
+      "valid_measurement means accepted measured input; object columns may be smoothed. Raw columns preserve measurements.",
+      "Pickup/release are object-motion estimates, not grasp/contact detections; override in phase_overrides.",
+      "Manual phase overrides are snapped to the nearest source timestamp; requested times and rationale are retained in parameters. Automatic estimates remain unchanged for comparison.",
+      "transport.csv covers pickup through release, including invalid rows. transport_progress normalizes the inner transport phase and is blank outside it or at unavailable samples.",
+      "transport_* metrics use transport_start through transport_end; pickup_to_release_* cover the full carrying interval. Paths/speeds never bridge missing samples; duration includes gaps.",
+      "Lift values are relative to first retained object position and the configured signed height axis."
+    ]
+  },
+  "transport_samples": 180,
+  "transport_interval": [
+    4.336666666666667,
+    10.306666666666667
+  ],
+  "target_definition": "plate_1_pos + target_offset; geometric anchor, not a contact placement pose"
+}

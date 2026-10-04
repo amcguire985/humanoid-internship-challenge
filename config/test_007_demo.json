@@ -24,5 +24,10 @@
   "min_coverage": 0.9,
   "phase_overrides": {},
   "goal_coplanar": true,
-  "goal_center_height": 0.0225
+  "goal_center_height": 0.0225,
+  "phase_override_reason": "Video-reviewed correction: transport includes carrying, lowering, and the final hold, from approximately 4.33 s through 10.30 s; hand opening/release is approximately 10.5 s. Automatic height reversal at 6.405 s and speed cutoff at 8.107 s truncate the action. Boundaries are annotations, not contact detections.",
+  "grasp_time_seconds": 3.77,
+  "release_time_seconds": 10.5,
+  "transport_start_time_seconds": 4.33,
+  "transport_end_time_seconds": 10.3
 }

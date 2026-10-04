@@ -1,0 +1,14 @@
+[robosuite WARNING] No private macro file found! (__init__.py:7)
+[robosuite WARNING] It is recommended to use a private macro file (__init__.py:8)
+[robosuite WARNING] To setup, run: python /home/student/miniconda3/envs/libero/lib/python3.8/site-packages/robosuite/scripts/setup_macros.py (__init__.py:9)
+[info] using task orders [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+[Warning]: datasets path /home/student/robot_challenge/LIBERO/libero/libero/../datasets does not exist!
+Entering SCENE_SETTLE
+Entering PREGRASP
+PREGRASP: episode step 100, EEF error 0.90 mm, grasp=False, object=[-0.06390143  0.20345986  0.89840415]
+PREGRASP: episode step 200, EEF error 2.32 mm, grasp=False, object=[-0.06390143  0.20345986  0.89840415]
+PREGRASP: episode step 300, EEF error 3.08 mm, grasp=False, object=[-0.06390143  0.20345986  0.89840415]
+PREGRASP: episode step 400, EEF error 2.69 mm, grasp=False, object=[-0.06390143  0.20345986  0.89840415]
+PREGRASP: episode step 500, EEF error 1.34 mm, grasp=False, object=[-0.06390143  0.20345986  0.89840415]
+Entering DESCEND
+DESCEND: episode step 600, EEF error 0.19 mm, grasp=False, object=[-0.06390143  0.20345986  0.89840415]
