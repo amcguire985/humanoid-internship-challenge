@@ -647,3 +647,13 @@ may be valid for processing without being a measurement. All distances are
 metres and times seconds. Review flags deliberately prevent the demonstration
 being labelled usable for retargeting until geometry/calibration, coverage and
 phase confidence have been checked. No robot control or learning is included.
+
+
+## LIBERO object-motion following test
+
+Run `python scripts/replay_libero_transport.py` in the LIBERO environment to
+follow the processed test_006 object motion in the exploration scene. Edit
+`config/libero_transport.json` for axis permutation, signs and scale. Results,
+per-step actions and tracking plots go to `results/libero_transport/`.
+See [experiment details](docs/LIBERO_TRAJECTORY.md) for source/frame conventions,
+controller scaling, gap handling and interpretation.

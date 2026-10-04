@@ -1,21 +1,27 @@
-﻿"""Human position replay through verified world-frame delta OSC_POSE; no grasping."""
+"""Human position replay through verified world-frame delta OSC_POSE; no grasping."""
 import argparse
 import csv
 import json
+import os
 from pathlib import Path
 import numpy as np
 from scipy.spatial.transform import Rotation
 
 
 def load_human_trajectory(path, max_gap=.15):
-    """Load valid relative positions; end replay at the first unresolved gap."""
+    """Load metre-valued object positions and subtract p(0); stop at the first gap."""
     with Path(path).open(newline='',encoding='utf-8-sig') as handle:
-        rows=list(csv.DictReader(handle))
+        reader=csv.DictReader(handle)
+        columns=reader.fieldnames or []
+        rows=list(reader)
+    keys = ('time_s','x_m','y_m','z_m') if 'x_m' in columns else ('time','x_rel','y_rel','z_rel')
+    if not all(k in columns for k in keys):
+        raise ValueError('Expected time_s,x_m,y_m,z_m or time,x_rel,y_rel,z_rel')
     times=[]; positions=[]; previous=None; stop=None
     for row in rows:
-        if not all(row.get(k,'').strip() for k in ('time','x_rel','y_rel','z_rel')):
+        if not all(row.get(k,'').strip() for k in keys):
             stop='missing_source_position'; break
-        values=np.array([float(row[k]) for k in ('time','x_rel','y_rel','z_rel')])
+        values=np.array([float(row[k]) for k in keys])
         if not np.isfinite(values).all():
             raise ValueError('Source contains nonfinite values')
         if previous is not None:
@@ -25,13 +31,23 @@ def load_human_trajectory(path, max_gap=.15):
         times.append(values[0]); positions.append(values[1:]); previous=values[0]
     if len(times)<2: raise ValueError('Need two continuous valid source samples')
     positions=np.array(positions)
-    if np.linalg.norm(positions[0])>1e-6:
-        raise ValueError('Relative trajectory must start at zero; normalize explicitly first')
-    return np.array(times)-times[0],positions,dict(source_rows=len(rows),replayed_source_rows=len(times),source_stop_reason=stop)
+    origin=positions[0].copy()
+    positions=positions-origin  # p_rel(t) = p(t) - p(0), in metres
+    return np.array(times)-times[0],positions,dict(
+        source_rows=len(rows),replayed_source_rows=len(times),source_stop_reason=stop,
+        columns=columns,position_columns=list(keys[1:]),units='metres',time_units='seconds',
+        median_sample_rate_hz=float(1/np.median(np.diff(times))),
+        source_start_position=origin.tolist(),source_start_time_s=times[0],
+        replayed_source_duration_s=times[-1]-times[0],
+        source_frame='ID0: x corner0->corner1, y corner3->corner0, z outward from tag')
 
 
 def map_to_libero_frame(positions, permutation, signs, scales):
-    """Explicit p_robot=S @ p_human; rows of S correspond to robot x,y,z."""
+    """Map offsets: robot[i] = signs[i] * scales[i] * human[permutation[i]].
+
+    Edit axis_permutation, axis_signs, scale_factors in config/libero_transport.json.
+    Default: robot XYZ = 0.5 * human XYZ (a chosen alignment, not calibration).
+    """
     if sorted(permutation)!=[0,1,2] or len(signs)!=3 or any(s not in (-1,1) for s in signs):
         raise ValueError('Mapping requires a permutation of 0,1,2 and three signs +/-1')
     scales=np.asarray(scales,dtype=float)
@@ -55,7 +71,7 @@ def build_desired_eef_trajectory(times, mapped, start, frequency, time_scale=2, 
 
 def inspect_controller(env):
     """Reject unsupported APIs instead of guessing scale, frame or delta semantics."""
-    robot=env.robots[0]
+    robot=env.env.robots[0]
     controller=getattr(robot,'controller',None)
     if controller is None or getattr(controller,'name',None)!='OSC_POSE':
         raise ValueError('Requires the classic robosuite world-frame OSC_POSE controller')
@@ -68,7 +84,7 @@ def inspect_controller(env):
         raise ValueError('Expected exactly six pose commands plus one gripper command')
     config={k:np.broadcast_to(np.asarray(getattr(controller,k),dtype=float),(6,)).copy()
             for k in ('input_min','input_max','output_min','output_max')}
-    if any(not np.isfinite(v).all() for v in config.values()) or np.any(config['output_max']<=config['output_min']):
+    if any(not np.isfinite(v).all() for v in config.values()) or np.any(config['output_max']<=config['output_min']) or np.any(config['input_max']<=config['input_min']):
         raise ValueError('Invalid controller scaling')
     config['action_min']=np.array(low); config['action_max']=np.array(high)
     return config
@@ -89,7 +105,7 @@ def desired_pose_to_action(desired,actual,target_rotation,current_rotation,contr
 
 def robot_contact(env):
     """Stop on robot/scene contact; internal robot contacts are ignored."""
-    sim=env.sim
+    sim=env.env.sim
     for contact in sim.data.contact[:sim.data.ncon]:
         names=[sim.model.geom_id2name(int(g)) or '' for g in (contact.geom1,contact.geom2)]
         robot=[name.startswith(('robot0_','gripper0_')) for name in names]
@@ -112,6 +128,7 @@ def plot_results(records,errors,output):
     t=np.array([r['time'] for r in records]); d=np.array([r['desired'] for r in records]); a=np.array([r['actual'] for r in records])
     fig=plt.figure(figsize=(8,7)); ax=fig.add_subplot(111,projection='3d')
     ax.plot(*d.T,label='Desired'); ax.plot(*a.T,label='Actual'); ax.scatter(*a[0],color='green',label='Start'); ax.scatter(*a[-1],color='red',label='End')
+    ax.set_box_aspect(np.maximum(np.ptp(np.vstack([d,a]),axis=0),.01))
     ax.set(xlabel='x (m)',ylabel='y (m)',zlabel='z (m)'); ax.legend(); fig.tight_layout(); fig.savefig(output/'tracking_3d.png',dpi=160); plt.close(fig)
     fig,axes=plt.subplots(4,1,figsize=(12,10),sharex=True)
     for i in range(3):
@@ -129,11 +146,15 @@ def replay_trajectory(env,times,mapped,settings,output):
     target_rotation=Rotation.from_quat(obs['robot0_eef_quat']).as_matrix()
     grid,desired,factor=build_desired_eef_trajectory(times,mapped,start,frequency,settings['time_scale'],settings['max_eef_speed_m_s'])
     lower=np.array(settings['workspace_min']); upper=np.array(settings['workspace_max'])
-    if lower.shape!=(3,) or upper.shape!=(3,) or np.any(lower>=upper): raise ValueError('Invalid workspace limits')
+    if lower.shape!=(3,) or upper.shape!=(3,) or not np.isfinite([lower,upper]).all() or np.any(lower>=upper): raise ValueError('Invalid workspace limits')
     if np.any(desired<lower) or np.any(desired>upper): raise ValueError('Desired path leaves workspace; edit mapping or bounds')
     grip=settings['gripper']
     if grip!=-1 or not controller['action_min'][6]<=grip<=controller['action_max'][6]: raise ValueError('This test requires open gripper command -1')
-    records=[dict(step=0,time=0.,desired=start.copy(),actual=start.copy(),action=np.zeros(7),clipped=False)]
+    output.mkdir(parents=True,exist_ok=True)
+    np.savetxt(output/'desired_trajectory.csv',np.column_stack([grid,desired]),
+               delimiter=',',header='time,desired_x,desired_y,desired_z',comments='')
+    print(f'Reset EEF: {start}; {frequency:g} Hz; time stretch {factor:.3f}; {len(desired)-1} tracking steps',flush=True)
+    records=[]  # Only executed commands contribute to metrics; reset is stored separately.
     stop=None
     # Optional final hold lets the controller settle; its target stays at the last position.
     targets=list(desired[1:])+[desired[-1]]*int(settings['settle_seconds']*frequency)
@@ -144,20 +165,26 @@ def replay_trajectory(env,times,mapped,settings,output):
         if contact: stop='robot_scene_contact:'+str(contact); break
         action,clipped=desired_pose_to_action(target,actual,target_rotation,Rotation.from_quat(obs['robot0_eef_quat']).as_matrix(),controller,settings['action_clip'],grip)
         obs,reward,done,info=env.step(action)
-        records.append(dict(step=step,time=step/frequency,desired=target.copy(),actual=np.asarray(obs['robot0_eef_pos']).copy(),action=action,clipped=clipped))
+        records.append(dict(step=step,time=step/frequency,desired=target.copy(),actual=np.asarray(obs['robot0_eef_pos']).copy(),action=action,clipped=clipped,command_error=target-actual,
+                            orientation_error_rad=float(Rotation.from_matrix(target_rotation@Rotation.from_quat(obs['robot0_eef_quat']).as_matrix().T).magnitude())))
+        if step % 200 == 0:
+            print(f'Step {step}/{len(targets)}: error {np.linalg.norm(target-records[-1]["actual"])*1000:.2f} mm',flush=True)
         if done: stop='environment_done'; break
         if robot_contact(env): stop='robot_scene_contact'; break
         actual=np.asarray(obs['robot0_eef_pos'])
         if not np.isfinite(actual).all() or np.any(actual<lower) or np.any(actual>upper): stop='workspace_exit'; break
     if not all(np.isfinite(r['actual']).all() for r in records): raise RuntimeError('Nonfinite simulator state')
     output.mkdir(parents=True,exist_ok=True)
+    if not records:
+        raise RuntimeError('No simulation steps executed: '+str(stop))
     report,errors=evaluate_tracking(records,stop is None)
-    report.update(stop_reason=stop,eef_start=start.tolist(),fixed_orientation_matrix=target_rotation.tolist(),
+    report.update(max_orientation_error_rad=max(r['orientation_error_rad'] for r in records),
+                  requested_steps=len(targets),tracking_steps=len(desired)-1,stop_reason=stop,eef_start=start.tolist(),fixed_orientation_matrix=target_rotation.tolist(),
                   time_scale_used=factor,control_frequency_hz=frequency,controller={k:v.tolist() for k,v in controller.items()},
                   endpoint_error_to_full_requested_target_m=float(np.linalg.norm(records[-1]['actual']-desired[-1])))
     with (output/'replay.csv').open('w',newline='',encoding='utf-8') as handle:
-        writer=csv.writer(handle); writer.writerow(['step','time',*[f'desired_{a}' for a in 'xyz'],*[f'actual_{a}' for a in 'xyz'],*[f'action_{i}' for i in range(7)],'error_m','clipped'])
-        for r,error in zip(records,errors): writer.writerow([r['step'],r['time'],*r['desired'],*r['actual'],*r['action'],error,r['clipped']])
+        writer=csv.writer(handle); writer.writerow(['step','time',*[f'desired_{a}' for a in 'xyz'],*[f'actual_{a}' for a in 'xyz'],*[f'action_{i}' for i in range(7)],*[f'error_{a}_m' for a in 'xyz'],*[f'command_error_{a}_m' for a in 'xyz'],'error_m','orientation_error_rad','clipped'])
+        for r,error in zip(records,errors): writer.writerow([r['step'],r['time'],*r['desired'],*r['actual'],*r['action'],*(r['desired']-r['actual']),*r['command_error'],error,r['orientation_error_rad'],r['clipped']])
     plot_results(records,errors,output)
     return report
 
@@ -165,12 +192,13 @@ def replay_trajectory(env,times,mapped,settings,output):
 def main():
     root=Path(__file__).resolve().parents[1]
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('trajectory',type=Path); parser.add_argument('--bddl',type=Path,help='Existing LIBERO scene/task file')
+    parser.add_argument('trajectory',type=Path,nargs='?',default=root/'results/test_006_slower_raw/object/cube_center/gap_filled_10_frames/gentle_smoothing/savgol_7.csv'); parser.add_argument('--bddl',type=Path,help='Existing LIBERO scene/task file')
     parser.add_argument('--config',type=Path,default=root/'config/libero_transport.json')
     parser.add_argument('--output',type=Path,default=root/'results/libero_transport')
+    parser.add_argument('--seed',type=int,default=0)
     parser.add_argument('--inspect-only',action='store_true',help='Save mapping/preflight without starting simulation')
     args=parser.parse_args(); settings=json.loads(args.config.read_text(encoding='utf-8-sig'))
-    if any(not np.isfinite(settings[k]) or settings[k]<=0 for k in ('time_scale','action_clip','max_source_gap_s','max_eef_speed_m_s')) or settings['action_clip']>1 or settings['settle_seconds']<0:
+    if any(not np.isfinite(settings[k]) or settings[k]<=0 for k in ('time_scale','action_clip','max_source_gap_s','max_eef_speed_m_s')) or settings['action_clip']>1 or (not np.isfinite(settings['settle_seconds']) or settings['settle_seconds']<0):
         parser.error('Invalid replay limits')
     times,positions,source=load_human_trajectory(args.trajectory,settings['max_source_gap_s'])
     mapped,matrix=map_to_libero_frame(positions,settings['axis_permutation'],settings['axis_signs'],settings['scale_factors'])
@@ -179,13 +207,16 @@ def main():
                    mapped_min_m=mapped.min(axis=0).tolist(),mapped_max_m=mapped.max(axis=0).tolist(),simulation_executed=False)
     (args.output/'preflight.json').write_text(json.dumps(preflight,indent=2)+'\n')
     if args.inspect_only: print(json.dumps(preflight,indent=2)); return
-    if not args.bddl or not args.bddl.exists(): parser.error('Provide an existing --bddl scene file from your LIBERO installation')
-    try:
-        from libero.libero.envs import ControlEnv
-    except ImportError as exc:
-        raise RuntimeError('Run this script in your working LIBERO/robosuite environment; no simulation results have been generated') from exc
-    env=ControlEnv(bddl_file_name=str(args.bddl.resolve()),controller='OSC_POSE',robots=['Panda'],
-                   use_camera_obs=False,has_renderer=False,has_offscreen_renderer=False,ignore_done=False,horizon=100000)
+    os.environ.setdefault('MUJOCO_GL','osmesa')
+    from libero.libero import benchmark, get_libero_path
+    from libero.libero.envs import OffScreenRenderEnv
+    task=benchmark.get_benchmark_dict()['libero_spatial']().get_task(0)
+    bddl=args.bddl or Path(get_libero_path('bddl_files'))/task.problem_folder/task.bddl_file
+    preflight.update(task=task.name if args.bddl is None else 'custom',bddl=str(bddl),seed=args.seed)
+    np.random.seed(args.seed)
+    env=OffScreenRenderEnv(bddl_file_name=str(bddl.resolve()),camera_heights=128,camera_widths=128,
+                           use_camera_obs=False,horizon=100000)
+    env.seed(args.seed)
     try: report=replay_trajectory(env,times,mapped,settings,args.output)
     finally: env.close()
     report.update(preflight,simulation_executed=True)

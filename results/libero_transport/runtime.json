@@ -1,0 +1,15 @@
+{
+  "python": "3.8.13 (default, Oct 21 2022, 23:50:54) \n[GCC 11.2.0]",
+  "packages": {
+    "robosuite": "1.4.0",
+    "mujoco": "3.2.3",
+    "numpy": "1.22.4",
+    "scipy": "1.10.1",
+    "matplotlib": "3.5.3"
+  },
+  "libero_commit": "8f1084e3132a39270c3a13ebe37270a43ece2a01",
+  "libero_checkout": "/tmp/libero-trajectory-runtime",
+  "reason_for_temporary_checkout": "Installed LIBERO BDDL and some Python source files contain only zero bytes; clean upstream assets used without modifying installed copy.",
+  "source_sha256": "f6953b012ead46ff4dc4bec35d3ee0faa2d151de1271f8872a4e67da4b32e1ec",
+  "command": "PYTHONPATH=/tmp/libero-trajectory-runtime LIBERO_CONFIG_PATH=/tmp/libero-trajectory-config NUMBA_CACHE_DIR=/tmp/libero-numba MPLCONFIGDIR=/tmp/libero-mpl OPENBLAS_NUM_THREADS=1 /home/student/miniconda3/envs/libero/bin/python -u scripts/replay_libero_transport.py"
+}
