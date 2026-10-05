@@ -1,0 +1,479 @@
+{
+  "completed_sequence": true,
+  "task_completed": true,
+  "failure_phase": null,
+  "failure_reason": null,
+  "gripper_acquired_object": true,
+  "object_lifted": true,
+  "remained_grasped_during_transport": true,
+  "object_reached_target_region": true,
+  "object_remained_at_target_after_release": true,
+  "libero_task_success": true,
+  "libero_success_ever": true,
+  "grasp_lost": false,
+  "eef_tracking_rmse_m": 0.0019228639711105285,
+  "maximum_tracking_error_m": 0.016503631919032265,
+  "final_object_to_target_anchor_error_m": 0.011208640907161343,
+  "final_object_to_placement_error_m": 0.017454254599706124,
+  "maximum_object_lift_m": 0.12752317413940006,
+  "total_episode_steps": 2121,
+  "phases": [
+    {
+      "phase": "SCENE_SETTLE",
+      "entry_step": 1,
+      "exit_step": 20
+    },
+    {
+      "phase": "PREGRASP",
+      "entry_step": 21,
+      "exit_step": 571
+    },
+    {
+      "phase": "DESCEND",
+      "entry_step": 572,
+      "exit_step": 843
+    },
+    {
+      "phase": "GRASP",
+      "entry_step": 844,
+      "exit_step": 883
+    },
+    {
+      "phase": "GRASP_SETTLE",
+      "entry_step": 884,
+      "exit_step": 903
+    },
+    {
+      "phase": "LIFT",
+      "entry_step": 904,
+      "exit_step": 1053
+    },
+    {
+      "phase": "TRANSPORT",
+      "entry_step": 1054,
+      "exit_step": 1684
+    },
+    {
+      "phase": "PLACE",
+      "entry_step": 1685,
+      "exit_step": 1796
+    },
+    {
+      "phase": "RELEASE",
+      "entry_step": 1797,
+      "exit_step": 1836
+    },
+    {
+      "phase": "RELEASE_SETTLE",
+      "entry_step": 1837,
+      "exit_step": 1876
+    },
+    {
+      "phase": "RETRACT",
+      "entry_step": 1877,
+      "exit_step": 2121
+    }
+  ],
+  "initial_observation": {
+    "eef": [
+      -0.2084646605658239,
+      0.0,
+      1.1732794757296405
+    ],
+    "object": [
+      -0.06390988281503088,
+      0.20349675443522666,
+      0.97
+    ],
+    "target": [
+      0.0728689182540634,
+      0.21238612100895377,
+      0.97
+    ],
+    "gripper": [
+      0.020833,
+      -0.020833
+    ]
+  },
+  "final_object_position": [
+    0.07496414753419008,
+    0.2226336561572025,
+    0.9065271298704948
+  ],
+  "geometry": {
+    "object_start": [
+      -0.08390143206336037,
+      0.20345985704175618,
+      0.8984041501882478
+    ],
+    "target_anchor": [
+      0.07287702006820722,
+      0.21238385502430443,
+      0.9024998346662079
+    ],
+    "object_collision_min": [
+      -0.13701674024307733,
+      0.1496782077921012,
+      0.8999925920845844
+    ],
+    "object_collision_max": [
+      -0.030009538899329998,
+      0.2568781479969237,
+      0.9505386857859383
+    ],
+    "target_collision_min": [
+      0.003794221677498974,
+      0.14439122828058715,
+      0.8999843134415404
+    ],
+    "target_collision_max": [
+      0.14126412962672555,
+      0.2820124461827364,
+      0.9189367959033883
+    ],
+    "object_origin_to_bottom_m": 0.0015884418963366675,
+    "placement_object_origin": [
+      0.07287702006820722,
+      0.21238385502430443,
+      0.9204998346662079
+    ],
+    "placement_bottom_above_target_collision_top_m": 0.0031514806591562694,
+    "measured_grasp_offset": [
+      0.0005129531748585547,
+      0.04812141451978866,
+      0.03549316584824913
+    ],
+    "fixed_grasp_offset": [
+      0.0005129531748585547,
+      0.04812141451978866,
+      0.03549316584824913
+    ]
+  },
+  "retargeting": {
+    "axis_matrix": [
+      [
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "human_start": [
+      -0.2366257973769527,
+      -0.044039656109936424,
+      0.06357388480983904
+    ],
+    "human_goal": [
+      -0.12767583028296864,
+      -0.21552658586838072,
+      0.0225
+    ],
+    "sim_start": [
+      -0.08159318795613939,
+      0.21112380972297717,
+      0.9632994170808767
+    ],
+    "sim_goal": [
+      0.07287702006820722,
+      0.21238385502430443,
+      0.9804998346662079
+    ],
+    "human_start_to_goal_distance_m": 0.20727982637277978,
+    "libero_start_to_goal_distance_m": 0.15543000754795094,
+    "horizontal_scale_factor": 0.7603272930091065,
+    "lateral_scale_factor": 1.0,
+    "vertical_scale_factor": 1.0,
+    "human_transport_endpoint_progress": 0.9500420201007855,
+    "human_transport_endpoint_goal_error_m": 0.056631653506562234,
+    "endpoint_correction_m": [
+      0.008123950916477052,
+      -0.049823172355808604,
+      -0.02189462342131132
+    ],
+    "endpoint_correction_norm_m": 0.055024736408736875,
+    "start_error_m": 0.0,
+    "final_error_m": 0.0,
+    "maximum_lift_m": 0.0780665879710537,
+    "path_length_m": 0.263165753507042,
+    "time_scale_used": 5.273953792172473,
+    "transport_hover_goal": [
+      0.07287702006820722,
+      0.21238385502430443,
+      0.9804998346662079
+    ]
+  },
+  "gripper_contract": {
+    "open_command": -1,
+    "close_command": 1,
+    "opening_internal_action": [
+      0.01,
+      -0.01
+    ],
+    "closing_internal_action": [
+      -0.01,
+      0.01
+    ],
+    "semantics": "Sign-integrated aperture command, not target aperture"
+  },
+  "control_frequency_hz": 20.0,
+  "render_errors": [],
+  "controller": {
+    "input_min": [
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0
+    ],
+    "input_max": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "output_min": [
+      -0.05,
+      -0.05,
+      -0.05,
+      -0.5,
+      -0.5,
+      -0.5
+    ],
+    "output_max": [
+      0.05,
+      0.05,
+      0.05,
+      0.5,
+      0.5,
+      0.5
+    ],
+    "action_min": [
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0
+    ],
+    "action_max": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "final_contacts": [
+    [
+      "akita_black_bowl_1_g36",
+      "plate_1_g1"
+    ],
+    [
+      "akita_black_bowl_1_g36",
+      "plate_1_g1"
+    ],
+    [
+      "akita_black_bowl_1_g36",
+      "plate_1_g1"
+    ],
+    [
+      "akita_black_bowl_1_g36",
+      "plate_1_g1"
+    ],
+    [
+      "akita_black_bowl_1_g37",
+      "plate_1_g1"
+    ],
+    [
+      "akita_black_bowl_1_g37",
+      "plate_1_g1"
+    ],
+    [
+      "akita_black_bowl_1_g37",
+      "plate_1_g1"
+    ],
+    [
+      "akita_black_bowl_1_g37",
+      "plate_1_g1"
+    ],
+    [
+      "akita_black_bowl_1_g38",
+      "plate_1_g1"
+    ],
+    [
+      "akita_black_bowl_1_g38",
+      "plate_1_g1"
+    ],
+    [
+      "akita_black_bowl_1_g38",
+      "plate_1_g1"
+    ],
+    [
+      "akita_black_bowl_1_g39",
+      "plate_1_g1"
+    ],
+    [
+      "akita_black_bowl_1_g39",
+      "plate_1_g1"
+    ],
+    [
+      "akita_black_bowl_1_g39",
+      "plate_1_g1"
+    ],
+    [
+      "akita_black_bowl_1_g39",
+      "plate_1_g1"
+    ],
+    [
+      "akita_black_bowl_1_g40",
+      "plate_1_g1"
+    ],
+    [
+      "akita_black_bowl_1_g40",
+      "plate_1_g1"
+    ],
+    [
+      "akita_black_bowl_1_g40",
+      "plate_1_g1"
+    ],
+    [
+      "akita_black_bowl_1_g40",
+      "plate_1_g1"
+    ]
+  ],
+  "final_gripper_qpos": [
+    0.03999973000502309,
+    -0.04000000680241741
+  ],
+  "final_bilateral_grasp": false,
+  "trial": {
+    "trial": 3,
+    "requested_offset_xy_m": [
+      -0.02,
+      0
+    ],
+    "applied_offset_xy_m": [
+      -0.02,
+      0.0
+    ],
+    "validation": {
+      "offset_xy_m": [
+        -0.02,
+        0.0
+      ],
+      "support_surface": "table_collision",
+      "support_contact_count": 20,
+      "support_surface_z_m": 0.9,
+      "bottom_minus_support_z_m": -7.407915415647004e-06,
+      "remains_on_support": true,
+      "within_scene_bounds": true,
+      "object_bounds": [
+        [
+          -0.13701674024307733,
+          0.1496782077921012,
+          0.8999925920845844
+        ],
+        [
+          -0.030009538899329998,
+          0.2568781479969237,
+          0.9505386857859383
+        ]
+      ],
+      "support_bounds": [
+        [
+          -0.5,
+          -0.6,
+          0.85
+        ],
+        [
+          0.5,
+          0.6,
+          0.9
+        ]
+      ],
+      "collision_free": true,
+      "invalid_contacts": [],
+      "intersection_tolerance_m": 1e-07,
+      "reachable": true,
+      "ik_waypoints": 185,
+      "maximum_ik_position_error_m": 0.0009723445563470234,
+      "maximum_ik_orientation_error_rad": 0.0019297680268618085,
+      "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+      "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+    },
+    "adjustment": {
+      "reduced": false,
+      "requested_validation": {
+        "offset_xy_m": [
+          -0.02,
+          0.0
+        ],
+        "support_surface": "table_collision",
+        "support_contact_count": 20,
+        "support_surface_z_m": 0.9,
+        "bottom_minus_support_z_m": -7.407915415647004e-06,
+        "remains_on_support": true,
+        "within_scene_bounds": true,
+        "object_bounds": [
+          [
+            -0.13701674024307733,
+            0.1496782077921012,
+            0.8999925920845844
+          ],
+          [
+            -0.030009538899329998,
+            0.2568781479969237,
+            0.9505386857859383
+          ]
+        ],
+        "support_bounds": [
+          [
+            -0.5,
+            -0.6,
+            0.85
+          ],
+          [
+            0.5,
+            0.6,
+            0.9
+          ]
+        ],
+        "collision_free": true,
+        "invalid_contacts": [],
+        "intersection_tolerance_m": 1e-07,
+        "reachable": true,
+        "ik_waypoints": 185,
+        "maximum_ik_position_error_m": 0.0009723445563470234,
+        "maximum_ik_orientation_error_rad": 0.0019297680268618085,
+        "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+        "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+      }
+    }
+  },
+  "input_hashes": {
+    "config/libero_pick_place.json": "6d4d97f57488591ea960ce5329e1fa11325ded7ea5dcf1a4f95842f0a0d98cbe",
+    "config/libero_retarget.json": "bae7ebc69fa6fc09402778f12a9f344480d515f7d289f232db2a38ed6aef5cfd",
+    "config/test_007_demo.json": "567bca770132334a22e335806a0103b3ff6b40208fc245894fd95e1784431641",
+    "results/test_007_block_only_raw/task_demo/processed_demo.csv": "3f2ef11c25daaaa99a269ed87a9c682281661692511a19b685a3a855a7357796",
+    "results/test_007_block_only_raw/task_demo/metadata.json": "eb8b764a5025a7a78d26df3dfa7ba253dca83f4e85d16bc5db435a9df65619bf",
+    "scripts/scripted_libero_pick_place.py": "57dc405d0642addd68c1c4d6af7c8329888869842b7aaa5a3209b5f6bfd80c4c",
+    "scripts/retarget_libero_object.py": "52a192893ab837e25ea380360172ea334d0d90b1005a578a48aa8e428325c806",
+    "scripts/replay_libero_transport.py": "fcd9e93ecd3060fcf5ed801714708548381c4823af349c62f8277d0f30757f8b",
+    "scripts/process_task_demo.py": "7612e201b99ede4d56e0bfc1d5bf389a7b46a6a86243d090d476a961a09e9454"
+  }
+}

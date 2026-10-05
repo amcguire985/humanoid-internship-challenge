@@ -1,0 +1,546 @@
+{
+  "schema_version": 1,
+  "attempts": [
+    {
+      "episode_id": "episode_001",
+      "trial": {
+        "trial": 1,
+        "requested_offset_xy_m": [
+          0,
+          0
+        ],
+        "applied_offset_xy_m": [
+          0.0,
+          0.0
+        ],
+        "validation": {
+          "offset_xy_m": [
+            0.0,
+            0.0
+          ],
+          "support_surface": "table_collision",
+          "support_contact_count": 20,
+          "support_surface_z_m": 0.9,
+          "bottom_minus_support_z_m": -7.407915415647004e-06,
+          "remains_on_support": true,
+          "within_scene_bounds": true,
+          "object_bounds": [
+            [
+              -0.11701674024307732,
+              0.1496782077921012,
+              0.8999925920845844
+            ],
+            [
+              -0.010009538899329994,
+              0.2568781479969237,
+              0.9505386857859383
+            ]
+          ],
+          "support_bounds": [
+            [
+              -0.5,
+              -0.6,
+              0.85
+            ],
+            [
+              0.5,
+              0.6,
+              0.9
+            ]
+          ],
+          "collision_free": true,
+          "invalid_contacts": [],
+          "intersection_tolerance_m": 1e-07,
+          "reachable": true,
+          "ik_waypoints": 185,
+          "maximum_ik_position_error_m": 0.0009919055332782368,
+          "maximum_ik_orientation_error_rad": 0.00028579504332600363,
+          "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+          "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+        },
+        "adjustment": {
+          "reduced": false,
+          "requested_validation": {
+            "offset_xy_m": [
+              0.0,
+              0.0
+            ],
+            "support_surface": "table_collision",
+            "support_contact_count": 20,
+            "support_surface_z_m": 0.9,
+            "bottom_minus_support_z_m": -7.407915415647004e-06,
+            "remains_on_support": true,
+            "within_scene_bounds": true,
+            "object_bounds": [
+              [
+                -0.11701674024307732,
+                0.1496782077921012,
+                0.8999925920845844
+              ],
+              [
+                -0.010009538899329994,
+                0.2568781479969237,
+                0.9505386857859383
+              ]
+            ],
+            "support_bounds": [
+              [
+                -0.5,
+                -0.6,
+                0.85
+              ],
+              [
+                0.5,
+                0.6,
+                0.9
+              ]
+            ],
+            "collision_free": true,
+            "invalid_contacts": [],
+            "intersection_tolerance_m": 1e-07,
+            "reachable": true,
+            "ik_waypoints": 185,
+            "maximum_ik_position_error_m": 0.0009919055332782368,
+            "maximum_ik_orientation_error_rad": 0.00028579504332600363,
+            "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+            "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+          }
+        }
+      },
+      "status": "success",
+      "accepted": true,
+      "transitions": 2109,
+      "failure_phase": null,
+      "failure_reason": null
+    },
+    {
+      "episode_id": "episode_002",
+      "trial": {
+        "trial": 2,
+        "requested_offset_xy_m": [
+          0.02,
+          0
+        ],
+        "applied_offset_xy_m": [
+          0.02,
+          0.0
+        ],
+        "validation": {
+          "offset_xy_m": [
+            0.02,
+            0.0
+          ],
+          "support_surface": "table_collision",
+          "support_contact_count": 20,
+          "support_surface_z_m": 0.9,
+          "bottom_minus_support_z_m": -7.407915415647004e-06,
+          "remains_on_support": true,
+          "within_scene_bounds": true,
+          "object_bounds": [
+            [
+              -0.09701674024307731,
+              0.1496782077921012,
+              0.8999925920845844
+            ],
+            [
+              0.00999046110067001,
+              0.2568781479969237,
+              0.9505386857859383
+            ]
+          ],
+          "support_bounds": [
+            [
+              -0.5,
+              -0.6,
+              0.85
+            ],
+            [
+              0.5,
+              0.6,
+              0.9
+            ]
+          ],
+          "collision_free": true,
+          "invalid_contacts": [],
+          "intersection_tolerance_m": 1e-07,
+          "reachable": true,
+          "ik_waypoints": 185,
+          "maximum_ik_position_error_m": 0.000978737221655907,
+          "maximum_ik_orientation_error_rad": 0.0001661281447265139,
+          "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+          "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+        },
+        "adjustment": {
+          "reduced": false,
+          "requested_validation": {
+            "offset_xy_m": [
+              0.02,
+              0.0
+            ],
+            "support_surface": "table_collision",
+            "support_contact_count": 20,
+            "support_surface_z_m": 0.9,
+            "bottom_minus_support_z_m": -7.407915415647004e-06,
+            "remains_on_support": true,
+            "within_scene_bounds": true,
+            "object_bounds": [
+              [
+                -0.09701674024307731,
+                0.1496782077921012,
+                0.8999925920845844
+              ],
+              [
+                0.00999046110067001,
+                0.2568781479969237,
+                0.9505386857859383
+              ]
+            ],
+            "support_bounds": [
+              [
+                -0.5,
+                -0.6,
+                0.85
+              ],
+              [
+                0.5,
+                0.6,
+                0.9
+              ]
+            ],
+            "collision_free": true,
+            "invalid_contacts": [],
+            "intersection_tolerance_m": 1e-07,
+            "reachable": true,
+            "ik_waypoints": 185,
+            "maximum_ik_position_error_m": 0.000978737221655907,
+            "maximum_ik_orientation_error_rad": 0.0001661281447265139,
+            "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+            "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+          }
+        }
+      },
+      "status": "success",
+      "accepted": true,
+      "transitions": 2121,
+      "failure_phase": null,
+      "failure_reason": null
+    },
+    {
+      "episode_id": "episode_003",
+      "trial": {
+        "trial": 3,
+        "requested_offset_xy_m": [
+          -0.02,
+          0
+        ],
+        "applied_offset_xy_m": [
+          -0.02,
+          0.0
+        ],
+        "validation": {
+          "offset_xy_m": [
+            -0.02,
+            0.0
+          ],
+          "support_surface": "table_collision",
+          "support_contact_count": 20,
+          "support_surface_z_m": 0.9,
+          "bottom_minus_support_z_m": -7.407915415647004e-06,
+          "remains_on_support": true,
+          "within_scene_bounds": true,
+          "object_bounds": [
+            [
+              -0.13701674024307733,
+              0.1496782077921012,
+              0.8999925920845844
+            ],
+            [
+              -0.030009538899329998,
+              0.2568781479969237,
+              0.9505386857859383
+            ]
+          ],
+          "support_bounds": [
+            [
+              -0.5,
+              -0.6,
+              0.85
+            ],
+            [
+              0.5,
+              0.6,
+              0.9
+            ]
+          ],
+          "collision_free": true,
+          "invalid_contacts": [],
+          "intersection_tolerance_m": 1e-07,
+          "reachable": true,
+          "ik_waypoints": 185,
+          "maximum_ik_position_error_m": 0.0009723445563470234,
+          "maximum_ik_orientation_error_rad": 0.0019297680268618085,
+          "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+          "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+        },
+        "adjustment": {
+          "reduced": false,
+          "requested_validation": {
+            "offset_xy_m": [
+              -0.02,
+              0.0
+            ],
+            "support_surface": "table_collision",
+            "support_contact_count": 20,
+            "support_surface_z_m": 0.9,
+            "bottom_minus_support_z_m": -7.407915415647004e-06,
+            "remains_on_support": true,
+            "within_scene_bounds": true,
+            "object_bounds": [
+              [
+                -0.13701674024307733,
+                0.1496782077921012,
+                0.8999925920845844
+              ],
+              [
+                -0.030009538899329998,
+                0.2568781479969237,
+                0.9505386857859383
+              ]
+            ],
+            "support_bounds": [
+              [
+                -0.5,
+                -0.6,
+                0.85
+              ],
+              [
+                0.5,
+                0.6,
+                0.9
+              ]
+            ],
+            "collision_free": true,
+            "invalid_contacts": [],
+            "intersection_tolerance_m": 1e-07,
+            "reachable": true,
+            "ik_waypoints": 185,
+            "maximum_ik_position_error_m": 0.0009723445563470234,
+            "maximum_ik_orientation_error_rad": 0.0019297680268618085,
+            "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+            "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+          }
+        }
+      },
+      "status": "success",
+      "accepted": true,
+      "transitions": 2101,
+      "failure_phase": null,
+      "failure_reason": null
+    },
+    {
+      "episode_id": "episode_004",
+      "trial": {
+        "trial": 4,
+        "requested_offset_xy_m": [
+          0,
+          0.02
+        ],
+        "applied_offset_xy_m": [
+          0.0,
+          0.02
+        ],
+        "validation": {
+          "offset_xy_m": [
+            0.0,
+            0.02
+          ],
+          "support_surface": "table_collision",
+          "support_contact_count": 20,
+          "support_surface_z_m": 0.9,
+          "bottom_minus_support_z_m": -7.407915415647004e-06,
+          "remains_on_support": true,
+          "within_scene_bounds": true,
+          "object_bounds": [
+            [
+              -0.11701674024307732,
+              0.1696782077921012,
+              0.8999925920845844
+            ],
+            [
+              -0.010009538899329994,
+              0.2768781479969237,
+              0.9505386857859383
+            ]
+          ],
+          "support_bounds": [
+            [
+              -0.5,
+              -0.6,
+              0.85
+            ],
+            [
+              0.5,
+              0.6,
+              0.9
+            ]
+          ],
+          "collision_free": true,
+          "invalid_contacts": [],
+          "intersection_tolerance_m": 1e-07,
+          "reachable": true,
+          "ik_waypoints": 185,
+          "maximum_ik_position_error_m": 0.0009922452127594285,
+          "maximum_ik_orientation_error_rad": 0.0002737846946716277,
+          "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+          "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+        },
+        "adjustment": {
+          "reduced": false,
+          "requested_validation": {
+            "offset_xy_m": [
+              0.0,
+              0.02
+            ],
+            "support_surface": "table_collision",
+            "support_contact_count": 20,
+            "support_surface_z_m": 0.9,
+            "bottom_minus_support_z_m": -7.407915415647004e-06,
+            "remains_on_support": true,
+            "within_scene_bounds": true,
+            "object_bounds": [
+              [
+                -0.11701674024307732,
+                0.1696782077921012,
+                0.8999925920845844
+              ],
+              [
+                -0.010009538899329994,
+                0.2768781479969237,
+                0.9505386857859383
+              ]
+            ],
+            "support_bounds": [
+              [
+                -0.5,
+                -0.6,
+                0.85
+              ],
+              [
+                0.5,
+                0.6,
+                0.9
+              ]
+            ],
+            "collision_free": true,
+            "invalid_contacts": [],
+            "intersection_tolerance_m": 1e-07,
+            "reachable": true,
+            "ik_waypoints": 185,
+            "maximum_ik_position_error_m": 0.0009922452127594285,
+            "maximum_ik_orientation_error_rad": 0.0002737846946716277,
+            "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+            "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+          }
+        }
+      },
+      "status": "interrupted",
+      "accepted": false,
+      "failure_reason": "Stopped at user request: no further demonstration collection."
+    }
+  ],
+  "successful_episodes": 3,
+  "total_transitions": 6331,
+  "episodes": [
+    {
+      "episode_id": "episode_001",
+      "path": "episodes/episode_001.h5",
+      "transitions": 2109,
+      "bytes": 97941201
+    },
+    {
+      "episode_id": "episode_002",
+      "path": "episodes/episode_002.h5",
+      "transitions": 2121,
+      "bytes": 98467685
+    },
+    {
+      "episode_id": "episode_003",
+      "path": "episodes/episode_003.h5",
+      "transitions": 2101,
+      "bytes": 97532363
+    }
+  ],
+  "observation_dimensions": {
+    "agentview_rgb": [
+      128,
+      128,
+      3
+    ],
+    "eef_pose": [
+      7
+    ],
+    "eye_in_hand_rgb": [
+      128,
+      128,
+      3
+    ],
+    "gripper_qpos": [
+      2
+    ],
+    "gripper_qvel": [
+      2
+    ],
+    "joint_pos": [
+      7
+    ],
+    "joint_vel": [
+      7
+    ],
+    "libero_success": [],
+    "proprio": [
+      18
+    ],
+    "sim_time": []
+  },
+  "action_dimension": 7,
+  "action_statistics": {
+    "min": [
+      -0.04867128969948509,
+      -0.042215105535075015,
+      -0.29818056774834956,
+      -0.008592390232115693,
+      -0.009728632425224681,
+      -0.002542090431426569,
+      -1.0
+    ],
+    "max": [
+      0.07107544454805331,
+      0.21687524933961866,
+      0.0796992127223195,
+      0.004794248964760069,
+      0.008701019396756814,
+      0.0017808334988386177,
+      1.0
+    ],
+    "mean": [
+      0.013379593457850943,
+      0.010407281540036836,
+      -0.0015034642158302388,
+      -0.0004132486971620732,
+      0.0012177768916913183,
+      -0.00013444185561287884,
+      -0.10472279260780287
+    ],
+    "std": [
+      0.0179904296401912,
+      0.024252623353282297,
+      0.03455990944033389,
+      0.0013751741774643987,
+      0.0022809826277324983,
+      0.001151056747873709,
+      0.9945014513354463
+    ]
+  },
+  "episode_file_bytes": 293941249,
+  "size_on_disk_bytes_excluding_summary": 328040104
+}

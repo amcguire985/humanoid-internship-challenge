@@ -1,0 +1,53 @@
+{
+  "episode_id": "episode_001",
+  "transitions": 2109,
+  "language_instruction": "pick the akita black bowl between the plate and the ramekin and place it on the plate",
+  "observations": {
+    "agentview_rgb": [
+      2110,
+      128,
+      128,
+      3
+    ],
+    "eef_pose": [
+      2110,
+      7
+    ],
+    "eye_in_hand_rgb": [
+      2110,
+      128,
+      128,
+      3
+    ],
+    "gripper_qpos": [
+      2110,
+      2
+    ],
+    "gripper_qvel": [
+      2110,
+      2
+    ],
+    "joint_pos": [
+      2110,
+      7
+    ],
+    "joint_vel": [
+      2110,
+      7
+    ],
+    "libero_success": [
+      2110
+    ],
+    "proprio": [
+      2110,
+      18
+    ],
+    "sim_time": [
+      2110
+    ]
+  },
+  "action_shape": [
+    2109,
+    7
+  ]
+}

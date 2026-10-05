@@ -1,0 +1,165 @@
+{
+  "episodes": [
+    {
+      "episode_id": "episode_001",
+      "transitions": 2109,
+      "language_instruction": "pick the akita black bowl between the plate and the ramekin and place it on the plate",
+      "observations": {
+        "agentview_rgb": [
+          2110,
+          128,
+          128,
+          3
+        ],
+        "eef_pose": [
+          2110,
+          7
+        ],
+        "eye_in_hand_rgb": [
+          2110,
+          128,
+          128,
+          3
+        ],
+        "gripper_qpos": [
+          2110,
+          2
+        ],
+        "gripper_qvel": [
+          2110,
+          2
+        ],
+        "joint_pos": [
+          2110,
+          7
+        ],
+        "joint_vel": [
+          2110,
+          7
+        ],
+        "libero_success": [
+          2110
+        ],
+        "proprio": [
+          2110,
+          18
+        ],
+        "sim_time": [
+          2110
+        ]
+      },
+      "action_shape": [
+        2109,
+        7
+      ],
+      "complete": true,
+      "successful": true,
+      "controller_log_alignment": "exact action[t], EEF/gripper state[t+1]",
+      "image_state_synchronization": "T+1 same-state renders; sequential capture wrapper verified by test; no intervening simulation steps"
+    },
+    {
+      "episode_id": "episode_002",
+      "transitions": 2121,
+      "language_instruction": "pick the akita black bowl between the plate and the ramekin and place it on the plate",
+      "observations": {
+        "agentview_rgb": [
+          2122,
+          128,
+          128,
+          3
+        ],
+        "eef_pose": [
+          2122,
+          7
+        ],
+        "eye_in_hand_rgb": [
+          2122,
+          128,
+          128,
+          3
+        ],
+        "gripper_qpos": [
+          2122,
+          2
+        ],
+        "gripper_qvel": [
+          2122,
+          2
+        ],
+        "joint_pos": [
+          2122,
+          7
+        ],
+        "joint_vel": [
+          2122,
+          7
+        ],
+        "libero_success": [
+          2122
+        ],
+        "proprio": [
+          2122,
+          18
+        ],
+        "sim_time": [
+          2122
+        ]
+      },
+      "action_shape": [
+        2121,
+        7
+      ],
+      "complete": true,
+      "successful": true,
+      "controller_log_alignment": "exact action[t], EEF/gripper state[t+1]",
+      "image_state_synchronization": "T+1 same-state renders; sequential capture wrapper verified by test; no intervening simulation steps"
+    }
+  ],
+  "total_transitions": 4230,
+  "action_statistics": {
+    "min": [
+      -0.04211296526254543,
+      -0.03780552138254234,
+      -0.28123784014087994,
+      -0.00841298804482245,
+      -0.008531994148062572,
+      -0.0023765123698012477,
+      -1.0
+    ],
+    "max": [
+      0.06442154238079555,
+      0.21687524933961866,
+      0.0796992127223195,
+      0.004365584353264089,
+      0.008444211275388334,
+      0.0017777222955330187,
+      1.0
+    ],
+    "mean": [
+      0.013382769347538478,
+      0.010464184389752905,
+      -0.001433726095648972,
+      -0.0004301409494727656,
+      0.001233935742854976,
+      -0.00014562566972818188,
+      -0.11063829787234042
+    ],
+    "std": [
+      0.017718486397219523,
+      0.02409881457383178,
+      0.03438832486335168,
+      0.0013896822601249163,
+      0.0022583535222818005,
+      0.0011485093140013122,
+      0.9938607382545883
+    ]
+  },
+  "training_episode_ids": [
+    "episode_001",
+    "episode_002"
+  ],
+  "excluded_episode_ids": [
+    "episode_003"
+  ],
+  "frequency_hz": 20
+}

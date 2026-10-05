@@ -1,0 +1,1727 @@
+{
+  "task": "pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate",
+  "seed": 0,
+  "reference_success": "/home/student/robot_challenge/humanoid_internship_challenge/results/libero_pick_place_attempt_003/metrics.json",
+  "settings": {
+    "robot": {
+      "pregrasp_height": 0.18,
+      "grasp_offset": [
+        0.0,
+        0.045,
+        0.035
+      ],
+      "grasp_offset_mode": "measured_after_grasp",
+      "max_grasp_offset_adjustment_m": 0.03,
+      "postgrasp_lift_height": 0.08,
+      "minimum_object_lift_m": 0.03,
+      "transport_clearance_height": 0.06,
+      "placement_object_height_offset": 0.018,
+      "approach_step_size": 0.001,
+      "max_eef_speed_m_s": 0.02,
+      "max_command_step_m": 0.025,
+      "action_clip": 0.5,
+      "fixed_eef_quaternion_xyzw": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scene_settle_steps": 20,
+      "grasp_close_steps": 40,
+      "grasp_settle_steps": 20,
+      "grasp_confirm_steps": 5,
+      "grasp_loss_grace_steps": 8,
+      "grasp_offset_drift_limit_m": 0.025,
+      "release_open_steps": 40,
+      "release_settle_steps": 40,
+      "retract_height": 0.12,
+      "retract_settle_steps": 20,
+      "position_tolerance_m": 0.003,
+      "move_settle_steps": 60,
+      "tracking_error_abort_m": 0.035,
+      "tracking_error_abort_steps": 5,
+      "workspace_min": [
+        -0.6,
+        -0.6,
+        0.88
+      ],
+      "workspace_max": [
+        0.6,
+        0.6,
+        1.5
+      ],
+      "target_region_radius_m": 0.04,
+      "placement_height_tolerance_m": 0.02,
+      "maximum_endpoint_correction_m": 0.06,
+      "phase_max_steps": {
+        "SCENE_SETTLE": 40,
+        "PREGRASP": 1000,
+        "DESCEND": 500,
+        "GRASP": 80,
+        "GRASP_SETTLE": 80,
+        "LIFT": 400,
+        "TRANSPORT": 2000,
+        "PLACE": 400,
+        "RELEASE": 80,
+        "RELEASE_SETTLE": 100,
+        "RETRACT": 500
+      }
+    },
+    "mapping": {
+      "axis_permutation": [
+        0,
+        1,
+        2
+      ],
+      "axis_signs": [
+        1,
+        1,
+        1
+      ],
+      "horizontal_scale": 1.0,
+      "vertical_scale": 1.0,
+      "grasp_offset": [
+        0.0,
+        0.0,
+        0.18
+      ],
+      "target_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "time_scale": 3.0,
+      "action_clip": 0.5,
+      "gripper": -1,
+      "workspace_min": [
+        -0.6,
+        -0.6,
+        0.85
+      ],
+      "workspace_max": [
+        0.6,
+        0.6,
+        1.5
+      ],
+      "max_source_gap_s": 0.15,
+      "max_eef_speed_m_s": 0.02,
+      "max_command_step_m": 0.025,
+      "approach_seconds": 3.0,
+      "start_tolerance_m": 0.005,
+      "settle_seconds": 1.0,
+      "scene_settle_seconds": 1.0
+    },
+    "human": {
+      "goal_object_offset": [
+        -0.09,
+        0.09,
+        0.0
+      ],
+      "goal_offset_frame": "goal_tag",
+      "goal_offset_verified": true,
+      "vertical_axis": "z",
+      "vertical_sign": 1,
+      "vertical_verified": false,
+      "calibration_verified": false,
+      "max_reprojection_error": 3.0,
+      "max_speed": 2.0,
+      "max_gap_frames": 3,
+      "max_gap_span": 0.15,
+      "smoothing_window": 7,
+      "stationary_speed": 0.03,
+      "vertical_speed": 0.03,
+      "min_motion_duration": 0.2,
+      "stationary_duration": 0.3,
+      "goal_radius": 0.06,
+      "max_goal_scatter": 0.02,
+      "min_coverage": 0.9,
+      "phase_overrides": {},
+      "goal_coplanar": true,
+      "goal_center_height": 0.0225,
+      "phase_override_reason": "Video-reviewed correction: transport includes carrying, lowering, and the final hold, from approximately 4.33 s through 10.30 s; hand opening/release is approximately 10.5 s. Automatic height reversal at 6.405 s and speed cutoff at 8.107 s truncate the action. Boundaries are annotations, not contact detections.",
+      "grasp_time_seconds": 3.77,
+      "release_time_seconds": 10.5,
+      "transport_start_time_seconds": 4.33,
+      "transport_end_time_seconds": 10.3
+    }
+  },
+  "input_hashes": {
+    "config/libero_pick_place.json": "6d4d97f57488591ea960ce5329e1fa11325ded7ea5dcf1a4f95842f0a0d98cbe",
+    "config/libero_retarget.json": "bae7ebc69fa6fc09402778f12a9f344480d515f7d289f232db2a38ed6aef5cfd",
+    "config/test_007_demo.json": "567bca770132334a22e335806a0103b3ff6b40208fc245894fd95e1784431641",
+    "results/test_007_block_only_raw/task_demo/processed_demo.csv": "3f2ef11c25daaaa99a269ed87a9c682281661692511a19b685a3a855a7357796",
+    "results/test_007_block_only_raw/task_demo/metadata.json": "eb8b764a5025a7a78d26df3dfa7ba253dca83f4e85d16bc5db435a9df65619bf",
+    "scripts/scripted_libero_pick_place.py": "57dc405d0642addd68c1c4d6af7c8329888869842b7aaa5a3209b5f6bfd80c4c",
+    "scripts/retarget_libero_object.py": "52a192893ab837e25ea380360172ea334d0d90b1005a578a48aa8e428325c806",
+    "scripts/replay_libero_transport.py": "fcd9e93ecd3060fcf5ed801714708548381c4823af349c62f8277d0f30757f8b",
+    "scripts/process_task_demo.py": "7612e201b99ede4d56e0bfc1d5bf389a7b46a6a86243d090d476a961a09e9454"
+  },
+  "nominal": {
+    "object_start": [
+      -0.06390143206336037,
+      0.20345985704175618,
+      0.8984041501882155
+    ],
+    "target_anchor": [
+      0.07287702006820722,
+      0.21238385502430443,
+      0.9024998346662079
+    ],
+    "object_free_joint_qpos": [
+      -0.06390143206336037,
+      0.20345985704175618,
+      0.8984041501882478,
+      0.7071067829265477,
+      -2.7755353437344595e-05,
+      3.3351593347629462e-06,
+      0.7071067788939557
+    ],
+    "robot_arm_qpos": [
+      -7.778589328205276e-06,
+      -0.18998760752503868,
+      -1.7379629484181446e-05,
+      -2.491704283261854,
+      6.533349296318725e-06,
+      2.304296581420441,
+      0.7854599292802148
+    ],
+    "robot_gripper_qpos": [
+      0.0392367022242068,
+      -0.03923669442085487
+    ],
+    "eef_position": [
+      -0.20915618743233316,
+      -1.0344699369814407e-05,
+      1.1727024335161786
+    ],
+    "all_object_poses": {
+      "akita_black_bowl_1": [
+        -0.06390143206336037,
+        0.20345985704175618,
+        0.8984041501882478,
+        0.7071067829265477,
+        -2.7755353437344595e-05,
+        3.3351593347629462e-06,
+        0.7071067788939557
+      ],
+      "akita_black_bowl_2": [
+        -0.1808583968409169,
+        0.3179217657737119,
+        0.8984041501882478,
+        0.7071067829265477,
+        -2.7755353437344124e-05,
+        3.3351593347622957e-06,
+        0.7071067788939557
+      ],
+      "cookies_1": [
+        0.060021404633561856,
+        0.021655297471504485,
+        0.9093709548367092,
+        0.7071067811865475,
+        3.844442701569094e-17,
+        4.0398847425078686e-17,
+        0.7071067811865476
+      ],
+      "glazed_rim_porcelain_ramekin_1": [
+        -0.21435788658235364,
+        0.19103072198907708,
+        0.8993413701298072,
+        0.7071067844070472,
+        -6.687273925542767e-08,
+        1.6368629217739956e-07,
+        0.7071067779660266
+      ],
+      "plate_1": [
+        0.07287702006820722,
+        0.21238385502430443,
+        0.9024998346662371,
+        0.7071068091221641,
+        -2.6609958575457944e-05,
+        1.206721244865333e-05,
+        0.7071067526472675
+      ]
+    },
+    "initial": {
+      "eef": [
+        -0.2084646605658239,
+        0.0,
+        1.1732794757296405
+      ],
+      "object": [
+        -0.06390988281503088,
+        0.20349675443522666,
+        0.97
+      ],
+      "target": [
+        0.0728689182540634,
+        0.21238612100895377,
+        0.97
+      ],
+      "gripper": [
+        0.020833,
+        -0.020833
+      ]
+    },
+    "settling_steps": 20
+  },
+  "requested_trials": 10,
+  "trials": [
+    {
+      "trial": 1,
+      "requested_offset_xy_m": [
+        0,
+        0
+      ],
+      "applied_offset_xy_m": [
+        0.0,
+        0.0
+      ],
+      "validation": {
+        "offset_xy_m": [
+          0.0,
+          0.0
+        ],
+        "support_surface": "table_collision",
+        "support_contact_count": 20,
+        "support_surface_z_m": 0.9,
+        "bottom_minus_support_z_m": -7.407915415647004e-06,
+        "remains_on_support": true,
+        "within_scene_bounds": true,
+        "object_bounds": [
+          [
+            -0.11701674024307732,
+            0.1496782077921012,
+            0.8999925920845844
+          ],
+          [
+            -0.010009538899329994,
+            0.2568781479969237,
+            0.9505386857859383
+          ]
+        ],
+        "support_bounds": [
+          [
+            -0.5,
+            -0.6,
+            0.85
+          ],
+          [
+            0.5,
+            0.6,
+            0.9
+          ]
+        ],
+        "collision_free": true,
+        "invalid_contacts": [],
+        "intersection_tolerance_m": 1e-07,
+        "reachable": true,
+        "ik_waypoints": 185,
+        "maximum_ik_position_error_m": 0.0009919055332782368,
+        "maximum_ik_orientation_error_rad": 0.00028579504332600363,
+        "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+        "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+      },
+      "adjustment": {
+        "reduced": false,
+        "requested_validation": {
+          "offset_xy_m": [
+            0.0,
+            0.0
+          ],
+          "support_surface": "table_collision",
+          "support_contact_count": 20,
+          "support_surface_z_m": 0.9,
+          "bottom_minus_support_z_m": -7.407915415647004e-06,
+          "remains_on_support": true,
+          "within_scene_bounds": true,
+          "object_bounds": [
+            [
+              -0.11701674024307732,
+              0.1496782077921012,
+              0.8999925920845844
+            ],
+            [
+              -0.010009538899329994,
+              0.2568781479969237,
+              0.9505386857859383
+            ]
+          ],
+          "support_bounds": [
+            [
+              -0.5,
+              -0.6,
+              0.85
+            ],
+            [
+              0.5,
+              0.6,
+              0.9
+            ]
+          ],
+          "collision_free": true,
+          "invalid_contacts": [],
+          "intersection_tolerance_m": 1e-07,
+          "reachable": true,
+          "ik_waypoints": 185,
+          "maximum_ik_position_error_m": 0.0009919055332782368,
+          "maximum_ik_orientation_error_rad": 0.00028579504332600363,
+          "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+          "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+        }
+      }
+    },
+    {
+      "trial": 2,
+      "requested_offset_xy_m": [
+        0.02,
+        0
+      ],
+      "applied_offset_xy_m": [
+        0.02,
+        0.0
+      ],
+      "validation": {
+        "offset_xy_m": [
+          0.02,
+          0.0
+        ],
+        "support_surface": "table_collision",
+        "support_contact_count": 20,
+        "support_surface_z_m": 0.9,
+        "bottom_minus_support_z_m": -7.407915415647004e-06,
+        "remains_on_support": true,
+        "within_scene_bounds": true,
+        "object_bounds": [
+          [
+            -0.09701674024307731,
+            0.1496782077921012,
+            0.8999925920845844
+          ],
+          [
+            0.00999046110067001,
+            0.2568781479969237,
+            0.9505386857859383
+          ]
+        ],
+        "support_bounds": [
+          [
+            -0.5,
+            -0.6,
+            0.85
+          ],
+          [
+            0.5,
+            0.6,
+            0.9
+          ]
+        ],
+        "collision_free": true,
+        "invalid_contacts": [],
+        "intersection_tolerance_m": 1e-07,
+        "reachable": true,
+        "ik_waypoints": 185,
+        "maximum_ik_position_error_m": 0.000978737221655907,
+        "maximum_ik_orientation_error_rad": 0.0001661281447265139,
+        "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+        "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+      },
+      "adjustment": {
+        "reduced": false,
+        "requested_validation": {
+          "offset_xy_m": [
+            0.02,
+            0.0
+          ],
+          "support_surface": "table_collision",
+          "support_contact_count": 20,
+          "support_surface_z_m": 0.9,
+          "bottom_minus_support_z_m": -7.407915415647004e-06,
+          "remains_on_support": true,
+          "within_scene_bounds": true,
+          "object_bounds": [
+            [
+              -0.09701674024307731,
+              0.1496782077921012,
+              0.8999925920845844
+            ],
+            [
+              0.00999046110067001,
+              0.2568781479969237,
+              0.9505386857859383
+            ]
+          ],
+          "support_bounds": [
+            [
+              -0.5,
+              -0.6,
+              0.85
+            ],
+            [
+              0.5,
+              0.6,
+              0.9
+            ]
+          ],
+          "collision_free": true,
+          "invalid_contacts": [],
+          "intersection_tolerance_m": 1e-07,
+          "reachable": true,
+          "ik_waypoints": 185,
+          "maximum_ik_position_error_m": 0.000978737221655907,
+          "maximum_ik_orientation_error_rad": 0.0001661281447265139,
+          "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+          "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+        }
+      }
+    },
+    {
+      "trial": 3,
+      "requested_offset_xy_m": [
+        -0.02,
+        0
+      ],
+      "applied_offset_xy_m": [
+        -0.02,
+        0.0
+      ],
+      "validation": {
+        "offset_xy_m": [
+          -0.02,
+          0.0
+        ],
+        "support_surface": "table_collision",
+        "support_contact_count": 20,
+        "support_surface_z_m": 0.9,
+        "bottom_minus_support_z_m": -7.407915415647004e-06,
+        "remains_on_support": true,
+        "within_scene_bounds": true,
+        "object_bounds": [
+          [
+            -0.13701674024307733,
+            0.1496782077921012,
+            0.8999925920845844
+          ],
+          [
+            -0.030009538899329998,
+            0.2568781479969237,
+            0.9505386857859383
+          ]
+        ],
+        "support_bounds": [
+          [
+            -0.5,
+            -0.6,
+            0.85
+          ],
+          [
+            0.5,
+            0.6,
+            0.9
+          ]
+        ],
+        "collision_free": true,
+        "invalid_contacts": [],
+        "intersection_tolerance_m": 1e-07,
+        "reachable": true,
+        "ik_waypoints": 185,
+        "maximum_ik_position_error_m": 0.0009723445563470234,
+        "maximum_ik_orientation_error_rad": 0.0019297680268618085,
+        "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+        "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+      },
+      "adjustment": {
+        "reduced": false,
+        "requested_validation": {
+          "offset_xy_m": [
+            -0.02,
+            0.0
+          ],
+          "support_surface": "table_collision",
+          "support_contact_count": 20,
+          "support_surface_z_m": 0.9,
+          "bottom_minus_support_z_m": -7.407915415647004e-06,
+          "remains_on_support": true,
+          "within_scene_bounds": true,
+          "object_bounds": [
+            [
+              -0.13701674024307733,
+              0.1496782077921012,
+              0.8999925920845844
+            ],
+            [
+              -0.030009538899329998,
+              0.2568781479969237,
+              0.9505386857859383
+            ]
+          ],
+          "support_bounds": [
+            [
+              -0.5,
+              -0.6,
+              0.85
+            ],
+            [
+              0.5,
+              0.6,
+              0.9
+            ]
+          ],
+          "collision_free": true,
+          "invalid_contacts": [],
+          "intersection_tolerance_m": 1e-07,
+          "reachable": true,
+          "ik_waypoints": 185,
+          "maximum_ik_position_error_m": 0.0009723445563470234,
+          "maximum_ik_orientation_error_rad": 0.0019297680268618085,
+          "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+          "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+        }
+      }
+    },
+    {
+      "trial": 4,
+      "requested_offset_xy_m": [
+        0,
+        0.02
+      ],
+      "applied_offset_xy_m": [
+        0.0,
+        0.02
+      ],
+      "validation": {
+        "offset_xy_m": [
+          0.0,
+          0.02
+        ],
+        "support_surface": "table_collision",
+        "support_contact_count": 20,
+        "support_surface_z_m": 0.9,
+        "bottom_minus_support_z_m": -7.407915415647004e-06,
+        "remains_on_support": true,
+        "within_scene_bounds": true,
+        "object_bounds": [
+          [
+            -0.11701674024307732,
+            0.1696782077921012,
+            0.8999925920845844
+          ],
+          [
+            -0.010009538899329994,
+            0.2768781479969237,
+            0.9505386857859383
+          ]
+        ],
+        "support_bounds": [
+          [
+            -0.5,
+            -0.6,
+            0.85
+          ],
+          [
+            0.5,
+            0.6,
+            0.9
+          ]
+        ],
+        "collision_free": true,
+        "invalid_contacts": [],
+        "intersection_tolerance_m": 1e-07,
+        "reachable": true,
+        "ik_waypoints": 185,
+        "maximum_ik_position_error_m": 0.0009922452127594285,
+        "maximum_ik_orientation_error_rad": 0.0002737846946716277,
+        "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+        "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+      },
+      "adjustment": {
+        "reduced": false,
+        "requested_validation": {
+          "offset_xy_m": [
+            0.0,
+            0.02
+          ],
+          "support_surface": "table_collision",
+          "support_contact_count": 20,
+          "support_surface_z_m": 0.9,
+          "bottom_minus_support_z_m": -7.407915415647004e-06,
+          "remains_on_support": true,
+          "within_scene_bounds": true,
+          "object_bounds": [
+            [
+              -0.11701674024307732,
+              0.1696782077921012,
+              0.8999925920845844
+            ],
+            [
+              -0.010009538899329994,
+              0.2768781479969237,
+              0.9505386857859383
+            ]
+          ],
+          "support_bounds": [
+            [
+              -0.5,
+              -0.6,
+              0.85
+            ],
+            [
+              0.5,
+              0.6,
+              0.9
+            ]
+          ],
+          "collision_free": true,
+          "invalid_contacts": [],
+          "intersection_tolerance_m": 1e-07,
+          "reachable": true,
+          "ik_waypoints": 185,
+          "maximum_ik_position_error_m": 0.0009922452127594285,
+          "maximum_ik_orientation_error_rad": 0.0002737846946716277,
+          "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+          "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+        }
+      }
+    },
+    {
+      "trial": 5,
+      "requested_offset_xy_m": [
+        0,
+        -0.02
+      ],
+      "applied_offset_xy_m": [
+        0.0,
+        -0.02
+      ],
+      "validation": {
+        "offset_xy_m": [
+          0.0,
+          -0.02
+        ],
+        "support_surface": "table_collision",
+        "support_contact_count": 20,
+        "support_surface_z_m": 0.9,
+        "bottom_minus_support_z_m": -7.407915415647004e-06,
+        "remains_on_support": true,
+        "within_scene_bounds": true,
+        "object_bounds": [
+          [
+            -0.11701674024307732,
+            0.1296782077921012,
+            0.8999925920845844
+          ],
+          [
+            -0.010009538899329994,
+            0.2368781479969237,
+            0.9505386857859383
+          ]
+        ],
+        "support_bounds": [
+          [
+            -0.5,
+            -0.6,
+            0.85
+          ],
+          [
+            0.5,
+            0.6,
+            0.9
+          ]
+        ],
+        "collision_free": true,
+        "invalid_contacts": [],
+        "intersection_tolerance_m": 1e-07,
+        "reachable": true,
+        "ik_waypoints": 185,
+        "maximum_ik_position_error_m": 0.00099721317731736,
+        "maximum_ik_orientation_error_rad": 0.0004701125950964325,
+        "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+        "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+      },
+      "adjustment": {
+        "reduced": false,
+        "requested_validation": {
+          "offset_xy_m": [
+            0.0,
+            -0.02
+          ],
+          "support_surface": "table_collision",
+          "support_contact_count": 20,
+          "support_surface_z_m": 0.9,
+          "bottom_minus_support_z_m": -7.407915415647004e-06,
+          "remains_on_support": true,
+          "within_scene_bounds": true,
+          "object_bounds": [
+            [
+              -0.11701674024307732,
+              0.1296782077921012,
+              0.8999925920845844
+            ],
+            [
+              -0.010009538899329994,
+              0.2368781479969237,
+              0.9505386857859383
+            ]
+          ],
+          "support_bounds": [
+            [
+              -0.5,
+              -0.6,
+              0.85
+            ],
+            [
+              0.5,
+              0.6,
+              0.9
+            ]
+          ],
+          "collision_free": true,
+          "invalid_contacts": [],
+          "intersection_tolerance_m": 1e-07,
+          "reachable": true,
+          "ik_waypoints": 185,
+          "maximum_ik_position_error_m": 0.00099721317731736,
+          "maximum_ik_orientation_error_rad": 0.0004701125950964325,
+          "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+          "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+        }
+      }
+    },
+    {
+      "trial": 6,
+      "requested_offset_xy_m": [
+        0.02,
+        0.02
+      ],
+      "applied_offset_xy_m": [
+        0.02,
+        0.02
+      ],
+      "validation": {
+        "offset_xy_m": [
+          0.02,
+          0.02
+        ],
+        "support_surface": "table_collision",
+        "support_contact_count": 20,
+        "support_surface_z_m": 0.9,
+        "bottom_minus_support_z_m": -7.407915415647004e-06,
+        "remains_on_support": true,
+        "within_scene_bounds": true,
+        "object_bounds": [
+          [
+            -0.09701674024307731,
+            0.1696782077921012,
+            0.8999925920845844
+          ],
+          [
+            0.00999046110067001,
+            0.2768781479969237,
+            0.9505386857859383
+          ]
+        ],
+        "support_bounds": [
+          [
+            -0.5,
+            -0.6,
+            0.85
+          ],
+          [
+            0.5,
+            0.6,
+            0.9
+          ]
+        ],
+        "collision_free": true,
+        "invalid_contacts": [],
+        "intersection_tolerance_m": 1e-07,
+        "reachable": true,
+        "ik_waypoints": 185,
+        "maximum_ik_position_error_m": 0.000978967266595445,
+        "maximum_ik_orientation_error_rad": 0.00039851557084354025,
+        "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+        "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+      },
+      "adjustment": {
+        "reduced": false,
+        "requested_validation": {
+          "offset_xy_m": [
+            0.02,
+            0.02
+          ],
+          "support_surface": "table_collision",
+          "support_contact_count": 20,
+          "support_surface_z_m": 0.9,
+          "bottom_minus_support_z_m": -7.407915415647004e-06,
+          "remains_on_support": true,
+          "within_scene_bounds": true,
+          "object_bounds": [
+            [
+              -0.09701674024307731,
+              0.1696782077921012,
+              0.8999925920845844
+            ],
+            [
+              0.00999046110067001,
+              0.2768781479969237,
+              0.9505386857859383
+            ]
+          ],
+          "support_bounds": [
+            [
+              -0.5,
+              -0.6,
+              0.85
+            ],
+            [
+              0.5,
+              0.6,
+              0.9
+            ]
+          ],
+          "collision_free": true,
+          "invalid_contacts": [],
+          "intersection_tolerance_m": 1e-07,
+          "reachable": true,
+          "ik_waypoints": 185,
+          "maximum_ik_position_error_m": 0.000978967266595445,
+          "maximum_ik_orientation_error_rad": 0.00039851557084354025,
+          "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+          "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+        }
+      }
+    },
+    {
+      "trial": 7,
+      "requested_offset_xy_m": [
+        0.02,
+        -0.02
+      ],
+      "applied_offset_xy_m": [
+        0.02,
+        -0.02
+      ],
+      "validation": {
+        "offset_xy_m": [
+          0.02,
+          -0.02
+        ],
+        "support_surface": "table_collision",
+        "support_contact_count": 20,
+        "support_surface_z_m": 0.9,
+        "bottom_minus_support_z_m": -7.407915415647004e-06,
+        "remains_on_support": true,
+        "within_scene_bounds": true,
+        "object_bounds": [
+          [
+            -0.09701674024307731,
+            0.1296782077921012,
+            0.8999925920845844
+          ],
+          [
+            0.00999046110067001,
+            0.2368781479969237,
+            0.9505386857859383
+          ]
+        ],
+        "support_bounds": [
+          [
+            -0.5,
+            -0.6,
+            0.85
+          ],
+          [
+            0.5,
+            0.6,
+            0.9
+          ]
+        ],
+        "collision_free": true,
+        "invalid_contacts": [],
+        "intersection_tolerance_m": 1e-07,
+        "reachable": true,
+        "ik_waypoints": 185,
+        "maximum_ik_position_error_m": 0.0009838267319671275,
+        "maximum_ik_orientation_error_rad": 0.0007626182468096005,
+        "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+        "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+      },
+      "adjustment": {
+        "reduced": false,
+        "requested_validation": {
+          "offset_xy_m": [
+            0.02,
+            -0.02
+          ],
+          "support_surface": "table_collision",
+          "support_contact_count": 20,
+          "support_surface_z_m": 0.9,
+          "bottom_minus_support_z_m": -7.407915415647004e-06,
+          "remains_on_support": true,
+          "within_scene_bounds": true,
+          "object_bounds": [
+            [
+              -0.09701674024307731,
+              0.1296782077921012,
+              0.8999925920845844
+            ],
+            [
+              0.00999046110067001,
+              0.2368781479969237,
+              0.9505386857859383
+            ]
+          ],
+          "support_bounds": [
+            [
+              -0.5,
+              -0.6,
+              0.85
+            ],
+            [
+              0.5,
+              0.6,
+              0.9
+            ]
+          ],
+          "collision_free": true,
+          "invalid_contacts": [],
+          "intersection_tolerance_m": 1e-07,
+          "reachable": true,
+          "ik_waypoints": 185,
+          "maximum_ik_position_error_m": 0.0009838267319671275,
+          "maximum_ik_orientation_error_rad": 0.0007626182468096005,
+          "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+          "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+        }
+      }
+    },
+    {
+      "trial": 8,
+      "requested_offset_xy_m": [
+        -0.02,
+        0.02
+      ],
+      "applied_offset_xy_m": [
+        -0.02,
+        0.02
+      ],
+      "validation": {
+        "offset_xy_m": [
+          -0.02,
+          0.02
+        ],
+        "support_surface": "table_collision",
+        "support_contact_count": 20,
+        "support_surface_z_m": 0.9,
+        "bottom_minus_support_z_m": -7.407915415647004e-06,
+        "remains_on_support": true,
+        "within_scene_bounds": true,
+        "object_bounds": [
+          [
+            -0.13701674024307733,
+            0.1696782077921012,
+            0.8999925920845844
+          ],
+          [
+            -0.030009538899329998,
+            0.2768781479969237,
+            0.9505386857859383
+          ]
+        ],
+        "support_bounds": [
+          [
+            -0.5,
+            -0.6,
+            0.85
+          ],
+          [
+            0.5,
+            0.6,
+            0.9
+          ]
+        ],
+        "collision_free": true,
+        "invalid_contacts": [],
+        "intersection_tolerance_m": 1e-07,
+        "reachable": true,
+        "ik_waypoints": 185,
+        "maximum_ik_position_error_m": 0.0009732055703248021,
+        "maximum_ik_orientation_error_rad": 0.00022950230984448145,
+        "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+        "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+      },
+      "adjustment": {
+        "reduced": false,
+        "requested_validation": {
+          "offset_xy_m": [
+            -0.02,
+            0.02
+          ],
+          "support_surface": "table_collision",
+          "support_contact_count": 20,
+          "support_surface_z_m": 0.9,
+          "bottom_minus_support_z_m": -7.407915415647004e-06,
+          "remains_on_support": true,
+          "within_scene_bounds": true,
+          "object_bounds": [
+            [
+              -0.13701674024307733,
+              0.1696782077921012,
+              0.8999925920845844
+            ],
+            [
+              -0.030009538899329998,
+              0.2768781479969237,
+              0.9505386857859383
+            ]
+          ],
+          "support_bounds": [
+            [
+              -0.5,
+              -0.6,
+              0.85
+            ],
+            [
+              0.5,
+              0.6,
+              0.9
+            ]
+          ],
+          "collision_free": true,
+          "invalid_contacts": [],
+          "intersection_tolerance_m": 1e-07,
+          "reachable": true,
+          "ik_waypoints": 185,
+          "maximum_ik_position_error_m": 0.0009732055703248021,
+          "maximum_ik_orientation_error_rad": 0.00022950230984448145,
+          "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+          "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+        }
+      }
+    },
+    {
+      "trial": 9,
+      "requested_offset_xy_m": [
+        -0.02,
+        -0.02
+      ],
+      "applied_offset_xy_m": [
+        -0.02,
+        -0.02
+      ],
+      "validation": {
+        "offset_xy_m": [
+          -0.02,
+          -0.02
+        ],
+        "support_surface": "table_collision",
+        "support_contact_count": 20,
+        "support_surface_z_m": 0.9,
+        "bottom_minus_support_z_m": -7.407915415647004e-06,
+        "remains_on_support": true,
+        "within_scene_bounds": true,
+        "object_bounds": [
+          [
+            -0.13701674024307733,
+            0.1296782077921012,
+            0.8999925920845844
+          ],
+          [
+            -0.030009538899329998,
+            0.2368781479969237,
+            0.9505386857859383
+          ]
+        ],
+        "support_bounds": [
+          [
+            -0.5,
+            -0.6,
+            0.85
+          ],
+          [
+            0.5,
+            0.6,
+            0.9
+          ]
+        ],
+        "collision_free": true,
+        "invalid_contacts": [],
+        "intersection_tolerance_m": 1e-07,
+        "reachable": true,
+        "ik_waypoints": 185,
+        "maximum_ik_position_error_m": 0.000971455957484698,
+        "maximum_ik_orientation_error_rad": 0.00029369152676048257,
+        "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+        "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+      },
+      "adjustment": {
+        "reduced": false,
+        "requested_validation": {
+          "offset_xy_m": [
+            -0.02,
+            -0.02
+          ],
+          "support_surface": "table_collision",
+          "support_contact_count": 20,
+          "support_surface_z_m": 0.9,
+          "bottom_minus_support_z_m": -7.407915415647004e-06,
+          "remains_on_support": true,
+          "within_scene_bounds": true,
+          "object_bounds": [
+            [
+              -0.13701674024307733,
+              0.1296782077921012,
+              0.8999925920845844
+            ],
+            [
+              -0.030009538899329998,
+              0.2368781479969237,
+              0.9505386857859383
+            ]
+          ],
+          "support_bounds": [
+            [
+              -0.5,
+              -0.6,
+              0.85
+            ],
+            [
+              0.5,
+              0.6,
+              0.9
+            ]
+          ],
+          "collision_free": true,
+          "invalid_contacts": [],
+          "intersection_tolerance_m": 1e-07,
+          "reachable": true,
+          "ik_waypoints": 185,
+          "maximum_ik_position_error_m": 0.000971455957484698,
+          "maximum_ik_orientation_error_rad": 0.00029369152676048257,
+          "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+          "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+        }
+      }
+    },
+    {
+      "trial": 10,
+      "requested_offset_xy_m": [
+        0.04,
+        0
+      ],
+      "applied_offset_xy_m": [
+        0.0250671875,
+        0.0
+      ],
+      "validation": {
+        "offset_xy_m": [
+          0.0250671875,
+          0.0
+        ],
+        "support_surface": "table_collision",
+        "support_contact_count": 20,
+        "support_surface_z_m": 0.9,
+        "bottom_minus_support_z_m": -7.407915415647004e-06,
+        "remains_on_support": true,
+        "within_scene_bounds": true,
+        "object_bounds": [
+          [
+            -0.09194955274307731,
+            0.1496782077921012,
+            0.8999925920845844
+          ],
+          [
+            0.01505764860067001,
+            0.2568781479969237,
+            0.9505386857859383
+          ]
+        ],
+        "support_bounds": [
+          [
+            -0.5,
+            -0.6,
+            0.85
+          ],
+          [
+            0.5,
+            0.6,
+            0.9
+          ]
+        ],
+        "collision_free": true,
+        "invalid_contacts": [],
+        "intersection_tolerance_m": 1e-07,
+        "reachable": true,
+        "ik_waypoints": 185,
+        "maximum_ik_position_error_m": 0.0009713507507440413,
+        "maximum_ik_orientation_error_rad": 0.00014332380737960533,
+        "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+        "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+      },
+      "adjustment": {
+        "reduced": true,
+        "requested_validation": {
+          "offset_xy_m": [
+            0.04,
+            0.0
+          ],
+          "support_surface": "table_collision",
+          "support_contact_count": 20,
+          "support_surface_z_m": 0.9,
+          "bottom_minus_support_z_m": -7.407915415647004e-06,
+          "remains_on_support": true,
+          "within_scene_bounds": true,
+          "object_bounds": [
+            [
+              -0.07701674024307732,
+              0.1496782077921012,
+              0.8999925920845844
+            ],
+            [
+              0.029990461100670007,
+              0.2568781479969237,
+              0.9505386857859383
+            ]
+          ],
+          "support_bounds": [
+            [
+              -0.5,
+              -0.6,
+              0.85
+            ],
+            [
+              0.5,
+              0.6,
+              0.9
+            ]
+          ],
+          "collision_free": false,
+          "invalid_contacts": [
+            {
+              "geoms": [
+                "akita_black_bowl_1_g7",
+                "plate_1_g2"
+              ],
+              "distance_m": -0.003090536673596163
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g7",
+                "plate_1_g3"
+              ],
+              "distance_m": -0.003090536673596163
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g7",
+                "plate_1_g10"
+              ],
+              "distance_m": -0.0004851309335035807
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g7",
+                "plate_1_g10"
+              ],
+              "distance_m": -0.0027793972765815076
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g8",
+                "plate_1_g2"
+              ],
+              "distance_m": -0.003168175056774626
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g8",
+                "plate_1_g2"
+              ],
+              "distance_m": -0.0029547263078786305
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g8",
+                "plate_1_g3"
+              ],
+              "distance_m": -0.003168175056774626
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g8",
+                "plate_1_g3"
+              ],
+              "distance_m": -0.0029547263078786305
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g8",
+                "plate_1_g10"
+              ],
+              "distance_m": -0.0038754282254495702
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g8",
+                "plate_1_g10"
+              ],
+              "distance_m": -0.000453840517338412
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g9",
+                "plate_1_g2"
+              ],
+              "distance_m": -0.0030296913467786225
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g9",
+                "plate_1_g2"
+              ],
+              "distance_m": -0.0013784758132075257
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g9",
+                "plate_1_g3"
+              ],
+              "distance_m": -0.0030296913467786225
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g9",
+                "plate_1_g3"
+              ],
+              "distance_m": -0.0013784758132075257
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g9",
+                "plate_1_g4"
+              ],
+              "distance_m": -0.00043922217596381304
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g9",
+                "plate_1_g4"
+              ],
+              "distance_m": -0.00012216958878315655
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g9",
+                "plate_1_g4"
+              ],
+              "distance_m": -0.0007063764976906264
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g10",
+                "plate_1_g2"
+              ],
+              "distance_m": -0.0004330674647657375
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g10",
+                "plate_1_g2"
+              ],
+              "distance_m": -0.0015179811392532026
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g10",
+                "plate_1_g3"
+              ],
+              "distance_m": -0.0004330674647657375
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g10",
+                "plate_1_g3"
+              ],
+              "distance_m": -0.0015179811392532026
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g10",
+                "plate_1_g4"
+              ],
+              "distance_m": -0.00044089150064116937
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g10",
+                "plate_1_g4"
+              ],
+              "distance_m": -0.0005308736637447825
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g10",
+                "plate_1_g4"
+              ],
+              "distance_m": -0.0006364554306205932
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g24",
+                "plate_1_g2"
+              ],
+              "distance_m": -0.0013243368308008803
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g24",
+                "plate_1_g2"
+              ],
+              "distance_m": -0.00039930150075908764
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g24",
+                "plate_1_g3"
+              ],
+              "distance_m": -0.0013243368308008803
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g24",
+                "plate_1_g3"
+              ],
+              "distance_m": -0.00039930150075908764
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g24",
+                "plate_1_g10"
+              ],
+              "distance_m": -0.004526590558731912
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g24",
+                "plate_1_g10"
+              ],
+              "distance_m": -0.005114569739914132
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g24",
+                "plate_1_g10"
+              ],
+              "distance_m": -0.0016133354473623828
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g25",
+                "plate_1_g2"
+              ],
+              "distance_m": -0.00039201135666822387
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g25",
+                "plate_1_g2"
+              ],
+              "distance_m": -0.00028724603460460044
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g25",
+                "plate_1_g3"
+              ],
+              "distance_m": -0.00039201135666822387
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g25",
+                "plate_1_g3"
+              ],
+              "distance_m": -0.00028724603460460044
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g25",
+                "plate_1_g10"
+              ],
+              "distance_m": -0.0013596534312743536
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g25",
+                "plate_1_g10"
+              ],
+              "distance_m": -0.0012999919070613446
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g26",
+                "plate_1_g2"
+              ],
+              "distance_m": -0.000624228315799339
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g26",
+                "plate_1_g2"
+              ],
+              "distance_m": -0.0005255448876941172
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g26",
+                "plate_1_g3"
+              ],
+              "distance_m": -0.000624228315799339
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g26",
+                "plate_1_g3"
+              ],
+              "distance_m": -0.0005255448876941172
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g27",
+                "plate_1_g2"
+              ],
+              "distance_m": -0.0021506160333394832
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g27",
+                "plate_1_g2"
+              ],
+              "distance_m": -0.002111883288294771
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g27",
+                "plate_1_g2"
+              ],
+              "distance_m": -0.0004086521620204006
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g27",
+                "plate_1_g2"
+              ],
+              "distance_m": -0.0003699194169756884
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g27",
+                "plate_1_g3"
+              ],
+              "distance_m": -0.0021506160333394832
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g27",
+                "plate_1_g3"
+              ],
+              "distance_m": -0.002111883288294771
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g27",
+                "plate_1_g3"
+              ],
+              "distance_m": -0.0004086521620204006
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g27",
+                "plate_1_g3"
+              ],
+              "distance_m": -0.0003699194169756884
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g27",
+                "plate_1_g4"
+              ],
+              "distance_m": -0.0018962763764647642
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g27",
+                "plate_1_g4"
+              ],
+              "distance_m": -0.0014090977514182989
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g28",
+                "plate_1_g2"
+              ],
+              "distance_m": -0.002172775411635253
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g28",
+                "plate_1_g2"
+              ],
+              "distance_m": -0.0024943833125844676
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g28",
+                "plate_1_g3"
+              ],
+              "distance_m": -0.002172775411635253
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g28",
+                "plate_1_g3"
+              ],
+              "distance_m": -0.0024943833125844676
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g28",
+                "plate_1_g4"
+              ],
+              "distance_m": -0.0002845954173900158
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g28",
+                "plate_1_g4"
+              ],
+              "distance_m": -0.0006608592062869264
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g28",
+                "plate_1_g4"
+              ],
+              "distance_m": -0.0005115678295312028
+            },
+            {
+              "geoms": [
+                "akita_black_bowl_1_g28",
+                "plate_1_g4"
+              ],
+              "distance_m": -0.0008430616239191065
+            }
+          ],
+          "intersection_tolerance_m": 1e-07,
+          "reachable": null
+        },
+        "scale_factor": 0.6266796875,
+        "upper_invalid_scale": 0.62669921875,
+        "boundary_resolution_m": 1e-06,
+        "search": "Highest valid descending 1%-sample interval, boundary refined by bisection; no extrapolation beyond requested offset"
+      }
+    }
+  ],
+  "initialization": "Same seed-0 reset and identical settling; change only bowl free-joint XY immediately before PREGRASP",
+  "target_policy": "Identical initial plate pose and fixed retargeting goal in all trials; natural contact dynamics unchanged",
+  "preflight_is_not_a_trial": true,
+  "all_poses_validated": true
+}

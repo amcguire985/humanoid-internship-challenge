@@ -1,0 +1,523 @@
+{
+  "episode_id": "episode_010",
+  "trial": {
+    "trial": 10,
+    "requested_offset_xy_m": [
+      0.04,
+      0
+    ],
+    "applied_offset_xy_m": [
+      0.0250671875,
+      0.0
+    ],
+    "validation": {
+      "offset_xy_m": [
+        0.0250671875,
+        0.0
+      ],
+      "support_surface": "table_collision",
+      "support_contact_count": 20,
+      "support_surface_z_m": 0.9,
+      "bottom_minus_support_z_m": -7.407915415647004e-06,
+      "remains_on_support": true,
+      "within_scene_bounds": true,
+      "object_bounds": [
+        [
+          -0.09194955274307731,
+          0.1496782077921012,
+          0.8999925920845844
+        ],
+        [
+          0.01505764860067001,
+          0.2568781479969237,
+          0.9505386857859383
+        ]
+      ],
+      "support_bounds": [
+        [
+          -0.5,
+          -0.6,
+          0.85
+        ],
+        [
+          0.5,
+          0.6,
+          0.9
+        ]
+      ],
+      "collision_free": true,
+      "invalid_contacts": [],
+      "intersection_tolerance_m": 1e-07,
+      "reachable": true,
+      "ik_waypoints": 185,
+      "maximum_ik_position_error_m": 0.0009713507507440413,
+      "maximum_ik_orientation_error_rad": 0.00014332380737960533,
+      "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+      "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+    },
+    "adjustment": {
+      "reduced": true,
+      "requested_validation": {
+        "offset_xy_m": [
+          0.04,
+          0.0
+        ],
+        "support_surface": "table_collision",
+        "support_contact_count": 20,
+        "support_surface_z_m": 0.9,
+        "bottom_minus_support_z_m": -7.407915415647004e-06,
+        "remains_on_support": true,
+        "within_scene_bounds": true,
+        "object_bounds": [
+          [
+            -0.07701674024307732,
+            0.1496782077921012,
+            0.8999925920845844
+          ],
+          [
+            0.029990461100670007,
+            0.2568781479969237,
+            0.9505386857859383
+          ]
+        ],
+        "support_bounds": [
+          [
+            -0.5,
+            -0.6,
+            0.85
+          ],
+          [
+            0.5,
+            0.6,
+            0.9
+          ]
+        ],
+        "collision_free": false,
+        "invalid_contacts": [
+          {
+            "geoms": [
+              "akita_black_bowl_1_g7",
+              "plate_1_g2"
+            ],
+            "distance_m": -0.003090536673596163
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g7",
+              "plate_1_g3"
+            ],
+            "distance_m": -0.003090536673596163
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g7",
+              "plate_1_g10"
+            ],
+            "distance_m": -0.0004851309335035807
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g7",
+              "plate_1_g10"
+            ],
+            "distance_m": -0.0027793972765815076
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g8",
+              "plate_1_g2"
+            ],
+            "distance_m": -0.003168175056774626
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g8",
+              "plate_1_g2"
+            ],
+            "distance_m": -0.0029547263078786305
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g8",
+              "plate_1_g3"
+            ],
+            "distance_m": -0.003168175056774626
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g8",
+              "plate_1_g3"
+            ],
+            "distance_m": -0.0029547263078786305
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g8",
+              "plate_1_g10"
+            ],
+            "distance_m": -0.0038754282254495702
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g8",
+              "plate_1_g10"
+            ],
+            "distance_m": -0.000453840517338412
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g9",
+              "plate_1_g2"
+            ],
+            "distance_m": -0.0030296913467786225
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g9",
+              "plate_1_g2"
+            ],
+            "distance_m": -0.0013784758132075257
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g9",
+              "plate_1_g3"
+            ],
+            "distance_m": -0.0030296913467786225
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g9",
+              "plate_1_g3"
+            ],
+            "distance_m": -0.0013784758132075257
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g9",
+              "plate_1_g4"
+            ],
+            "distance_m": -0.00043922217596381304
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g9",
+              "plate_1_g4"
+            ],
+            "distance_m": -0.00012216958878315655
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g9",
+              "plate_1_g4"
+            ],
+            "distance_m": -0.0007063764976906264
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g10",
+              "plate_1_g2"
+            ],
+            "distance_m": -0.0004330674647657375
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g10",
+              "plate_1_g2"
+            ],
+            "distance_m": -0.0015179811392532026
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g10",
+              "plate_1_g3"
+            ],
+            "distance_m": -0.0004330674647657375
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g10",
+              "plate_1_g3"
+            ],
+            "distance_m": -0.0015179811392532026
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g10",
+              "plate_1_g4"
+            ],
+            "distance_m": -0.00044089150064116937
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g10",
+              "plate_1_g4"
+            ],
+            "distance_m": -0.0005308736637447825
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g10",
+              "plate_1_g4"
+            ],
+            "distance_m": -0.0006364554306205932
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g24",
+              "plate_1_g2"
+            ],
+            "distance_m": -0.0013243368308008803
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g24",
+              "plate_1_g2"
+            ],
+            "distance_m": -0.00039930150075908764
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g24",
+              "plate_1_g3"
+            ],
+            "distance_m": -0.0013243368308008803
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g24",
+              "plate_1_g3"
+            ],
+            "distance_m": -0.00039930150075908764
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g24",
+              "plate_1_g10"
+            ],
+            "distance_m": -0.004526590558731912
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g24",
+              "plate_1_g10"
+            ],
+            "distance_m": -0.005114569739914132
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g24",
+              "plate_1_g10"
+            ],
+            "distance_m": -0.0016133354473623828
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g25",
+              "plate_1_g2"
+            ],
+            "distance_m": -0.00039201135666822387
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g25",
+              "plate_1_g2"
+            ],
+            "distance_m": -0.00028724603460460044
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g25",
+              "plate_1_g3"
+            ],
+            "distance_m": -0.00039201135666822387
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g25",
+              "plate_1_g3"
+            ],
+            "distance_m": -0.00028724603460460044
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g25",
+              "plate_1_g10"
+            ],
+            "distance_m": -0.0013596534312743536
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g25",
+              "plate_1_g10"
+            ],
+            "distance_m": -0.0012999919070613446
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g26",
+              "plate_1_g2"
+            ],
+            "distance_m": -0.000624228315799339
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g26",
+              "plate_1_g2"
+            ],
+            "distance_m": -0.0005255448876941172
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g26",
+              "plate_1_g3"
+            ],
+            "distance_m": -0.000624228315799339
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g26",
+              "plate_1_g3"
+            ],
+            "distance_m": -0.0005255448876941172
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g27",
+              "plate_1_g2"
+            ],
+            "distance_m": -0.0021506160333394832
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g27",
+              "plate_1_g2"
+            ],
+            "distance_m": -0.002111883288294771
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g27",
+              "plate_1_g2"
+            ],
+            "distance_m": -0.0004086521620204006
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g27",
+              "plate_1_g2"
+            ],
+            "distance_m": -0.0003699194169756884
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g27",
+              "plate_1_g3"
+            ],
+            "distance_m": -0.0021506160333394832
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g27",
+              "plate_1_g3"
+            ],
+            "distance_m": -0.002111883288294771
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g27",
+              "plate_1_g3"
+            ],
+            "distance_m": -0.0004086521620204006
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g27",
+              "plate_1_g3"
+            ],
+            "distance_m": -0.0003699194169756884
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g27",
+              "plate_1_g4"
+            ],
+            "distance_m": -0.0018962763764647642
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g27",
+              "plate_1_g4"
+            ],
+            "distance_m": -0.0014090977514182989
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g28",
+              "plate_1_g2"
+            ],
+            "distance_m": -0.002172775411635253
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g28",
+              "plate_1_g2"
+            ],
+            "distance_m": -0.0024943833125844676
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g28",
+              "plate_1_g3"
+            ],
+            "distance_m": -0.002172775411635253
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g28",
+              "plate_1_g3"
+            ],
+            "distance_m": -0.0024943833125844676
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g28",
+              "plate_1_g4"
+            ],
+            "distance_m": -0.0002845954173900158
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g28",
+              "plate_1_g4"
+            ],
+            "distance_m": -0.0006608592062869264
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g28",
+              "plate_1_g4"
+            ],
+            "distance_m": -0.0005115678295312028
+          },
+          {
+            "geoms": [
+              "akita_black_bowl_1_g28",
+              "plate_1_g4"
+            ],
+            "distance_m": -0.0008430616239191065
+          }
+        ],
+        "intersection_tolerance_m": 1e-07,
+        "reachable": null
+      },
+      "scale_factor": 0.6266796875,
+      "upper_invalid_scale": 0.62669921875,
+      "boundary_resolution_m": 1e-06,
+      "search": "Highest valid descending 1%-sample interval, boundary refined by bisection; no extrapolation beyond requested offset"
+    }
+  },
+  "status": "error",
+  "accepted": false,
+  "failure_reason": "RuntimeError: cannot cache function 'mat2quat': no locator available for file '/home/student/miniconda3/envs/libero/lib/python3.8/site-packages/robosuite/utils/transform_utils.py'"
+}

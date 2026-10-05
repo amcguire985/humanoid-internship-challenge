@@ -1,0 +1,252 @@
+{
+  "dataset": {
+    "episodes": [
+      {
+        "episode_id": "episode_001",
+        "transitions": 2109,
+        "language_instruction": "pick the akita black bowl between the plate and the ramekin and place it on the plate",
+        "observations": {
+          "agentview_rgb": [
+            2110,
+            128,
+            128,
+            3
+          ],
+          "eef_pose": [
+            2110,
+            7
+          ],
+          "eye_in_hand_rgb": [
+            2110,
+            128,
+            128,
+            3
+          ],
+          "gripper_qpos": [
+            2110,
+            2
+          ],
+          "gripper_qvel": [
+            2110,
+            2
+          ],
+          "joint_pos": [
+            2110,
+            7
+          ],
+          "joint_vel": [
+            2110,
+            7
+          ],
+          "libero_success": [
+            2110
+          ],
+          "proprio": [
+            2110,
+            18
+          ],
+          "sim_time": [
+            2110
+          ]
+        },
+        "action_shape": [
+          2109,
+          7
+        ],
+        "complete": true,
+        "successful": true,
+        "controller_log_alignment": "exact action[t], EEF/gripper state[t+1]",
+        "image_state_synchronization": "T+1 same-state renders; sequential capture wrapper verified by test; no intervening simulation steps"
+      },
+      {
+        "episode_id": "episode_002",
+        "transitions": 2121,
+        "language_instruction": "pick the akita black bowl between the plate and the ramekin and place it on the plate",
+        "observations": {
+          "agentview_rgb": [
+            2122,
+            128,
+            128,
+            3
+          ],
+          "eef_pose": [
+            2122,
+            7
+          ],
+          "eye_in_hand_rgb": [
+            2122,
+            128,
+            128,
+            3
+          ],
+          "gripper_qpos": [
+            2122,
+            2
+          ],
+          "gripper_qvel": [
+            2122,
+            2
+          ],
+          "joint_pos": [
+            2122,
+            7
+          ],
+          "joint_vel": [
+            2122,
+            7
+          ],
+          "libero_success": [
+            2122
+          ],
+          "proprio": [
+            2122,
+            18
+          ],
+          "sim_time": [
+            2122
+          ]
+        },
+        "action_shape": [
+          2121,
+          7
+        ],
+        "complete": true,
+        "successful": true,
+        "controller_log_alignment": "exact action[t], EEF/gripper state[t+1]",
+        "image_state_synchronization": "T+1 same-state renders; sequential capture wrapper verified by test; no intervening simulation steps"
+      }
+    ],
+    "total_transitions": 4230,
+    "action_statistics": {
+      "min": [
+        -0.04211296526254543,
+        -0.03780552138254234,
+        -0.28123784014087994,
+        -0.00841298804482245,
+        -0.008531994148062572,
+        -0.0023765123698012477,
+        -1.0
+      ],
+      "max": [
+        0.06442154238079555,
+        0.21687524933961866,
+        0.0796992127223195,
+        0.004365584353264089,
+        0.008444211275388334,
+        0.0017777222955330187,
+        1.0
+      ],
+      "mean": [
+        0.013382769347538478,
+        0.010464184389752905,
+        -0.001433726095648972,
+        -0.0004301409494727656,
+        0.001233935742854976,
+        -0.00014562566972818188,
+        -0.11063829787234042
+      ],
+      "std": [
+        0.017718486397219523,
+        0.02409881457383178,
+        0.03438832486335168,
+        0.0013896822601249163,
+        0.0022583535222818005,
+        0.0011485093140013122,
+        0.9938607382545883
+      ]
+    },
+    "training_episode_ids": [
+      "episode_001",
+      "episode_002"
+    ],
+    "excluded_episode_ids": [
+      "episode_003"
+    ],
+    "frequency_hz": 20
+  },
+  "training_initial": {
+    "normalized_mse": 0.9870943427085876,
+    "action_mse": 0.14173775911331177,
+    "rmse_per_dimension": [
+      0.017427193000912666,
+      0.023809079080820084,
+      0.03416139632463455,
+      0.0013840390602126718,
+      0.0022713246289640665,
+      0.0011332023423165083,
+      0.9950469732284546
+    ],
+    "gripper_sign_accuracy": 0.5562647581100464
+  },
+  "training_final": {
+    "normalized_mse": 0.024129560217261314,
+    "action_mse": 0.0008973193471319973,
+    "rmse_per_dimension": [
+      0.0021884969901293516,
+      0.0053745461627841,
+      0.006566761992871761,
+      0.00019666351727209985,
+      0.0003619860508479178,
+      0.00014274311251938343,
+      0.07876705378293991
+    ],
+    "gripper_sign_accuracy": 0.99858158826828
+  },
+  "evaluations": [
+    {
+      "reset": "nominal",
+      "trial": 1,
+      "offset_xy_m": [
+        0.0,
+        0.0
+      ],
+      "steps": 2400,
+      "horizon": 2400,
+      "object_acquired": false,
+      "object_lifted": false,
+      "object_reached_target": false,
+      "released": false,
+      "task_completed": false,
+      "libero_success": false,
+      "libero_success_ever": false,
+      "failure_phase": "APPROACH_OR_GRASP",
+      "failure_reason": "Evaluation horizon exhausted",
+      "maximum_object_lift_m": 6.051825707231728e-13,
+      "final_object_target_xy_error_m": 0.1370692624460351,
+      "policy": "SmallBC image+18D proprio only; no phase, time, target, or scripted control after initialization",
+      "phase_semantics": "Post-hoc diagnostic milestone, not a scripted policy phase",
+      "action_postprocessing": "Clamp pose input to [-0.5,0.5], threshold predicted gripper at zero to +/-1",
+      "completion_criterion": "Confirmed grasp and lift; release; LIBERO success and target retention without grasp and EEF >=8cm above object for 20 consecutive steps",
+      "training_distribution_reset": true,
+      "gripper_close_command_count": 0
+    },
+    {
+      "reset": "perturbed_plus_2cm_x",
+      "trial": 2,
+      "offset_xy_m": [
+        0.02,
+        0.0
+      ],
+      "steps": 2400,
+      "horizon": 2400,
+      "object_acquired": false,
+      "object_lifted": false,
+      "object_reached_target": false,
+      "released": false,
+      "task_completed": false,
+      "libero_success": false,
+      "libero_success_ever": false,
+      "failure_phase": "APPROACH_OR_GRASP",
+      "failure_reason": "Evaluation horizon exhausted",
+      "maximum_object_lift_m": 6.051825707231728e-13,
+      "final_object_target_xy_error_m": 0.11711893366248406,
+      "policy": "SmallBC image+18D proprio only; no phase, time, target, or scripted control after initialization",
+      "phase_semantics": "Post-hoc diagnostic milestone, not a scripted policy phase",
+      "action_postprocessing": "Clamp pose input to [-0.5,0.5], threshold predicted gripper at zero to +/-1",
+      "completion_criterion": "Confirmed grasp and lift; release; LIBERO success and target retention without grasp and EEF >=8cm above object for 20 consecutive steps",
+      "training_distribution_reset": true,
+      "gripper_close_command_count": 0
+    }
+  ],
+  "conclusion": "Valid demonstrations and good training-set action fit; no closed-loop task success (0/2)."
+}

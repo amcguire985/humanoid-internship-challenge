@@ -1,0 +1,29 @@
+{
+  "input_hashes": {
+    "config/libero_pick_place.json": "6d4d97f57488591ea960ce5329e1fa11325ded7ea5dcf1a4f95842f0a0d98cbe",
+    "config/libero_retarget.json": "bae7ebc69fa6fc09402778f12a9f344480d515f7d289f232db2a38ed6aef5cfd",
+    "config/test_007_demo.json": "567bca770132334a22e335806a0103b3ff6b40208fc245894fd95e1784431641",
+    "results/test_007_block_only_raw/task_demo/processed_demo.csv": "3f2ef11c25daaaa99a269ed87a9c682281661692511a19b685a3a855a7357796",
+    "results/test_007_block_only_raw/task_demo/metadata.json": "eb8b764a5025a7a78d26df3dfa7ba253dca83f4e85d16bc5db435a9df65619bf",
+    "scripts/scripted_libero_pick_place.py": "57dc405d0642addd68c1c4d6af7c8329888869842b7aaa5a3209b5f6bfd80c4c",
+    "scripts/retarget_libero_object.py": "52a192893ab837e25ea380360172ea334d0d90b1005a578a48aa8e428325c806",
+    "scripts/replay_libero_transport.py": "fcd9e93ecd3060fcf5ed801714708548381c4823af349c62f8277d0f30757f8b",
+    "scripts/process_task_demo.py": "7612e201b99ede4d56e0bfc1d5bf389a7b46a6a86243d090d476a961a09e9454"
+  },
+  "seed": 0,
+  "recording_script_sha256": "768a1c7b61198b4c4b9542a1a4b510403e172be952b22476a694c8bc0baac525",
+  "resolution": 128,
+  "reset_boundary": "After SCENE_SETTLE and XY perturbation, before PREGRASP",
+  "selected_trials": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ]
+}

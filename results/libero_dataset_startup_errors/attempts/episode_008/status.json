@@ -1,0 +1,110 @@
+{
+  "episode_id": "episode_008",
+  "trial": {
+    "trial": 8,
+    "requested_offset_xy_m": [
+      -0.02,
+      0.02
+    ],
+    "applied_offset_xy_m": [
+      -0.02,
+      0.02
+    ],
+    "validation": {
+      "offset_xy_m": [
+        -0.02,
+        0.02
+      ],
+      "support_surface": "table_collision",
+      "support_contact_count": 20,
+      "support_surface_z_m": 0.9,
+      "bottom_minus_support_z_m": -7.407915415647004e-06,
+      "remains_on_support": true,
+      "within_scene_bounds": true,
+      "object_bounds": [
+        [
+          -0.13701674024307733,
+          0.1696782077921012,
+          0.8999925920845844
+        ],
+        [
+          -0.030009538899329998,
+          0.2768781479969237,
+          0.9505386857859383
+        ]
+      ],
+      "support_bounds": [
+        [
+          -0.5,
+          -0.6,
+          0.85
+        ],
+        [
+          0.5,
+          0.6,
+          0.9
+        ]
+      ],
+      "collision_free": true,
+      "invalid_contacts": [],
+      "intersection_tolerance_m": 1e-07,
+      "reachable": true,
+      "ik_waypoints": 185,
+      "maximum_ik_position_error_m": 0.0009732055703248021,
+      "maximum_ik_orientation_error_rad": 0.00022950230984448145,
+      "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+      "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+    },
+    "adjustment": {
+      "reduced": false,
+      "requested_validation": {
+        "offset_xy_m": [
+          -0.02,
+          0.02
+        ],
+        "support_surface": "table_collision",
+        "support_contact_count": 20,
+        "support_surface_z_m": 0.9,
+        "bottom_minus_support_z_m": -7.407915415647004e-06,
+        "remains_on_support": true,
+        "within_scene_bounds": true,
+        "object_bounds": [
+          [
+            -0.13701674024307733,
+            0.1696782077921012,
+            0.8999925920845844
+          ],
+          [
+            -0.030009538899329998,
+            0.2768781479969237,
+            0.9505386857859383
+          ]
+        ],
+        "support_bounds": [
+          [
+            -0.5,
+            -0.6,
+            0.85
+          ],
+          [
+            0.5,
+            0.6,
+            0.9
+          ]
+        ],
+        "collision_free": true,
+        "invalid_contacts": [],
+        "intersection_tolerance_m": 1e-07,
+        "reachable": true,
+        "ik_waypoints": 185,
+        "maximum_ik_position_error_m": 0.0009732055703248021,
+        "maximum_ik_orientation_error_rad": 0.00022950230984448145,
+        "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+        "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+      }
+    }
+  },
+  "status": "error",
+  "accepted": false,
+  "failure_reason": "RuntimeError: cannot cache function 'mat2quat': no locator available for file '/home/student/miniconda3/envs/libero/lib/python3.8/site-packages/robosuite/utils/transform_utils.py'"
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "reset": "nominal",
+    "initial_rgb_exact_match": true,
+    "initial_qpos_exact_match": true,
+    "initial_qvel_exact_match": true
+  },
+  {
+    "reset": "perturbed_plus_2cm_x",
+    "initial_rgb_exact_match": true,
+    "initial_qpos_exact_match": true,
+    "initial_qvel_exact_match": true
+  }
+]

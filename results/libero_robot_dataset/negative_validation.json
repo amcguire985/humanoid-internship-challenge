@@ -1,0 +1,14 @@
+[
+  {
+    "corruption": "noncontiguous timestep",
+    "rejected": true
+  },
+  {
+    "corruption": "unsynchronized sim time",
+    "rejected": true
+  },
+  {
+    "corruption": "failed episode",
+    "rejected": true
+  }
+]

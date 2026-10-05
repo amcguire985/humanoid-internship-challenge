@@ -1,0 +1,15 @@
+{
+  "python": "3.8.13",
+  "packages": {
+    "numpy": "1.22.4",
+    "h5py": "3.11.0",
+    "Pillow": "10.4.0",
+    "scipy": "1.10.1",
+    "matplotlib": "3.5.3",
+    "mujoco": "3.2.3",
+    "robosuite": "1.4.0",
+    "numba": "0.58.1",
+    "torch": "2.4.1",
+    "libero": "0.1.0"
+  }
+}

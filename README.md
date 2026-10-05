@@ -699,3 +699,26 @@ See the [experiment protocol](docs/LIBERO_XY_TRIALS.md) and
 [results and per-trial outcomes](results/libero_xy_trials_10/README.md).
 The requested +4 cm X pose intersects the plate; its validated replacement is
 +2.50671875 cm along the same X direction. All other requested offsets are kept.
+
+## Robot-native scripted demonstration dataset
+
+`python scripts/record_libero_dataset.py` records the unchanged retargeted
+controller across the ten preflight-validated bowl reset offsets. Complete,
+successful episodes are stored as lossless HDF5 files in
+`results/libero_robot_dataset/episodes/`; failures and interrupted attempts are
+explicitly reported separately. Each episode includes synchronized agent/wrist
+RGB, Panda proprioception, end-effector pose, gripper state, exact executed
+actions, task language, IDs, timing, and success metadata. The collector does not train a policy.
+
+See [the dataset format and reproduction guide](docs/LIBERO_ROBOT_DATASET.md)
+and [collection summary](results/libero_robot_dataset/summary.json).
+`python scripts/inspect_libero_dataset.py <episode.h5> --samples <directory>`
+validates an episode and saves five observation/action previews.
+
+## Minimal behavioral-cloning baseline
+
+The first two robot episodes are used by `scripts/train_libero_bc.py` to train a
+small CNN plus proprioception MLP. `scripts/evaluate_libero_bc.py` evaluates the
+learned policy at the nominal and +2 cm X starts without scripted control after
+reset preparation. See [the experiment guide](docs/LIBERO_BC_BASELINE.md) and
+[results](results/libero_bc_baseline/README.md).
