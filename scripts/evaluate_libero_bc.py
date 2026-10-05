@@ -49,13 +49,26 @@ def inferred_phase(acquired, lifted, near_target, released):
     return 'RETRACT_OR_RETENTION'
 
 
-def evaluate(checkpoint, output, horizon=2400):
+def evaluate(checkpoint, output, horizon=2400, nominal_only=False, execute_steps=4, runtime=None):
     torch.set_num_threads(2)
     torch.manual_seed(0)
-    model = SmallBC()
-    saved = torch.load(checkpoint, map_location='cpu', weights_only=True)
-    model.load_state_dict(saved['state_dict'])
-    model.eval()
+    saved = runtime.metadata if runtime is not None else torch.load(checkpoint, map_location='cpu', weights_only=True)
+    chunk_size = saved.get('chunk_size', 1)
+    if runtime is not None:
+        model = None
+        if not 1 <= execute_steps <= chunk_size:
+            raise ValueError('execute_steps must be within the predicted chunk')
+    elif chunk_size > 1:
+        from train_libero_chunk_bc import SmallChunkBC
+        model = SmallChunkBC(chunk_size)
+        if not 1 <= execute_steps <= chunk_size:
+            raise ValueError('execute_steps must be within the predicted chunk')
+    else:
+        model = SmallBC()
+        execute_steps = 1
+    if model is not None:
+        model.load_state_dict(saved['state_dict'])
+        model.eval()
     c, _, human, hashes = inputs()
     preflight = ROOT/'results/libero_xy_trials_10'
     manifest = json.loads((preflight/'preflight.json').read_text())
@@ -63,7 +76,8 @@ def evaluate(checkpoint, output, horizon=2400):
         raise ValueError('Original validated inputs changed')
     output.mkdir(parents=True, exist_ok=True)
     reports = []
-    for number, name in [(1, 'nominal'), (2, 'perturbed_plus_2cm_x')]:
+    resets = [(1, 'nominal')] if nominal_only else [(1, 'nominal'), (2, 'perturbed_plus_2cm_x')]
+    for number, name in resets:
         directory = output/name
         if directory.exists():
             raise ValueError('Refusing to repeat an existing evaluation')
@@ -82,11 +96,18 @@ def evaluate(checkpoint, output, horizon=2400):
             obs = runner.obs
             rendering_settings(env.env.sim)
             for step in range(horizon):
-                rgb = env.env.sim.render(width=128, height=128, camera_name='agentview')[::-1].copy()
-                if step % 500 == 0:
-                    Image.fromarray(rgb).save(directory/f'agentview_{step:04d}.png')
-                with torch.no_grad():
-                    prediction = model.predict(prepare_images(rgb[None]), torch.from_numpy(proprio(env, obs)[None]))[0].numpy()
+                if step % execute_steps == 0:
+                    rgb = env.env.sim.render(width=128, height=128, camera_name='agentview')[::-1].copy()
+                    if step % 500 == 0:
+                        Image.fromarray(rgb).save(directory/f'agentview_{step:04d}.png')
+                    if runtime is not None:
+                        chunk = runtime.predict(rgb, proprio(env, obs))
+                        if chunk.shape != (chunk_size, 7):
+                            raise ValueError('Policy returned an invalid action chunk shape')
+                    else:
+                        with torch.no_grad():
+                            chunk = model.predict(prepare_images(rgb[None]), torch.from_numpy(proprio(env, obs)[None]))[0].numpy().reshape(chunk_size, 7)
+                prediction = chunk[step % execute_steps].copy()
                 if not np.isfinite(prediction).all():
                     reason = 'Nonfinite learned action'; break
                 action = prediction.astype(np.float64)
@@ -113,6 +134,10 @@ def evaluate(checkpoint, output, horizon=2400):
                 retention_streak = retention_streak + 1 if retained else 0
                 phase = inferred_phase(acquired, lifted, near_target, released)
                 rows.append(dict(timestep=step, phase=phase, grasp=grasp,
+                    chunk_index=step % execute_steps,
+                    eef_object_distance_m=float(np.linalg.norm(eef-obj)),
+                    gripper_qpos_0=float(obs['robot0_gripper_qpos'][0]),
+                    gripper_qpos_1=float(obs['robot0_gripper_qpos'][1]),
                     libero_success=libero_success, reward=float(reward),
                     object_lift_m=lift_height, object_target_xy_error_m=xy_error,
                     **{f'action_{i}':float(v) for i,v in enumerate(action)},
@@ -142,7 +167,10 @@ def evaluate(checkpoint, output, horizon=2400):
                 failure_phase=None if completed else inferred_phase(acquired,lifted,near_target,released),
                 failure_reason=reason, maximum_object_lift_m=max((r['object_lift_m'] for r in rows),default=0),
                 final_object_target_xy_error_m=rows[-1]['object_target_xy_error_m'] if rows else None,
-                policy='SmallBC image+18D proprio only; no phase, time, target, or scripted control after initialization',
+                policy=saved['architecture']+(' image+18D proprio+task language' if runtime is not None else ' image+18D proprio only')+'; no phase, time, target coordinates, or scripted control after initialization',
+                chunk_size=chunk_size, execute_steps=execute_steps,
+                close_command_count=sum(r['action_6'] > 0 for r in rows),
+                minimum_eef_object_distance_m=min((r['eef_object_distance_m'] for r in rows), default=None),
                 phase_semantics='Post-hoc diagnostic milestone, not a scripted policy phase',
                 action_postprocessing='Clamp pose input to [-0.5,0.5], threshold predicted gripper at zero to +/-1',
                 completion_criterion='Confirmed grasp and lift; release; LIBERO success and target retention without grasp and EEF >=8cm above object for 20 consecutive steps',
@@ -164,5 +192,7 @@ if __name__ == '__main__':
     parser.add_argument('--checkpoint', type=Path, default=ROOT/'results/libero_bc_baseline/policy.pt')
     parser.add_argument('--output', type=Path, default=ROOT/'results/libero_bc_baseline/evaluation')
     parser.add_argument('--horizon', type=int, default=2400)
+    parser.add_argument('--nominal-only', action='store_true')
+    parser.add_argument('--execute-steps', type=int, default=4)
     args = parser.parse_args()
-    evaluate(args.checkpoint,args.output,args.horizon)
+    evaluate(args.checkpoint,args.output,args.horizon,args.nominal_only,args.execute_steps)

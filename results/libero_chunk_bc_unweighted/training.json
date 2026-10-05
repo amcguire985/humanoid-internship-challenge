@@ -1,0 +1,353 @@
+{
+  "training_episodes": [
+    {
+      "path": "/home/student/robot_challenge/humanoid_internship_challenge/results/libero_robot_dataset/episodes/episode_001.h5",
+      "sha256": "4d20f8de93972b8a347a6e781a029e4b19999285f3c8b99a6728e7ef8efb61b1",
+      "episode_id": "episode_001",
+      "transitions": 2109
+    },
+    {
+      "path": "/home/student/robot_challenge/humanoid_internship_challenge/results/libero_robot_dataset/episodes/episode_002.h5",
+      "sha256": "6e46cce6dd13df6eda469d12f8ee99159b66f09d37a9a87dbd9af1394fa43dcd",
+      "episode_id": "episode_002",
+      "transitions": 2121
+    }
+  ],
+  "chunk_size": 12,
+  "execute_steps": 4,
+  "gripper_weight": 1.0,
+  "seed": 0,
+  "parameters": 167116,
+  "epochs": 40,
+  "objective": "Masked per-dimension standardized action MSE, with optional gripper multiplier",
+  "optimizer": "Adam lr=.001 batch=128",
+  "final": {
+    "normalized_mse": 0.04977630078792572,
+    "weighted_loss": 0.04977630078792572,
+    "action_mse": 0.0026273145340383053,
+    "first_action_mse": 0.001321511692367494,
+    "gripper_sign_accuracy": 0.9946867227554321
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "normalized_mse": 0.49549272656440735,
+      "weighted_loss": 0.49549272656440735,
+      "action_mse": 0.05001452937722206,
+      "first_action_mse": 0.060487646609544754,
+      "gripper_sign_accuracy": 0.9093782305717468
+    },
+    {
+      "epoch": 2,
+      "normalized_mse": 0.2854776084423065,
+      "weighted_loss": 0.2854776084423065,
+      "action_mse": 0.01680225320160389,
+      "first_action_mse": 0.010073857381939888,
+      "gripper_sign_accuracy": 0.9851465821266174
+    },
+    {
+      "epoch": 3,
+      "normalized_mse": 0.2364148199558258,
+      "weighted_loss": 0.2364148199558258,
+      "action_mse": 0.00788476224988699,
+      "first_action_mse": 0.002858961233869195,
+      "gripper_sign_accuracy": 0.9900252819061279
+    },
+    {
+      "epoch": 4,
+      "normalized_mse": 0.19796739518642426,
+      "weighted_loss": 0.19796739518642426,
+      "action_mse": 0.0063306852243840694,
+      "first_action_mse": 0.0028773793019354343,
+      "gripper_sign_accuracy": 0.9913091659545898
+    },
+    {
+      "epoch": 5,
+      "normalized_mse": 0.17223207652568817,
+      "weighted_loss": 0.17223207652568817,
+      "action_mse": 0.005303533282130957,
+      "first_action_mse": 0.0026577645912766457,
+      "gripper_sign_accuracy": 0.9925535321235657
+    },
+    {
+      "epoch": 6,
+      "normalized_mse": 0.15613718330860138,
+      "weighted_loss": 0.15613718330860138,
+      "action_mse": 0.005069785285741091,
+      "first_action_mse": 0.0026901622768491507,
+      "gripper_sign_accuracy": 0.9928300380706787
+    },
+    {
+      "epoch": 7,
+      "normalized_mse": 0.13645590841770172,
+      "weighted_loss": 0.13645590841770172,
+      "action_mse": 0.004702978301793337,
+      "first_action_mse": 0.002852480160072446,
+      "gripper_sign_accuracy": 0.9928103089332581
+    },
+    {
+      "epoch": 8,
+      "normalized_mse": 0.14904145896434784,
+      "weighted_loss": 0.14904145896434784,
+      "action_mse": 0.00479503208771348,
+      "first_action_mse": 0.0026477763894945383,
+      "gripper_sign_accuracy": 0.9928103089332581
+    },
+    {
+      "epoch": 9,
+      "normalized_mse": 0.11963772028684616,
+      "weighted_loss": 0.11963772028684616,
+      "action_mse": 0.004100709222257137,
+      "first_action_mse": 0.0019802660681307316,
+      "gripper_sign_accuracy": 0.9928892850875854
+    },
+    {
+      "epoch": 10,
+      "normalized_mse": 0.10929059237241745,
+      "weighted_loss": 0.10929059237241745,
+      "action_mse": 0.003998523112386465,
+      "first_action_mse": 0.0018184096552431583,
+      "gripper_sign_accuracy": 0.9928892850875854
+    },
+    {
+      "epoch": 11,
+      "normalized_mse": 0.10359087586402893,
+      "weighted_loss": 0.10359087586402893,
+      "action_mse": 0.003998236730694771,
+      "first_action_mse": 0.0019256138475611806,
+      "gripper_sign_accuracy": 0.9928892850875854
+    },
+    {
+      "epoch": 12,
+      "normalized_mse": 0.0990774855017662,
+      "weighted_loss": 0.0990774855017662,
+      "action_mse": 0.00383361941203475,
+      "first_action_mse": 0.0018045350443571806,
+      "gripper_sign_accuracy": 0.9928892850875854
+    },
+    {
+      "epoch": 13,
+      "normalized_mse": 0.11006976664066315,
+      "weighted_loss": 0.11006976664066315,
+      "action_mse": 0.004170429892838001,
+      "first_action_mse": 0.0020316271111369133,
+      "gripper_sign_accuracy": 0.9928892850875854
+    },
+    {
+      "epoch": 14,
+      "normalized_mse": 0.08997690677642822,
+      "weighted_loss": 0.08997690677642822,
+      "action_mse": 0.004089904483407736,
+      "first_action_mse": 0.0020034611225128174,
+      "gripper_sign_accuracy": 0.9928892850875854
+    },
+    {
+      "epoch": 15,
+      "normalized_mse": 0.08658868819475174,
+      "weighted_loss": 0.08658868819475174,
+      "action_mse": 0.0036563619505614042,
+      "first_action_mse": 0.0017235863488167524,
+      "gripper_sign_accuracy": 0.9928892850875854
+    },
+    {
+      "epoch": 16,
+      "normalized_mse": 0.0876878872513771,
+      "weighted_loss": 0.0876878872513771,
+      "action_mse": 0.0035631407517939806,
+      "first_action_mse": 0.0016115399776026607,
+      "gripper_sign_accuracy": 0.9928892850875854
+    },
+    {
+      "epoch": 17,
+      "normalized_mse": 0.07840007543563843,
+      "weighted_loss": 0.07840007543563843,
+      "action_mse": 0.0034397728741168976,
+      "first_action_mse": 0.001523783546872437,
+      "gripper_sign_accuracy": 0.9928892850875854
+    },
+    {
+      "epoch": 18,
+      "normalized_mse": 0.08168523013591766,
+      "weighted_loss": 0.08168523013591766,
+      "action_mse": 0.0035831823479384184,
+      "first_action_mse": 0.0016316201072186232,
+      "gripper_sign_accuracy": 0.9928892850875854
+    },
+    {
+      "epoch": 19,
+      "normalized_mse": 0.07728996127843857,
+      "weighted_loss": 0.07728996127843857,
+      "action_mse": 0.003325456054881215,
+      "first_action_mse": 0.0014284830540418625,
+      "gripper_sign_accuracy": 0.9928892850875854
+    },
+    {
+      "epoch": 20,
+      "normalized_mse": 0.0738748088479042,
+      "weighted_loss": 0.0738748088479042,
+      "action_mse": 0.003337601199746132,
+      "first_action_mse": 0.0014745326479896903,
+      "gripper_sign_accuracy": 0.9928892850875854
+    },
+    {
+      "epoch": 21,
+      "normalized_mse": 0.07709580659866333,
+      "weighted_loss": 0.07709580659866333,
+      "action_mse": 0.0031442746985703707,
+      "first_action_mse": 0.001425636583007872,
+      "gripper_sign_accuracy": 0.9928892850875854
+    },
+    {
+      "epoch": 22,
+      "normalized_mse": 0.06880157440900803,
+      "weighted_loss": 0.06880157440900803,
+      "action_mse": 0.0032550133764743805,
+      "first_action_mse": 0.0014111943310126662,
+      "gripper_sign_accuracy": 0.9929683208465576
+    },
+    {
+      "epoch": 23,
+      "normalized_mse": 0.06596734374761581,
+      "weighted_loss": 0.06596734374761581,
+      "action_mse": 0.003088514320552349,
+      "first_action_mse": 0.0014119410188868642,
+      "gripper_sign_accuracy": 0.9928892850875854
+    },
+    {
+      "epoch": 24,
+      "normalized_mse": 0.07119987159967422,
+      "weighted_loss": 0.07119987159967422,
+      "action_mse": 0.0033841992262750864,
+      "first_action_mse": 0.0018094483530148864,
+      "gripper_sign_accuracy": 0.9929288029670715
+    },
+    {
+      "epoch": 25,
+      "normalized_mse": 0.06714322417974472,
+      "weighted_loss": 0.06714322417974472,
+      "action_mse": 0.0029802832286804914,
+      "first_action_mse": 0.0014194948598742485,
+      "gripper_sign_accuracy": 0.9931263327598572
+    },
+    {
+      "epoch": 26,
+      "normalized_mse": 0.06396806985139847,
+      "weighted_loss": 0.06396806985139847,
+      "action_mse": 0.002980706747621298,
+      "first_action_mse": 0.0013914938317611814,
+      "gripper_sign_accuracy": 0.9930275678634644
+    },
+    {
+      "epoch": 27,
+      "normalized_mse": 0.09107697755098343,
+      "weighted_loss": 0.09107697755098343,
+      "action_mse": 0.003126476425677538,
+      "first_action_mse": 0.0014691305113956332,
+      "gripper_sign_accuracy": 0.9930275678634644
+    },
+    {
+      "epoch": 28,
+      "normalized_mse": 0.06836526095867157,
+      "weighted_loss": 0.06836526095867157,
+      "action_mse": 0.003000317607074976,
+      "first_action_mse": 0.0014909245073795319,
+      "gripper_sign_accuracy": 0.9932053685188293
+    },
+    {
+      "epoch": 29,
+      "normalized_mse": 0.06268098950386047,
+      "weighted_loss": 0.06268098950386047,
+      "action_mse": 0.0028793460223823786,
+      "first_action_mse": 0.001372382277622819,
+      "gripper_sign_accuracy": 0.9932448267936707
+    },
+    {
+      "epoch": 30,
+      "normalized_mse": 0.05921625345945358,
+      "weighted_loss": 0.05921625345945358,
+      "action_mse": 0.0028817569836974144,
+      "first_action_mse": 0.0014955701772123575,
+      "gripper_sign_accuracy": 0.9932646155357361
+    },
+    {
+      "epoch": 31,
+      "normalized_mse": 0.0677817165851593,
+      "weighted_loss": 0.0677817165851593,
+      "action_mse": 0.0028837460558861494,
+      "first_action_mse": 0.0014705945504829288,
+      "gripper_sign_accuracy": 0.99322509765625
+    },
+    {
+      "epoch": 32,
+      "normalized_mse": 0.060386959463357925,
+      "weighted_loss": 0.060386959463357925,
+      "action_mse": 0.002798567758873105,
+      "first_action_mse": 0.0012954439735040069,
+      "gripper_sign_accuracy": 0.9933238625526428
+    },
+    {
+      "epoch": 33,
+      "normalized_mse": 0.059869833290576935,
+      "weighted_loss": 0.059869833290576935,
+      "action_mse": 0.002861505839973688,
+      "first_action_mse": 0.0013609699672088027,
+      "gripper_sign_accuracy": 0.9932843446731567
+    },
+    {
+      "epoch": 34,
+      "normalized_mse": 0.05670581012964249,
+      "weighted_loss": 0.05670581012964249,
+      "action_mse": 0.002673802198842168,
+      "first_action_mse": 0.001219843397848308,
+      "gripper_sign_accuracy": 0.9934423565864563
+    },
+    {
+      "epoch": 35,
+      "normalized_mse": 0.05378468707203865,
+      "weighted_loss": 0.05378468707203865,
+      "action_mse": 0.0026687374338507652,
+      "first_action_mse": 0.0012720990926027298,
+      "gripper_sign_accuracy": 0.9936991333961487
+    },
+    {
+      "epoch": 36,
+      "normalized_mse": 0.0525161549448967,
+      "weighted_loss": 0.0525161549448967,
+      "action_mse": 0.002634761156514287,
+      "first_action_mse": 0.001220492646098137,
+      "gripper_sign_accuracy": 0.9942522048950195
+    },
+    {
+      "epoch": 37,
+      "normalized_mse": 0.05427410826086998,
+      "weighted_loss": 0.05427410826086998,
+      "action_mse": 0.002697484800592065,
+      "first_action_mse": 0.0012650652788579464,
+      "gripper_sign_accuracy": 0.9941139221191406
+    },
+    {
+      "epoch": 38,
+      "normalized_mse": 0.05180488899350166,
+      "weighted_loss": 0.05180488899350166,
+      "action_mse": 0.0027151452377438545,
+      "first_action_mse": 0.0014035729691386223,
+      "gripper_sign_accuracy": 0.9943114519119263
+    },
+    {
+      "epoch": 39,
+      "normalized_mse": 0.05236763134598732,
+      "weighted_loss": 0.05236763134598732,
+      "action_mse": 0.002601918764412403,
+      "first_action_mse": 0.001279011252336204,
+      "gripper_sign_accuracy": 0.9942719340324402
+    },
+    {
+      "epoch": 40,
+      "normalized_mse": 0.04977630078792572,
+      "weighted_loss": 0.04977630078792572,
+      "action_mse": 0.0026273145340383053,
+      "first_action_mse": 0.001321511692367494,
+      "gripper_sign_accuracy": 0.9946867227554321
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+# Python 3.12; install CUDA-enabled PyTorch appropriate to your driver first.
+# Exact official LeRobot source inspected for this handoff.
+lerobot[smolvla,training] @ git+https://github.com/huggingface/lerobot.git@8c920c4270460851cedd2737657584586d3dc66f
+h5py>=3.11,<4

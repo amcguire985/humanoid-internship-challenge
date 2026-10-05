@@ -1,0 +1,33 @@
+{
+  "status": "gpu_required",
+  "local_device": "cpu",
+  "cuda_available": false,
+  "cuda_device_count": 0,
+  "python": "3.8.13",
+  "torch": "2.4.1+cu121",
+  "lerobot_installed": false,
+  "training_started": false,
+  "evaluation_rollouts": 0,
+  "dataset_transitions": 4230,
+  "dataset_episodes": 2,
+  "dataset_format": "SmolVLA-compatible NPY tensor dataset; native LeRobot export optional and unexecuted",
+  "planned_training": {
+    "pretrained": "lerobot/smolvla_base",
+    "batch_size": 4,
+    "max_steps": 200,
+    "max_training_minutes": 15,
+    "seed": 0,
+    "freeze_vlm": true
+  },
+  "training_loss": null,
+  "action_loss": null,
+  "leaves_start": null,
+  "approaches_object": null,
+  "closest_eef_distance_m": null,
+  "commands_close": null,
+  "acquires_object": null,
+  "lifts_object": null,
+  "transports_places": null,
+  "libero_success": null,
+  "conclusion": "No SmolVLA performance result: GPU is unavailable. Data and bounded GPU training/evaluation code prepared."
+}

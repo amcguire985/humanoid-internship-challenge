@@ -1,0 +1,860 @@
+{
+  "format": "smolvla_numpy_v1",
+  "fps": 20,
+  "total_frames": 4230,
+  "image_key": "observation.images.camera1",
+  "state_key": "observation.state",
+  "action_key": "action",
+  "episodes": [
+    {
+      "directory": "episode_001",
+      "source": "results/libero_robot_dataset/episodes/episode_001.h5",
+      "sha256": "4d20f8de93972b8a347a6e781a029e4b19999285f3c8b99a6728e7ef8efb61b1",
+      "length": 2109,
+      "task": "pick the akita black bowl between the plate and the ramekin and place it on the plate",
+      "success": true,
+      "success_metadata": {
+        "completed_sequence": true,
+        "task_completed": true,
+        "failure_phase": null,
+        "failure_reason": null,
+        "gripper_acquired_object": true,
+        "object_lifted": true,
+        "remained_grasped_during_transport": true,
+        "object_reached_target_region": true,
+        "object_remained_at_target_after_release": true,
+        "libero_task_success": true,
+        "libero_success_ever": true,
+        "grasp_lost": false,
+        "eef_tracking_rmse_m": 0.0018942951047154876,
+        "maximum_tracking_error_m": 0.015895130336885988,
+        "final_object_to_target_anchor_error_m": 0.011659473614760104,
+        "final_object_to_placement_error_m": 0.01771616177677338,
+        "maximum_object_lift_m": 0.1287112968982862,
+        "total_episode_steps": 2129,
+        "phases": [
+          {
+            "phase": "SCENE_SETTLE",
+            "entry_step": 1,
+            "exit_step": 20
+          },
+          {
+            "phase": "PREGRASP",
+            "entry_step": 21,
+            "exit_step": 588
+          },
+          {
+            "phase": "DESCEND",
+            "entry_step": 589,
+            "exit_step": 860
+          },
+          {
+            "phase": "GRASP",
+            "entry_step": 861,
+            "exit_step": 900
+          },
+          {
+            "phase": "GRASP_SETTLE",
+            "entry_step": 901,
+            "exit_step": 920
+          },
+          {
+            "phase": "LIFT",
+            "entry_step": 921,
+            "exit_step": 1071
+          },
+          {
+            "phase": "TRANSPORT",
+            "entry_step": 1072,
+            "exit_step": 1692
+          },
+          {
+            "phase": "PLACE",
+            "entry_step": 1693,
+            "exit_step": 1804
+          },
+          {
+            "phase": "RELEASE",
+            "entry_step": 1805,
+            "exit_step": 1844
+          },
+          {
+            "phase": "RELEASE_SETTLE",
+            "entry_step": 1845,
+            "exit_step": 1884
+          },
+          {
+            "phase": "RETRACT",
+            "entry_step": 1885,
+            "exit_step": 2129
+          }
+        ],
+        "initial_observation": {
+          "eef": [
+            -0.2084646605658239,
+            0.0,
+            1.1732794757296405
+          ],
+          "object": [
+            -0.06390988281503088,
+            0.20349675443522666,
+            0.97
+          ],
+          "target": [
+            0.0728689182540634,
+            0.21238612100895377,
+            0.97
+          ],
+          "gripper": [
+            0.020833,
+            -0.020833
+          ]
+        },
+        "final_object_position": [
+          0.0749961408402288,
+          0.22310704859857322,
+          0.9065576384682212
+        ],
+        "geometry": {
+          "object_start": [
+            -0.06390143206336037,
+            0.20345985704175618,
+            0.8984041501882478
+          ],
+          "target_anchor": [
+            0.07287702006820722,
+            0.21238385502430443,
+            0.9024998346662079
+          ],
+          "object_collision_min": [
+            -0.11701674024307732,
+            0.1496782077921012,
+            0.8999925920845844
+          ],
+          "object_collision_max": [
+            -0.010009538899329994,
+            0.2568781479969237,
+            0.9505386857859383
+          ],
+          "target_collision_min": [
+            0.003794221677498974,
+            0.14439122828058715,
+            0.8999843134415404
+          ],
+          "target_collision_max": [
+            0.14126412962672555,
+            0.2820124461827364,
+            0.9189367959033883
+          ],
+          "object_origin_to_bottom_m": 0.0015884418963366675,
+          "placement_object_origin": [
+            0.07287702006820722,
+            0.21238385502430443,
+            0.9204998346662079
+          ],
+          "placement_bottom_above_target_collision_top_m": 0.0031514806591562694,
+          "measured_grasp_offset": [
+            0.0004615636675179696,
+            0.04812642200468356,
+            0.035509433261647017
+          ],
+          "fixed_grasp_offset": [
+            0.0004615636675179696,
+            0.04812642200468356,
+            0.035509433261647017
+          ]
+        },
+        "retargeting": {
+          "axis_matrix": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "human_start": [
+            -0.2366257973769527,
+            -0.044039656109936424,
+            0.06357388480983904
+          ],
+          "human_goal": [
+            -0.12767583028296864,
+            -0.21552658586838072,
+            0.0225
+          ],
+          "sim_start": [
+            -0.061772980445016626,
+            0.21117532035771175,
+            0.9641429689776769
+          ],
+          "sim_goal": [
+            0.07287702006820722,
+            0.21238385502430443,
+            0.9804998346662079
+          ],
+          "human_start_to_goal_distance_m": 0.20727982637277978,
+          "libero_start_to_goal_distance_m": 0.13564523673687987,
+          "horizontal_scale_factor": 0.6627736777880336,
+          "lateral_scale_factor": 1.0,
+          "vertical_scale_factor": 1.0,
+          "human_transport_endpoint_progress": 0.9500420201007855,
+          "human_transport_endpoint_goal_error_m": 0.056631653506562234,
+          "endpoint_correction_m": [
+            0.0071745856854547735,
+            -0.04982539611306361,
+            -0.02193676557001556
+          ],
+          "endpoint_correction_norm_m": 0.05491144198849131,
+          "start_error_m": 0.0,
+          "final_error_m": 0.0,
+          "maximum_lift_m": 0.07759839858672335,
+          "path_length_m": 0.2462865061564335,
+          "time_scale_used": 5.191820727799347,
+          "transport_hover_goal": [
+            0.07287702006820722,
+            0.21238385502430443,
+            0.9804998346662079
+          ]
+        },
+        "gripper_contract": {
+          "open_command": -1,
+          "close_command": 1,
+          "opening_internal_action": [
+            0.01,
+            -0.01
+          ],
+          "closing_internal_action": [
+            -0.01,
+            0.01
+          ],
+          "semantics": "Sign-integrated aperture command, not target aperture"
+        },
+        "control_frequency_hz": 20.0,
+        "render_errors": [],
+        "controller": {
+          "input_min": [
+            -1.0,
+            -1.0,
+            -1.0,
+            -1.0,
+            -1.0,
+            -1.0
+          ],
+          "input_max": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "output_min": [
+            -0.05,
+            -0.05,
+            -0.05,
+            -0.5,
+            -0.5,
+            -0.5
+          ],
+          "output_max": [
+            0.05,
+            0.05,
+            0.05,
+            0.5,
+            0.5,
+            0.5
+          ],
+          "action_min": [
+            -1.0,
+            -1.0,
+            -1.0,
+            -1.0,
+            -1.0,
+            -1.0,
+            -1.0
+          ],
+          "action_max": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "final_contacts": [
+          [
+            "akita_black_bowl_1_g37",
+            "plate_1_g6"
+          ],
+          [
+            "akita_black_bowl_1_g40",
+            "plate_1_g1"
+          ],
+          [
+            "akita_black_bowl_1_g40",
+            "plate_1_g1"
+          ]
+        ],
+        "final_gripper_qpos": [
+          0.03999973558546037,
+          -0.040000006552807055
+        ],
+        "final_bilateral_grasp": false,
+        "trial": {
+          "trial": 1,
+          "requested_offset_xy_m": [
+            0,
+            0
+          ],
+          "applied_offset_xy_m": [
+            0.0,
+            0.0
+          ],
+          "validation": {
+            "offset_xy_m": [
+              0.0,
+              0.0
+            ],
+            "support_surface": "table_collision",
+            "support_contact_count": 20,
+            "support_surface_z_m": 0.9,
+            "bottom_minus_support_z_m": -7.407915415647004e-06,
+            "remains_on_support": true,
+            "within_scene_bounds": true,
+            "object_bounds": [
+              [
+                -0.11701674024307732,
+                0.1496782077921012,
+                0.8999925920845844
+              ],
+              [
+                -0.010009538899329994,
+                0.2568781479969237,
+                0.9505386857859383
+              ]
+            ],
+            "support_bounds": [
+              [
+                -0.5,
+                -0.6,
+                0.85
+              ],
+              [
+                0.5,
+                0.6,
+                0.9
+              ]
+            ],
+            "collision_free": true,
+            "invalid_contacts": [],
+            "intersection_tolerance_m": 1e-07,
+            "reachable": true,
+            "ik_waypoints": 185,
+            "maximum_ik_position_error_m": 0.0009919055332782368,
+            "maximum_ik_orientation_error_rad": 0.00028579504332600363,
+            "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+            "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+          },
+          "adjustment": {
+            "reduced": false,
+            "requested_validation": {
+              "offset_xy_m": [
+                0.0,
+                0.0
+              ],
+              "support_surface": "table_collision",
+              "support_contact_count": 20,
+              "support_surface_z_m": 0.9,
+              "bottom_minus_support_z_m": -7.407915415647004e-06,
+              "remains_on_support": true,
+              "within_scene_bounds": true,
+              "object_bounds": [
+                [
+                  -0.11701674024307732,
+                  0.1496782077921012,
+                  0.8999925920845844
+                ],
+                [
+                  -0.010009538899329994,
+                  0.2568781479969237,
+                  0.9505386857859383
+                ]
+              ],
+              "support_bounds": [
+                [
+                  -0.5,
+                  -0.6,
+                  0.85
+                ],
+                [
+                  0.5,
+                  0.6,
+                  0.9
+                ]
+              ],
+              "collision_free": true,
+              "invalid_contacts": [],
+              "intersection_tolerance_m": 1e-07,
+              "reachable": true,
+              "ik_waypoints": 185,
+              "maximum_ik_position_error_m": 0.0009919055332782368,
+              "maximum_ik_orientation_error_rad": 0.00028579504332600363,
+              "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+              "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+            }
+          }
+        },
+        "input_hashes": {
+          "config/libero_pick_place.json": "6d4d97f57488591ea960ce5329e1fa11325ded7ea5dcf1a4f95842f0a0d98cbe",
+          "config/libero_retarget.json": "bae7ebc69fa6fc09402778f12a9f344480d515f7d289f232db2a38ed6aef5cfd",
+          "config/test_007_demo.json": "567bca770132334a22e335806a0103b3ff6b40208fc245894fd95e1784431641",
+          "results/test_007_block_only_raw/task_demo/processed_demo.csv": "3f2ef11c25daaaa99a269ed87a9c682281661692511a19b685a3a855a7357796",
+          "results/test_007_block_only_raw/task_demo/metadata.json": "eb8b764a5025a7a78d26df3dfa7ba253dca83f4e85d16bc5db435a9df65619bf",
+          "scripts/scripted_libero_pick_place.py": "57dc405d0642addd68c1c4d6af7c8329888869842b7aaa5a3209b5f6bfd80c4c",
+          "scripts/retarget_libero_object.py": "52a192893ab837e25ea380360172ea334d0d90b1005a578a48aa8e428325c806",
+          "scripts/replay_libero_transport.py": "fcd9e93ecd3060fcf5ed801714708548381c4823af349c62f8277d0f30757f8b",
+          "scripts/process_task_demo.py": "7612e201b99ede4d56e0bfc1d5bf389a7b46a6a86243d090d476a961a09e9454"
+        }
+      },
+      "proprio_order": "joint_pos[7], joint_vel[7], gripper_qpos[2], gripper_qvel[2]"
+    },
+    {
+      "directory": "episode_002",
+      "source": "results/libero_robot_dataset/episodes/episode_002.h5",
+      "sha256": "6e46cce6dd13df6eda469d12f8ee99159b66f09d37a9a87dbd9af1394fa43dcd",
+      "length": 2121,
+      "task": "pick the akita black bowl between the plate and the ramekin and place it on the plate",
+      "success": true,
+      "success_metadata": {
+        "completed_sequence": true,
+        "task_completed": true,
+        "failure_phase": null,
+        "failure_reason": null,
+        "gripper_acquired_object": true,
+        "object_lifted": true,
+        "remained_grasped_during_transport": true,
+        "object_reached_target_region": true,
+        "object_remained_at_target_after_release": true,
+        "libero_task_success": true,
+        "libero_success_ever": true,
+        "grasp_lost": false,
+        "eef_tracking_rmse_m": 0.001878901979977489,
+        "maximum_tracking_error_m": 0.015876724160144757,
+        "final_object_to_target_anchor_error_m": 0.011631180947610033,
+        "final_object_to_placement_error_m": 0.0177117212963039,
+        "maximum_object_lift_m": 0.12869880439072867,
+        "total_episode_steps": 2141,
+        "phases": [
+          {
+            "phase": "SCENE_SETTLE",
+            "entry_step": 1,
+            "exit_step": 20
+          },
+          {
+            "phase": "PREGRASP",
+            "entry_step": 21,
+            "exit_step": 607
+          },
+          {
+            "phase": "DESCEND",
+            "entry_step": 608,
+            "exit_step": 879
+          },
+          {
+            "phase": "GRASP",
+            "entry_step": 880,
+            "exit_step": 919
+          },
+          {
+            "phase": "GRASP_SETTLE",
+            "entry_step": 920,
+            "exit_step": 939
+          },
+          {
+            "phase": "LIFT",
+            "entry_step": 940,
+            "exit_step": 1090
+          },
+          {
+            "phase": "TRANSPORT",
+            "entry_step": 1091,
+            "exit_step": 1704
+          },
+          {
+            "phase": "PLACE",
+            "entry_step": 1705,
+            "exit_step": 1816
+          },
+          {
+            "phase": "RELEASE",
+            "entry_step": 1817,
+            "exit_step": 1856
+          },
+          {
+            "phase": "RELEASE_SETTLE",
+            "entry_step": 1857,
+            "exit_step": 1896
+          },
+          {
+            "phase": "RETRACT",
+            "entry_step": 1897,
+            "exit_step": 2141
+          }
+        ],
+        "initial_observation": {
+          "eef": [
+            -0.2084646605658239,
+            0.0,
+            1.1732794757296405
+          ],
+          "object": [
+            -0.06390988281503088,
+            0.20349675443522666,
+            0.97
+          ],
+          "target": [
+            0.0728689182540634,
+            0.21238612100895377,
+            0.97
+          ],
+          "gripper": [
+            0.020833,
+            -0.020833
+          ]
+        },
+        "final_object_position": [
+          0.07487728732475009,
+          0.2231044157040828,
+          0.9065437040817107
+        ],
+        "geometry": {
+          "object_start": [
+            -0.04390143206336036,
+            0.20345985704175618,
+            0.8984041501882478
+          ],
+          "target_anchor": [
+            0.07287702006820722,
+            0.21238385502430443,
+            0.9024998346662079
+          ],
+          "object_collision_min": [
+            -0.09701674024307731,
+            0.1496782077921012,
+            0.8999925920845844
+          ],
+          "object_collision_max": [
+            0.00999046110067001,
+            0.2568781479969237,
+            0.9505386857859383
+          ],
+          "target_collision_min": [
+            0.003794221677498974,
+            0.14439122828058715,
+            0.8999843134415404
+          ],
+          "target_collision_max": [
+            0.14126412962672555,
+            0.2820124461827364,
+            0.9189367959033883
+          ],
+          "object_origin_to_bottom_m": 0.0015884418963366675,
+          "placement_object_origin": [
+            0.07287702006820722,
+            0.21238385502430443,
+            0.9204998346662079
+          ],
+          "placement_bottom_above_target_collision_top_m": 0.0031514806591562694,
+          "measured_grasp_offset": [
+            0.0003973924145983035,
+            0.048136704193183194,
+            0.035503266166784564
+          ],
+          "fixed_grasp_offset": [
+            0.0003973924145983035,
+            0.048136704193183194,
+            0.035503266166784564
+          ]
+        },
+        "retargeting": {
+          "axis_matrix": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "human_start": [
+            -0.2366257973769527,
+            -0.044039656109936424,
+            0.06357388480983904
+          ],
+          "human_goal": [
+            -0.12767583028296864,
+            -0.21552658586838072,
+            0.0225
+          ],
+          "sim_start": [
+            -0.04188168322056059,
+            0.21117596822623208,
+            0.9641501797668474
+          ],
+          "sim_goal": [
+            0.07287702006820722,
+            0.21238385502430443,
+            0.9804998346662079
+          ],
+          "human_start_to_goal_distance_m": 0.20727982637277978,
+          "libero_start_to_goal_distance_m": 0.11592381199030935,
+          "horizontal_scale_factor": 0.5648733530547415,
+          "lateral_scale_factor": 1.0,
+          "vertical_scale_factor": 1.0,
+          "human_transport_endpoint_progress": 0.9500420201007855,
+          "human_transport_endpoint_goal_error_m": 0.056631653506562234,
+          "endpoint_correction_m": [
+            0.006258175171762789,
+            -0.04982467459226694,
+            -0.021937125806476
+          ],
+          "endpoint_correction_norm_m": 0.054798726658152504,
+          "start_error_m": 0.0,
+          "final_error_m": 0.0,
+          "maximum_lift_m": 0.07759439644416977,
+          "path_length_m": 0.23026806822062057,
+          "time_scale_used": 5.127559255030603,
+          "transport_hover_goal": [
+            0.07287702006820722,
+            0.21238385502430443,
+            0.9804998346662079
+          ]
+        },
+        "gripper_contract": {
+          "open_command": -1,
+          "close_command": 1,
+          "opening_internal_action": [
+            0.01,
+            -0.01
+          ],
+          "closing_internal_action": [
+            -0.01,
+            0.01
+          ],
+          "semantics": "Sign-integrated aperture command, not target aperture"
+        },
+        "control_frequency_hz": 20.0,
+        "render_errors": [],
+        "controller": {
+          "input_min": [
+            -1.0,
+            -1.0,
+            -1.0,
+            -1.0,
+            -1.0,
+            -1.0
+          ],
+          "input_max": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "output_min": [
+            -0.05,
+            -0.05,
+            -0.05,
+            -0.5,
+            -0.5,
+            -0.5
+          ],
+          "output_max": [
+            0.05,
+            0.05,
+            0.05,
+            0.5,
+            0.5,
+            0.5
+          ],
+          "action_min": [
+            -1.0,
+            -1.0,
+            -1.0,
+            -1.0,
+            -1.0,
+            -1.0,
+            -1.0
+          ],
+          "action_max": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "final_contacts": [
+          [
+            "akita_black_bowl_1_g37",
+            "plate_1_g6"
+          ],
+          [
+            "akita_black_bowl_1_g40",
+            "plate_1_g1"
+          ],
+          [
+            "akita_black_bowl_1_g40",
+            "plate_1_g1"
+          ]
+        ],
+        "final_gripper_qpos": [
+          0.039999735769690466,
+          -0.04000000654568846
+        ],
+        "final_bilateral_grasp": false,
+        "trial": {
+          "trial": 2,
+          "requested_offset_xy_m": [
+            0.02,
+            0
+          ],
+          "applied_offset_xy_m": [
+            0.02,
+            0.0
+          ],
+          "validation": {
+            "offset_xy_m": [
+              0.02,
+              0.0
+            ],
+            "support_surface": "table_collision",
+            "support_contact_count": 20,
+            "support_surface_z_m": 0.9,
+            "bottom_minus_support_z_m": -7.407915415647004e-06,
+            "remains_on_support": true,
+            "within_scene_bounds": true,
+            "object_bounds": [
+              [
+                -0.09701674024307731,
+                0.1496782077921012,
+                0.8999925920845844
+              ],
+              [
+                0.00999046110067001,
+                0.2568781479969237,
+                0.9505386857859383
+              ]
+            ],
+            "support_bounds": [
+              [
+                -0.5,
+                -0.6,
+                0.85
+              ],
+              [
+                0.5,
+                0.6,
+                0.9
+              ]
+            ],
+            "collision_free": true,
+            "invalid_contacts": [],
+            "intersection_tolerance_m": 1e-07,
+            "reachable": true,
+            "ik_waypoints": 185,
+            "maximum_ik_position_error_m": 0.000978737221655907,
+            "maximum_ik_orientation_error_rad": 0.0001661281447265139,
+            "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+            "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+          },
+          "adjustment": {
+            "reduced": false,
+            "requested_validation": {
+              "offset_xy_m": [
+                0.02,
+                0.0
+              ],
+              "support_surface": "table_collision",
+              "support_contact_count": 20,
+              "support_surface_z_m": 0.9,
+              "bottom_minus_support_z_m": -7.407915415647004e-06,
+              "remains_on_support": true,
+              "within_scene_bounds": true,
+              "object_bounds": [
+                [
+                  -0.09701674024307731,
+                  0.1496782077921012,
+                  0.8999925920845844
+                ],
+                [
+                  0.00999046110067001,
+                  0.2568781479969237,
+                  0.9505386857859383
+                ]
+              ],
+              "support_bounds": [
+                [
+                  -0.5,
+                  -0.6,
+                  0.85
+                ],
+                [
+                  0.5,
+                  0.6,
+                  0.9
+                ]
+              ],
+              "collision_free": true,
+              "invalid_contacts": [],
+              "intersection_tolerance_m": 1e-07,
+              "reachable": true,
+              "ik_waypoints": 185,
+              "maximum_ik_position_error_m": 0.000978737221655907,
+              "maximum_ik_orientation_error_rad": 0.0001661281447265139,
+              "ik_method": "Damped Jacobian IK; fixed orientation; joint limits; all human source knots plus pregrasp/grasp/lift/place/retract",
+              "reachability_scope": "Kinematic feasibility, not a guarantee of dynamic tracking or grasp success"
+            }
+          }
+        },
+        "input_hashes": {
+          "config/libero_pick_place.json": "6d4d97f57488591ea960ce5329e1fa11325ded7ea5dcf1a4f95842f0a0d98cbe",
+          "config/libero_retarget.json": "bae7ebc69fa6fc09402778f12a9f344480d515f7d289f232db2a38ed6aef5cfd",
+          "config/test_007_demo.json": "567bca770132334a22e335806a0103b3ff6b40208fc245894fd95e1784431641",
+          "results/test_007_block_only_raw/task_demo/processed_demo.csv": "3f2ef11c25daaaa99a269ed87a9c682281661692511a19b685a3a855a7357796",
+          "results/test_007_block_only_raw/task_demo/metadata.json": "eb8b764a5025a7a78d26df3dfa7ba253dca83f4e85d16bc5db435a9df65619bf",
+          "scripts/scripted_libero_pick_place.py": "57dc405d0642addd68c1c4d6af7c8329888869842b7aaa5a3209b5f6bfd80c4c",
+          "scripts/retarget_libero_object.py": "52a192893ab837e25ea380360172ea334d0d90b1005a578a48aa8e428325c806",
+          "scripts/replay_libero_transport.py": "fcd9e93ecd3060fcf5ed801714708548381c4823af349c62f8277d0f30757f8b",
+          "scripts/process_task_demo.py": "7612e201b99ede4d56e0bfc1d5bf389a7b46a6a86243d090d476a961a09e9454"
+        }
+      },
+      "proprio_order": "joint_pos[7], joint_vel[7], gripper_qpos[2], gripper_qvel[2]"
+    }
+  ],
+  "alignment": "Observation t predicts action t; terminal observation retained separately, never used as a target.",
+  "gripper": "-1 open; +1 close; raw LIBERO OSC actions, no joint-space reinterpretation"
+}

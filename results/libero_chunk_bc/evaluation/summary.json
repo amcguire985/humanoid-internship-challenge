@@ -1,0 +1,35 @@
+{
+  "checkpoint": "/home/student/robot_challenge/humanoid_internship_challenge/results/libero_chunk_bc/policy.pt",
+  "evaluations": [
+    {
+      "reset": "nominal",
+      "trial": 1,
+      "offset_xy_m": [
+        0.0,
+        0.0
+      ],
+      "steps": 2400,
+      "horizon": 2400,
+      "object_acquired": false,
+      "object_lifted": false,
+      "object_reached_target": false,
+      "released": false,
+      "task_completed": false,
+      "libero_success": false,
+      "libero_success_ever": false,
+      "failure_phase": "APPROACH_OR_GRASP",
+      "failure_reason": "Evaluation horizon exhausted",
+      "maximum_object_lift_m": 6.051825707231728e-13,
+      "final_object_target_xy_error_m": 0.1370692624460351,
+      "policy": "SmallChunkBC-v1 image+18D proprio only; no phase, time, target, or scripted control after initialization",
+      "chunk_size": 12,
+      "execute_steps": 4,
+      "close_command_count": 0,
+      "minimum_eef_object_distance_m": 0.37117010061552524,
+      "phase_semantics": "Post-hoc diagnostic milestone, not a scripted policy phase",
+      "action_postprocessing": "Clamp pose input to [-0.5,0.5], threshold predicted gripper at zero to +/-1",
+      "completion_criterion": "Confirmed grasp and lift; release; LIBERO success and target retention without grasp and EEF >=8cm above object for 20 consecutive steps",
+      "training_distribution_reset": true
+    }
+  ]
+}

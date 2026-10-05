@@ -1,0 +1,40 @@
+{
+  "passed": true,
+  "transitions": 4230,
+  "episodes": [
+    {
+      "episode": "episode_001",
+      "length": 2109,
+      "sample_indices": [
+        0,
+        1,
+        839,
+        840,
+        841,
+        1054,
+        1783,
+        1784,
+        1785,
+        2108
+      ],
+      "passed": true
+    },
+    {
+      "episode": "episode_002",
+      "length": 2121,
+      "sample_indices": [
+        0,
+        1,
+        858,
+        859,
+        860,
+        1060,
+        1795,
+        1796,
+        1797,
+        2120
+      ],
+      "passed": true
+    }
+  ]
+}
