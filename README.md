@@ -751,3 +751,5 @@ The short `test__008_shutterspeed500.MOV` test uses the same tracker and cleaner
 `data_003.MOV` was processed with the same tracker and cleaner. Its three video-reviewed transfers and diagnostics are in `results/data_003_demos/`; raw outputs are in `results/data_003_raw/`. See `results/data_003_demos/REPORT.md` for coverage, metrics and the export audit. Edit `config/data_003_demos.json` for timing overrides.
 
 Manual `data_003` annotations and the single-attempt Colab recording workflow are documented in [docs/DATA_003_COLAB.md](docs/DATA_003_COLAB.md). Edit one JSON file per demo in `config/data_003_annotations/`, then regenerate with `scripts/annotate_transfer_demos.py`. Windows performs preparation only; physical LIBERO rollouts run in the validated Colab micromamba environment. No training is included.
+
+The reviewed `data_003` Colab rollout manifest is [`config/data_003_rollouts.json`](config/data_003_rollouts.json). Its [handoff guide](docs/DATA_003_COLAB.md) includes the single command for one recorded rollout per demo; all four contact/transport timing fields are now manually supplied.

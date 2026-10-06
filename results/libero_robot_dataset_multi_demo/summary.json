@@ -30,5 +30,6 @@
   ],
   "new_successful_episodes": 0,
   "new_attempts": [],
+  "rejected_demos": [],
   "format": "Existing robot-native HDF5: N actions / N+1 observations; no policy training."
 }

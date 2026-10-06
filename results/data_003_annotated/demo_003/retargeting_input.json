@@ -1,0 +1,279 @@
+{
+  "demo_id": "demo_003",
+  "episode_id": "episode_006",
+  "direction": "object -> target",
+  "source_demo": "results/data_003_demos/demo_003",
+  "annotation_file": "config/data_003_annotations/demo_003.json",
+  "prepared_demo": "results/data_003_annotated/demo_003",
+  "transport_step_budget": 8000,
+  "robot_settings": {
+    "pregrasp_height": 0.18,
+    "grasp_offset": [
+      0.0,
+      0.045,
+      0.035
+    ],
+    "grasp_offset_mode": "measured_after_grasp",
+    "max_grasp_offset_adjustment_m": 0.03,
+    "postgrasp_lift_height": 0.08,
+    "minimum_object_lift_m": 0.03,
+    "transport_clearance_height": 0.06,
+    "placement_object_height_offset": 0.018,
+    "approach_step_size": 0.001,
+    "max_eef_speed_m_s": 0.02,
+    "max_command_step_m": 0.025,
+    "action_clip": 0.5,
+    "fixed_eef_quaternion_xyzw": [
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scene_settle_steps": 20,
+    "grasp_close_steps": 40,
+    "grasp_settle_steps": 20,
+    "grasp_confirm_steps": 5,
+    "grasp_loss_grace_steps": 8,
+    "grasp_offset_drift_limit_m": 0.025,
+    "release_open_steps": 40,
+    "release_settle_steps": 40,
+    "retract_height": 0.12,
+    "retract_settle_steps": 20,
+    "position_tolerance_m": 0.003,
+    "move_settle_steps": 60,
+    "tracking_error_abort_m": 0.035,
+    "tracking_error_abort_steps": 5,
+    "workspace_min": [
+      -0.6,
+      -0.6,
+      0.88
+    ],
+    "workspace_max": [
+      0.6,
+      0.6,
+      1.5
+    ],
+    "target_region_radius_m": 0.04,
+    "placement_height_tolerance_m": 0.02,
+    "maximum_endpoint_correction_m": 0.06,
+    "phase_max_steps": {
+      "SCENE_SETTLE": 40,
+      "PREGRASP": 1000,
+      "DESCEND": 500,
+      "GRASP": 80,
+      "GRASP_SETTLE": 80,
+      "LIFT": 400,
+      "TRANSPORT": 8000,
+      "PLACE": 400,
+      "RELEASE": 80,
+      "RELEASE_SETTLE": 100,
+      "RETRACT": 500
+    }
+  },
+  "mapping_settings": {
+    "axis_permutation": [
+      0,
+      1,
+      2
+    ],
+    "axis_signs": [
+      1,
+      1,
+      1
+    ],
+    "horizontal_scale": 1.0,
+    "vertical_scale": 1.0,
+    "grasp_offset": [
+      0.0,
+      0.0,
+      0.18
+    ],
+    "target_offset": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "time_scale": 3.0,
+    "action_clip": 0.5,
+    "gripper": -1,
+    "workspace_min": [
+      -0.6,
+      -0.6,
+      0.85
+    ],
+    "workspace_max": [
+      0.6,
+      0.6,
+      1.5
+    ],
+    "max_source_gap_s": 0.15,
+    "max_eef_speed_m_s": 0.02,
+    "max_command_step_m": 0.025,
+    "approach_seconds": 3.0,
+    "start_tolerance_m": 0.005,
+    "settle_seconds": 1.0,
+    "scene_settle_seconds": 1.0
+  },
+  "schema_version": 1,
+  "task": "pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate",
+  "benchmark": "libero_spatial",
+  "task_index": 0,
+  "seed": 0,
+  "requested_rollouts": 1,
+  "automatic_retries": false,
+  "ready_for_rollout": true,
+  "blocking_reasons": [],
+  "validation": {
+    "demo_id": "demo_003",
+    "direction": "object -> target",
+    "start_position": [
+      -0.3512425876794558,
+      0.34997038453204576,
+      -0.12360089424406107
+    ],
+    "end_goal_position": [
+      -0.3455190773576847,
+      0.05432991391094802,
+      -0.07036877579860995
+    ],
+    "start_to_goal_distance_m": 0.3004491718638248,
+    "maximum_lift_m": 0.18927348288542056,
+    "grasp_time_seconds": 41.085,
+    "release_time_seconds": 54.99166666666667,
+    "transport_start_time_seconds": 42.48666666666667,
+    "transport_end_time_seconds": 53.19166666666667,
+    "transport_duration_seconds": 10.704999999999998,
+    "suitable_for_retargeting": true,
+    "source_tracking_and_timing_suitable": true,
+    "suitability_scope": "Source samples and timing only; rollout_inputs.json includes geometry and annotation-review gates.",
+    "blocking_reasons": [],
+    "phase_boundary_sources": {
+      "pickup_time": {
+        "source": "manual",
+        "requested_time_seconds": 41.1,
+        "effective_time_seconds": 41.085
+      },
+      "release_time": {
+        "source": "manual",
+        "requested_time_seconds": 55.0,
+        "effective_time_seconds": 54.99166666666667
+      },
+      "transport_start": {
+        "source": "manual",
+        "requested_time_seconds": 42.5,
+        "effective_time_seconds": 42.48666666666667
+      },
+      "transport_end": {
+        "source": "manual",
+        "requested_time_seconds": 53.2,
+        "effective_time_seconds": 53.19166666666667
+      }
+    },
+    "automatic_estimates": {
+      "pickup_time": 39.985,
+      "transport_start": 43.45333333333333,
+      "transport_end": 47.08833333333334,
+      "release_time": 53.99166666666667
+    },
+    "manual_annotations": {
+      "grasp_time_seconds": 41.1,
+      "release_time_seconds": 55.0,
+      "transport_start_time_seconds": 42.5,
+      "transport_end_time_seconds": 53.2
+    },
+    "geometry_limitations": [
+      "Motion timings do not measure grasp/contact.",
+      "Inherited landscape calibration/crop and world Z gravity direction remain unverified."
+    ],
+    "source_demo": "results/data_003_demos/demo_003",
+    "annotation_path": "config/data_003_annotations/demo_003.json",
+    "prepared_demo": "results/data_003_annotated/demo_003",
+    "annotation_sha256": "419bdf574769bfa4c4f01773890d75f9279e320a7c3af9edc534462941d2c546",
+    "direction_mapping": "Align this demo start-to-end task axis with LIBERO object-start-to-target; preserve temporal order and lift/lateral shape, including target -> object strategies."
+  },
+  "mapping_preview": {
+    "demo_id": "demo_003",
+    "direction": "object -> target",
+    "nominal_preview_only": true,
+    "retargeting": {
+      "axis_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "human_start": [
+        -0.3461154176994059,
+        0.3557352080368391,
+        -0.0966634447285247
+      ],
+      "human_goal": [
+        -0.3455190773576847,
+        0.05432991391094802,
+        -0.07036877579860995
+      ],
+      "sim_start": [
+        -0.06390143206336037,
+        0.20345985704175618,
+        0.9784041501882155
+      ],
+      "sim_goal": [
+        0.07287702006820722,
+        0.21238385502430443,
+        0.9804998346662078
+      ],
+      "human_start_to_goal_distance_m": 0.3025506842878593,
+      "libero_start_to_goal_distance_m": 0.13708528221852026,
+      "horizontal_scale_factor": 0.45476637880281146,
+      "lateral_scale_factor": 1.0,
+      "vertical_scale_factor": 1.0,
+      "human_transport_endpoint_progress": 1.014163255132763,
+      "human_transport_endpoint_goal_error_m": 0.009109407162118673,
+      "endpoint_correction_m": [
+        -0.0023921602963231647,
+        0.006846369775620115,
+        0.004334165747828078
+      ],
+      "endpoint_correction_norm_m": 0.008448680531152523,
+      "start_error_m": 0.0,
+      "final_error_m": 0.0,
+      "maximum_lift_m": 0.1494004841436869,
+      "path_length_m": 1.548650596634099
+    },
+    "time_scale_used": 33.32226971264628,
+    "transport_steps": 7136,
+    "robot_duration_seconds": 356.75,
+    "mapping_suitable": true,
+    "reasons": [],
+    "transport_step_budget": 8000,
+    "baseline_transport_step_budget": 2000,
+    "robot_max_eef_speed_m_s": 0.02,
+    "maximum_endpoint_correction_m": 0.06,
+    "limitation": "Nominal scene and configured offset only; live grasp state and measured offset may differ. Not a physical rollout or IK certificate."
+  },
+  "transport_samples": 322,
+  "provenance": {
+    "source_video": "videos\\data_003.MOV",
+    "source_demo": "results/data_003_demos/demo_003",
+    "annotation_file": "config/data_003_annotations/demo_003.json",
+    "source_trajectory_sha256": "c7499264149b7121031b7367199a8309ff034f966e5f4448d267b192bac35d66",
+    "annotation_sha256": "419bdf574769bfa4c4f01773890d75f9279e320a7c3af9edc534462941d2c546",
+    "prepared_trajectory_sha256": "3e9faed70dededee51545c0c180575a88b7cde50a2451845cb8adde779b721c0",
+    "prepared_metadata_sha256": "c03327cb2535261f23f32c6df9322948650b53d678814e4ca592f5193782702c",
+    "manifest_sha256": "488edf9e616e28dd03493df2d6c4324519b58190c97b5feb131fb6ca5e8404aa",
+    "robot_config_sha256": "f6d61ad8e4f7560f26eed21966c5b6910c7dc5407e0e09ab93d9a6d36c6d25fb",
+    "mapping_config_sha256": "51de8eb012f965c3ca3d1e8ee3663a5625c620a72f0743fc7b1beced4eb83b01"
+  },
+  "mapping_semantics": "Align the source demo start-to-end axis to bowl-start-to-plate; preserve sample order, lateral path and lift residual. Robot contact phases remain scripted."
+}

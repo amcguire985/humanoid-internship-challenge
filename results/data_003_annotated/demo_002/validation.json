@@ -15,10 +15,12 @@
   "maximum_lift_m": 0.12916032534869926,
   "grasp_time_seconds": 24.511666666666667,
   "release_time_seconds": 36.483333333333334,
-  "transport_start_time_seconds": 26.678333333333335,
-  "transport_end_time_seconds": 31.18166666666667,
-  "transport_duration_seconds": 4.503333333333334,
+  "transport_start_time_seconds": 25.41166666666667,
+  "transport_end_time_seconds": 35.483333333333334,
+  "transport_duration_seconds": 10.071666666666665,
   "suitable_for_retargeting": true,
+  "source_tracking_and_timing_suitable": true,
+  "suitability_scope": "Source samples and timing only; rollout_inputs.json includes geometry and annotation-review gates.",
   "blocking_reasons": [],
   "phase_boundary_sources": {
     "pickup_time": {
@@ -32,14 +34,14 @@
       "effective_time_seconds": 36.483333333333334
     },
     "transport_start": {
-      "source": "existing_motion_estimate",
-      "requested_time_seconds": null,
-      "effective_time_seconds": 26.678333333333335
+      "source": "manual",
+      "requested_time_seconds": 25.4,
+      "effective_time_seconds": 25.41166666666667
     },
     "transport_end": {
-      "source": "existing_motion_estimate",
-      "requested_time_seconds": null,
-      "effective_time_seconds": 31.18166666666667
+      "source": "manual",
+      "requested_time_seconds": 35.5,
+      "effective_time_seconds": 35.483333333333334
     }
   },
   "automatic_estimates": {
@@ -51,8 +53,8 @@
   "manual_annotations": {
     "grasp_time_seconds": 24.5,
     "release_time_seconds": 36.5,
-    "transport_start_time_seconds": null,
-    "transport_end_time_seconds": null
+    "transport_start_time_seconds": 25.4,
+    "transport_end_time_seconds": 35.5
   },
   "geometry_limitations": [
     "Motion timings do not measure grasp/contact.",
@@ -61,6 +63,6 @@
   "source_demo": "results/data_003_demos/demo_002",
   "annotation_path": "config/data_003_annotations/demo_002.json",
   "prepared_demo": "results/data_003_annotated/demo_002",
-  "annotation_sha256": "3a8edd240cfa68d4e967dd927fc82a297b05a1f1cce9a04c9091e9f5caacac78",
+  "annotation_sha256": "cac5dc56e7960b1bce24766cdde9b5e8fb1a2ea1495ca312d0d7a90d90af0990",
   "direction_mapping": "Align this demo start-to-end task axis with LIBERO object-start-to-target; preserve temporal order and lift/lateral shape, including target -> object strategies."
 }

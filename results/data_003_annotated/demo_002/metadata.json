@@ -38,8 +38,8 @@
   "maximum_transport_speed": 0.23721187363634075,
   "transport_complete": true,
   "pickup_time": 24.511666666666667,
-  "transport_start": 26.678333333333335,
-  "transport_end": 31.18166666666667,
+  "transport_start": 25.41166666666667,
+  "transport_end": 35.483333333333334,
   "release_time": 36.483333333333334,
   "id": "demo_002",
   "direction": "target -> object",
@@ -141,14 +141,14 @@
       "effective_time_seconds": 36.483333333333334
     },
     "transport_start": {
-      "source": "existing_motion_estimate",
-      "requested_time_seconds": null,
-      "effective_time_seconds": 26.678333333333335
+      "source": "manual",
+      "requested_time_seconds": 25.4,
+      "effective_time_seconds": 25.41166666666667
     },
     "transport_end": {
-      "source": "existing_motion_estimate",
-      "requested_time_seconds": null,
-      "effective_time_seconds": 31.18166666666667
+      "source": "manual",
+      "requested_time_seconds": 35.5,
+      "effective_time_seconds": 35.483333333333334
     }
   },
   "active_tracking_gaps": [],
@@ -160,10 +160,10 @@
   "manual_event_annotations": {
     "grasp_time_seconds": 24.5,
     "release_time_seconds": 36.5,
-    "transport_start_time_seconds": null,
-    "transport_end_time_seconds": null
+    "transport_start_time_seconds": 25.4,
+    "transport_end_time_seconds": 35.5
   },
   "annotation_file": "config/data_003_annotations/demo_002.json",
   "manual_contact_annotations_present": true,
-  "annotation_notes": "Manual grasp/degrasp annotations provided by the user on 2026-10-06. Demo 1 5:30 interpreted as 5.30 absolute video seconds. Future rollouts require manual annotations."
+  "annotation_notes": "Manual grasp/degrasp annotations provided by the user on 2026-10-06. Demo 1 5:30 interpreted as 5.30 absolute video seconds. Future rollouts require manual annotations. Manual transport start/end provided by the user on 2026-10-06; all four event fields are now manually labeled."
 }

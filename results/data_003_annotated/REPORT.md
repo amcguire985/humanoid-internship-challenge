@@ -1,15 +1,19 @@
-# data_003 manual annotation validation
+# data_003 reviewed rollout preparation
 
-User-confirmed grasp/release annotations applied. All three pass timing order and gap checks. Retargeting/controller feasibility and physical rollouts are deferred to Colab. Optional transport fields remain automatic/reviewed motion estimates and need review because they end early.
+Prepared on Windows without simulator execution. All three source demonstrations and nominal mappings pass the configured gates. All four event times were manually supplied by the user; automatic estimates are preserved separately.
 
-| Demo | Direction | Start XYZ (m) | End XYZ (m) | Distance (cm) | Max lift (cm) | Manual grasp/release (s) | Transport interval (s) | Transport duration (s) |
-|---|---|---|---|---:|---:|---|---|---:|
-| [demo_001](demo_001/annotation_diagnostic.png) | object -> target | -0.2092, 0.2882, -0.0915 | -0.3570, 0.0499, -0.0789 | 28.1 | 21.6 | 5.30 / 18.50 | 5.503-11.138 | 5.635 |
-| [demo_002](demo_002/annotation_diagnostic.png) | target -> object | -0.3570, 0.0499, -0.0789 | -0.3512, 0.3500, -0.1236 | 30.3 | 12.9 | 24.50 / 36.50 | 26.678-31.182 | 4.503 |
-| [demo_003](demo_003/annotation_diagnostic.png) | object -> target | -0.3512, 0.3500, -0.1236 | -0.3455, 0.0543, -0.0704 | 30.0 | 18.9 | 41.10 / 55.00 | 43.453-47.088 | 3.635 |
+| Demo | Direction | Distance (cm) | Max human lift (cm) | Grasp | Transport start/end | Release | Source transport duration |
+|---|---|---:|---:|---:|---|---:|---:|
+| demo_001 | object -> target | 28.07 | 21.59 | 5.30 | 5.90 / 16.70 | 18.50 | 10.805 s |
+| demo_002 | target -> object | 30.34 | 12.92 | 24.50 | 25.40 / 35.50 | 36.50 | 10.072 s |
+| demo_003 | object -> target | 30.04 | 18.93 | 41.10 | 42.50 / 53.20 | 55.00 | 10.705 s |
 
-All values use the inherited ID0 world frame; calibration/crop and gravity alignment remain unverified. User annotations are preserved exactly in config and metadata; execution boundaries snap to nearest source frames. Automatic estimates remain unchanged. The reverse-direction demo is preserved as a distinct strategy and aligns its task axis to the same LIBERO bowl-to-plate task.
+Start and goal positions are in each per-demo `validation.json`. Effective times snap to source frames, while exact manual times remain in configs.
 
-No physical rollout has run, so there are no new successes or physical failures. The currently combined baseline has two validated episodes and 4,230 transitions (episode_001: 2,109; episode_002: 2,121), both from test_007. Rollouts, recording and any mapping feasibility checks run only in Colab; no SmolVLA training.
+The shared validated controller and mapping configuration are unchanged. Per-demo TRANSPORT timeouts are 5,000 / 5,500 / 8,000 steps to accommodate the existing 0.02 m/s speed limiting. No path was shortened, reversed or interpolated across missing observations.
 
-See [Colab handoff](../../docs/DATA_003_COLAB.md).
+Nominal endpoint correction is 0.81 / 0.48 / 0.84 cm, all below the existing 6 cm limit. Predicted transport steps are 4,411 / 4,822 / 7,136. Nominal EEF paths remain in the configured workspace. This is preparation validation, not physical-success evidence.
+
+Future accepted episodes: demo_001 -> episode_004, demo_002 -> episode_005, demo_003 -> episode_006. One durable attempt per demo, with failures excluded from the success-only dataset. Baseline episodes 001/002 contribute 4,230 transitions; baseline 003 is excluded.
+
+See [the Colab guide](../../docs/DATA_003_COLAB.md) for the exact single command and output locations.
