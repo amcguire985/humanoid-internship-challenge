@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "successful_episodes": 2,
+  "total_transitions": 4230,
+  "episodes": [
+    {
+      "episode_id": "episode_001",
+      "path": "episodes/episode_001.h5",
+      "source_path": "results/libero_robot_dataset/episodes/episode_001.h5",
+      "sha256": "4d20f8de93972b8a347a6e781a029e4b19999285f3c8b99a6728e7ef8efb61b1",
+      "transitions": 2109,
+      "human_demo_id": "test_007",
+      "source_video": "videos/test_007_block_only.MOV",
+      "origin": "existing"
+    },
+    {
+      "episode_id": "episode_002",
+      "path": "episodes/episode_002.h5",
+      "source_path": "results/libero_robot_dataset/episodes/episode_002.h5",
+      "sha256": "6e46cce6dd13df6eda469d12f8ee99159b66f09d37a9a87dbd9af1394fa43dcd",
+      "transitions": 2121,
+      "human_demo_id": "test_007",
+      "source_video": "videos/test_007_block_only.MOV",
+      "origin": "existing"
+    }
+  ],
+  "selected_existing_episodes": [
+    1,
+    2
+  ],
+  "new_successful_episodes": 0,
+  "new_attempts": [],
+  "format": "Existing robot-native HDF5: N actions / N+1 observations; no policy training."
+}

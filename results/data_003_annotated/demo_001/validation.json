@@ -1,0 +1,66 @@
+{
+  "demo_id": "demo_001",
+  "direction": "object -> target",
+  "start_position": [
+    -0.209170712298483,
+    0.2882412340382706,
+    -0.0914651513757749
+  ],
+  "end_goal_position": [
+    -0.3570216243294384,
+    0.04994184596338081,
+    -0.07889764766926746
+  ],
+  "start_to_goal_distance_m": 0.28072127225179305,
+  "maximum_lift_m": 0.21593616192916382,
+  "grasp_time_seconds": 5.301666666666667,
+  "release_time_seconds": 18.508333333333333,
+  "transport_start_time_seconds": 5.503333333333334,
+  "transport_end_time_seconds": 11.138333333333334,
+  "transport_duration_seconds": 5.635,
+  "suitable_for_retargeting": true,
+  "blocking_reasons": [],
+  "phase_boundary_sources": {
+    "pickup_time": {
+      "source": "manual",
+      "requested_time_seconds": 5.3,
+      "effective_time_seconds": 5.301666666666667
+    },
+    "release_time": {
+      "source": "manual",
+      "requested_time_seconds": 18.5,
+      "effective_time_seconds": 18.508333333333333
+    },
+    "transport_start": {
+      "source": "existing_motion_estimate",
+      "requested_time_seconds": null,
+      "effective_time_seconds": 5.503333333333334
+    },
+    "transport_end": {
+      "source": "existing_motion_estimate",
+      "requested_time_seconds": null,
+      "effective_time_seconds": 11.138333333333334
+    }
+  },
+  "automatic_estimates": {
+    "pickup_time": 0.1,
+    "transport_start": 4.9350000000000005,
+    "transport_end": 11.138333333333334,
+    "release_time": 22.01
+  },
+  "manual_annotations": {
+    "grasp_time_seconds": 5.3,
+    "release_time_seconds": 18.5,
+    "transport_start_time_seconds": null,
+    "transport_end_time_seconds": null
+  },
+  "geometry_limitations": [
+    "Motion timings do not measure grasp/contact.",
+    "Inherited landscape calibration/crop and world Z gravity direction remain unverified."
+  ],
+  "source_demo": "results/data_003_demos/demo_001",
+  "annotation_path": "config/data_003_annotations/demo_001.json",
+  "prepared_demo": "results/data_003_annotated/demo_001",
+  "annotation_sha256": "b05234e3b4f0de8cf3f88f6e8b67f7bd1b1b0c6981f7f32085addfbaa97ad2c3",
+  "direction_mapping": "Align this demo start-to-end task axis with LIBERO object-start-to-target; preserve temporal order and lift/lateral shape, including target -> object strategies."
+}

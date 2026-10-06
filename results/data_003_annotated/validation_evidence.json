@@ -1,0 +1,26 @@
+[
+  {
+    "demo_id": "demo_001",
+    "manual_grasp": 5.3,
+    "manual_release": 18.5,
+    "observations_unchanged": 661,
+    "automatic_estimates_preserved": true,
+    "portable_paths": true
+  },
+  {
+    "demo_id": "demo_002",
+    "manual_grasp": 24.5,
+    "manual_release": 36.5,
+    "observations_unchanged": 540,
+    "automatic_estimates_preserved": true,
+    "portable_paths": true
+  },
+  {
+    "demo_id": "demo_003",
+    "manual_grasp": 41.1,
+    "manual_release": 55.0,
+    "observations_unchanged": 530,
+    "automatic_estimates_preserved": true,
+    "portable_paths": true
+  }
+]

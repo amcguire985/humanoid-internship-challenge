@@ -4,3 +4,4 @@ matplotlib>=3.9,<4
 scipy>=1.14,<2
 pupil-apriltags==1.0.4.post11
 pupil-pthreads-win==2; sys_platform == "win32"
+h5py>=3.10,<4

@@ -1,0 +1,73 @@
+{
+  "processing": {
+    "goal_object_offset": [
+      -0.09,
+      0.09,
+      0.0
+    ],
+    "goal_offset_verified": true,
+    "goal_coplanar": true,
+    "goal_center_height": 0.0225,
+    "goal_radius": 0.06,
+    "stationary_duration": 0.3
+  },
+  "demonstrations": [
+    {
+      "start_time": 0.0,
+      "end_time": 22.01,
+      "pickup_time": 5.503333333333334,
+      "release_time": 19.208333333333336,
+      "start": [
+        -0.209170712298483,
+        0.2882412340382706,
+        -0.0914651513757749
+      ],
+      "end": [
+        -0.3570216243294384,
+        0.04994184596338081,
+        -0.07889764766926746
+      ],
+      "direction": "object -> target",
+      "phase_overrides": {},
+      "review_reason": "Three complete alternating transfers independently verified in video contact sheet and denser placement review; final release is visible before clip ends. Pickup is approximate measured lift onset; release is approximate video annotation. Stationary detector merges transfers because resting position jitter exceeds its threshold. Endpoints use measured resting medians. Inner transport phases remain automatic and need semantic review."
+    },
+    {
+      "start_time": 22.01,
+      "end_time": 39.985,
+      "pickup_time": 25.611666666666668,
+      "release_time": 36.78333333333334,
+      "start": [
+        -0.3570216243294384,
+        0.04994184596338081,
+        -0.07889764766926746
+      ],
+      "end": [
+        -0.3512425876794558,
+        0.34997038453204576,
+        -0.12360089424406107
+      ],
+      "direction": "target -> object",
+      "phase_overrides": {},
+      "review_reason": "Three complete alternating transfers independently verified in video contact sheet and denser placement review; final release is visible before clip ends. Pickup is approximate measured lift onset; release is approximate video annotation. Stationary detector merges transfers because resting position jitter exceeds its threshold. Endpoints use measured resting medians. Inner transport phases remain automatic and need semantic review."
+    },
+    {
+      "start_time": 39.985,
+      "end_time": 57.62666666666667,
+      "pickup_time": 42.586666666666666,
+      "release_time": 56.593333333333334,
+      "start": [
+        -0.3512425876794558,
+        0.34997038453204576,
+        -0.12360089424406107
+      ],
+      "end": [
+        -0.3455190773576847,
+        0.05432991391094802,
+        -0.07036877579860995
+      ],
+      "direction": "object -> target",
+      "phase_overrides": {},
+      "review_reason": "Three complete alternating transfers independently verified in video contact sheet and denser placement review; final release is visible before clip ends. Pickup is approximate measured lift onset; release is approximate video annotation. Stationary detector merges transfers because resting position jitter exceeds its threshold. Endpoints use measured resting medians. Inner transport phases remain automatic and need semantic review."
+    }
+  ]
+}
