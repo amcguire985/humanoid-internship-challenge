@@ -160,7 +160,7 @@ def pose_fields(transform):
 def main():
     root = Path(__file__).resolve().parents[1]
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--video", type=Path, default=root / "videos/test_001_static.MOV")
+    p.add_argument("--video", type=Path, default=Path("test_001_static.MOV"))
     p.add_argument("--calibration", type=Path, default=root / "results/camera_calibration_portrait/calibration.json")
     p.add_argument("--tag-size", type=float, default=0.078, help="Outer black-square side in metres")
     p.add_argument("--tag-size-convention", choices=["border", "full-pattern"], default="border", help="Full-pattern supported for Standard41h12 (pose border = 5/9 of pattern)")
@@ -174,6 +174,7 @@ def main():
     p.add_argument("--max-reprojection-error", type=float, default=3.0, help="Pose acceptance threshold in pixels")
     p.add_argument("--output", type=Path, default=root / "results/test_001_tracking")
     p.add_argument("--no-video", action="store_true")
+    p.add_argument("--video-output", type=Path, help="External overlay MP4 path; defaults to HUMANOID_VIDEO_ROOT/processed/<run>/annotated.mp4")
     p.add_argument("--multi-tag-raw", action="store_true", help="Raw configurable world/cube/wrist/target tags; no inference, rejection threshold, filling or filtering")
     p.add_argument("--world-ids", type=int, nargs="+", default=[0, 1, 2, 3])
     p.add_argument("--cube-ids", type=int, nargs="+", default=[4, 5, 6])
@@ -185,6 +186,13 @@ def main():
     p.add_argument("--cube-edge", type=float, help="Cube edge in metres; export raw centre position assuming centred flush face tags")
     p.add_argument("--hand-edge", type=float, default=0.045, help="Wrist cube edge in metres (default 45 mm); assumes centred flush face tags 7-8")
     a = p.parse_args()
+    from video_paths import resolve_video, output_video
+    try:
+        a.video = resolve_video(a.video)
+        if not a.no_video:
+            a.video_output = output_video(a.output, explicit=a.video_output)
+    except (ValueError, FileNotFoundError) as error:
+        p.error(str(error))
     if a.multi_tag_raw:
         from track_multitag_raw import run
         run(a)
@@ -230,7 +238,7 @@ def main():
     a.output.mkdir(parents=True, exist_ok=True)
     writer = None
     if not a.no_video:
-        writer = cv2.VideoWriter(str(a.output / "annotated.mp4"), cv2.VideoWriter_fourcc(*"mp4v"), fps, (width, height))
+        writer = cv2.VideoWriter(str(a.video_output), cv2.VideoWriter_fourcc(*"mp4v"), fps, (width, height))
         if not writer.isOpened():
             cap.release()
             raise RuntimeError("Could not open MP4 writer; use --no-video")
@@ -337,7 +345,7 @@ def main():
         plot_trajectory(object_rows, object_output, f"ID{a.object_id} object", f"ID{a.reference_id}")
     tracked = [r for r in rows if r["status"] == "tracked"]
     summary = {
-        "video": str(a.video), "calibration": str(a.calibration), "opencv_version": cv2.__version__,
+        "video": a.video.name, "annotated_video": str(a.video_output) if not a.no_video else None, "calibration": str(a.calibration), "opencv_version": cv2.__version__,
         "family": a.family, "tag_sizes_m": sizes, "input_tag_sizes_m": input_sizes, "tag_size_convention": a.tag_size_convention, "reference_id": a.reference_id,
         "moving_id": a.moving_id, "frames_processed": len(rows), "frames_tracked": len(tracked),
         "tracked_fraction": len(tracked) / len(rows), "detections_by_id": detections,

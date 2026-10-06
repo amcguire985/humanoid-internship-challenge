@@ -45,7 +45,11 @@ Primary metrics will include:
 - `PROJECT.md` — requirements, risks, current plan
 - `EXPERIMENTS.md` — experiment log and decisions
 - `scripts/` — code
-- `results/` — plots, images, videos
+- `results/` — plots, images, trajectory tables and metrics
+## External video storage
+
+Recordings and generated overlay videos live outside Git in Google Drive. Set `HUMANOID_VIDEO_ROOT` to the local or mounted Drive folder before running video tools. See [the storage setup and migration guide](docs/VIDEO_STORAGE.md). Existing commands can use recording names such as `data_003.MOV`; `--output` still selects the repository directory for CSV, JSON and plots.
+
 ## Camera calibration
 
 Install dependencies and run from the repository root:
@@ -53,7 +57,7 @@ Install dependencies and run from the repository root:
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
-.\.venv\Scripts\python.exe scripts/calibrate_camera.py --video videos/chessboard_calibration.MOV --frames 15 --seed 42 --orientation portrait
+.\.venv\Scripts\python.exe scripts/calibrate_camera.py --video chessboard_calibration.MOV --frames 15 --seed 42 --orientation portrait
 .\.venv\Scripts\python.exe scripts/calibrate_camera.py --orientation landscape
 ```
 
@@ -64,7 +68,7 @@ A uniform change to square size changes the estimated translations' metric
 scale; the intrinsic matrix and distortion should remain effectively unchanged.
 
 The portrait result now uses 15 random usable frames from
-`videos/chessboard_calibration.MOV`, with seed 42. Sampling proceeds without
+`chessboard_calibration.MOV`, with seed 42. Sampling proceeds without
 replacement and skips frames where the board cannot be detected. Video rotation
 metadata is applied to match the tracker; sampled and used frame indices are
 recorded in JSON. The landscape result retains the previous photo calibration with its original 3 cm square size.
@@ -186,9 +190,9 @@ squares, 7.8 cm AprilTag sides, and strict matching of 1080 x 1920 frames.
 | test_002_static.MOV | 166/166 (100%) | results/test_002_static_tracking |
 | test_003_static_camera_moving.MOV | 324/405 (80%) | results/test_003_static_camera_moving_tracking |
 
-Each output contains annotated.mp4, trajectory.csv, trajectory.png, preview.jpg,
-and summary.json. Run with `--tag-size 0.078 --calibration-fit strict`,
-`--video videos/VIDEO.MOV`, and a separate `--output` directory.
+Each results directory contains trajectory.csv, trajectory.png, preview.jpg,
+and summary.json. The annotated.mp4 overlay is saved in external video storage. Run with `--tag-size 0.078 --calibration-fit strict`,
+`--video VIDEO.MOV`, and a separate `--output` directory.
 
 ## Trajectory postprocessing
 
@@ -227,7 +231,7 @@ Validation: `python -m unittest discover -s tests -v`.
 ## Hand and object tracking (test_004)
 
 ```powershell
-.\.venv\Scripts\python.exe scripts/track_apriltags.py --video videos/test_004_hand.MOV --family Standard41h12 --tag-size 0.06 --tag-size-convention full-pattern --reference-id 0 --moving-id 1 --object-id 2 --calibration-fit strict --output results/test_004_hand_tracking
+.\.venv\Scripts\python.exe scripts/track_apriltags.py --video test_004_hand.MOV --family Standard41h12 --tag-size 0.06 --tag-size-convention full-pattern --reference-id 0 --moving-id 1 --object-id 2 --calibration-fit strict --output results/test_004_hand_tracking
 .\.venv\Scripts\python.exe scripts/postprocess_trajectory.py results/test_004_hand_tracking/trajectory.csv --tau 0.05
 .\.venv\Scripts\python.exe scripts/postprocess_trajectory.py results/test_004_hand_tracking/object/trajectory.csv --tau 0.05
 ```
@@ -329,7 +333,7 @@ and [forward-backward SOS filtering](https://docs.scipy.org/doc/scipy/reference/
 ## Raw multi-tag tracking (test_005)
 
 ```powershell
-.\.venv\Scripts\python.exe scripts/track_apriltags.py --multi-tag-raw --video videos/test_005_more_tags.MOV --family Standard41h12 --tag-size-convention full-pattern --world-size 0.060 --body-size 0.040 --calibration-fit strict --output results/test_005_more_tags_raw
+.\.venv\Scripts\python.exe scripts/track_apriltags.py --multi-tag-raw --video test_005_more_tags.MOV --family Standard41h12 --tag-size-convention full-pattern --world-size 0.060 --body-size 0.040 --calibration-fit strict --output results/test_005_more_tags_raw
 ```
 
 World tags 0-3 are stationary, cube face tags are 4-6, and wrist tags are 7-8.
@@ -544,7 +548,7 @@ The small functions in `describe_object_trajectory.py` are:
 ## World and target tracking (test_007)
 
 ```powershell
-.\.venv\Scripts\python.exe scripts/track_apriltags.py --multi-tag-raw --video videos/test_007_block_only.MOV --calibration results/camera_calibration_landscape/calibration.json --family Standard41h12 --tag-size-convention full-pattern --world-ids 0 1 --target-id 2 --hand-ids --world-size 0.060 --body-size 0.040 --cube-edge 0.045 --calibration-fit center-crop --output results/test_007_block_only_raw
+.\.venv\Scripts\python.exe scripts/track_apriltags.py --multi-tag-raw --video test_007_block_only.MOV --calibration results/camera_calibration_landscape/calibration.json --family Standard41h12 --tag-size-convention full-pattern --world-ids 0 1 --target-id 2 --hand-ids --world-size 0.060 --body-size 0.040 --cube-edge 0.045 --calibration-fit center-crop --output results/test_007_block_only_raw
 ```
 
 IDs 0 and 1 supply the stationary world reference; ID0 remains the origin.
@@ -728,7 +732,7 @@ reset preparation. See [the experiment guide](docs/LIBERO_BC_BASELINE.md) and
 `data_001.MOV` uses the existing test_007 AprilTag configuration. Tracking stays unchanged:
 
 ```powershell
-.\.venv\Scripts\python.exe scripts/track_apriltags.py --multi-tag-raw --video videos/data_001.MOV --calibration results/camera_calibration_landscape/calibration.json --family Standard41h12 --tag-size-convention full-pattern --world-ids 0 1 --target-id 2 --hand-ids --world-size 0.060 --body-size 0.040 --cube-edge 0.045 --calibration-fit center-crop --output results/data_001_raw
+.\.venv\Scripts\python.exe scripts/track_apriltags.py --multi-tag-raw --video data_001.MOV --calibration results/camera_calibration_landscape/calibration.json --family Standard41h12 --tag-size-convention full-pattern --world-ids 0 1 --target-id 2 --hand-ids --world-size 0.060 --body-size 0.040 --cube-edge 0.045 --calibration-fit center-crop --output results/data_001_raw
 .\.venv\Scripts\python.exe scripts/extract_transfer_demos.py results/data_001_raw --config config/data_001_demos.json --output results/data_001_demos
 ```
 
@@ -740,10 +744,10 @@ Normalization translates the measured resting start to the origin, aligns longit
 
 Edit `config/data_001_demos.json` to adjust segment windows, resting endpoints, directions, `pickup_time` and `release_time`. Per-transfer `phase_overrides` accepts `pickup_time`, `transport_start`, `transport_end`, and `release_time` in absolute video seconds. Requested event times snap to source timestamps using the existing phase routine. Metadata retains automatic estimates and timing sources. Object-motion estimates do not detect contact; review grasp/release semantics against video before robot use. Landscape calibration/crop and world-Z gravity are still unverified, so even the gap-free candidate remains behind the geometry review gate. This step does not run LIBERO or training.
 
-For `videos/data_002.MOV`, the same tracker settings produced `results/data_002_raw/`. Reviewed transfer configuration is `config/data_002_demos.json`; exports, whole-video review images and per-transfer diagnostics are in `results/data_002_demos/`. See `results/data_002_demos/REPORT.md` for the independent export audit and quality assessment. Reprocess with the same extractor command above, replacing `data_001` with `data_002` in all paths.
+For `data_002.MOV`, the same tracker settings produced `results/data_002_raw/`. Reviewed transfer configuration is `config/data_002_demos.json`; exports, whole-video review images and per-transfer diagnostics are in `results/data_002_demos/`. See `results/data_002_demos/REPORT.md` for the independent export audit and quality assessment. Reprocess with the same extractor command above, replacing `data_001` with `data_002` in all paths.
 
-The short `videos/test__008_shutterspeed500.MOV` test uses the same tracker and cleaner. Outputs are in `results/test_008_raw/` and `results/test_008_demos/`; `results/test_008_demos/REPORT.md` records coverage, one video-complete transfer, remaining tracking gaps and its export audit. Timing overrides are in `config/test_008_demos.json`.
+The short `test__008_shutterspeed500.MOV` test uses the same tracker and cleaner. Outputs are in `results/test_008_raw/` and `results/test_008_demos/`; `results/test_008_demos/REPORT.md` records coverage, one video-complete transfer, remaining tracking gaps and its export audit. Timing overrides are in `config/test_008_demos.json`.
 
-`videos/data_003.MOV` was processed with the same tracker and cleaner. Its three video-reviewed transfers and diagnostics are in `results/data_003_demos/`; raw outputs are in `results/data_003_raw/`. See `results/data_003_demos/REPORT.md` for coverage, metrics and the export audit. Edit `config/data_003_demos.json` for timing overrides.
+`data_003.MOV` was processed with the same tracker and cleaner. Its three video-reviewed transfers and diagnostics are in `results/data_003_demos/`; raw outputs are in `results/data_003_raw/`. See `results/data_003_demos/REPORT.md` for coverage, metrics and the export audit. Edit `config/data_003_demos.json` for timing overrides.
 
 Manual `data_003` annotations and the single-attempt Colab recording workflow are documented in [docs/DATA_003_COLAB.md](docs/DATA_003_COLAB.md). Edit one JSON file per demo in `config/data_003_annotations/`, then regenerate with `scripts/annotate_transfer_demos.py`. Windows performs preparation only; physical LIBERO rollouts run in the validated Colab micromamba environment. No training is included.

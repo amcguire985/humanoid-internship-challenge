@@ -61,3 +61,5 @@ The local `results/libero_robot_dataset_multi_demo/summary.json` records this in
 The recorder updates the combined dataset after each attempt, including source-human identity and hashes. No SmolVLA/LeRobot training or evaluation is part of this step.
 
 Validation: six new annotation/direction tests and five existing retargeting mathematics/loader tests passed without LIBERO. Both baseline HDF5 episodes passed the existing episode validator. The core controller and original two episodes are unchanged.
+
+Video recordings and overlays are now stored outside Git: see [external video storage](VIDEO_STORAGE.md) for the Google Drive mount and `HUMANOID_VIDEO_ROOT` setup. Prepared trajectories and annotations do not require downloading the original video for retargeting.

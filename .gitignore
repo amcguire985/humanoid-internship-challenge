@@ -1,2 +1,11 @@
-﻿.venv/
+ï»¿.venv/
 __pycache__/
+
+# All raw recordings and generated videos are stored externally (Google Drive).
+*.[mM][oO][vV]
+*.[mM][pP]4
+*.[aA][vV][iI]
+*.[mM][kK][vV]
+*.[wW][eE][bB][mM]
+*.[mM]4[vV]
+videos/
