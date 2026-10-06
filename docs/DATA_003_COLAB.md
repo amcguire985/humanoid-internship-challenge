@@ -1,4 +1,4 @@
-﻿# data_003: manual annotations and Colab handoff
+# data_003: manual annotations and Colab handoff
 
 Windows preparation is complete. No physical LIBERO rollout or training has run for these demos. Simulation/recording runs only in the validated Google Colab Python 3.8 micromamba runtime; Windows is reserved for video processing, annotations, dataset preparation and tests without LIBERO.
 
@@ -23,11 +23,15 @@ Run preparation on Windows after editing annotations:
 .\.venv\Scripts\python.exe -m unittest discover -s tests -p test_transfer_annotations.py -v
 ```
 
-In Colab, after pulling this commit:
+GitHub rejected the original main push because an earlier unpublished commit contains oversized videos. Local main is preserved. The supported handoff branch is `colab/data-003-annotations`, based on remote main plus the current task files and the existing multi-transfer extractor/tests. The oversized earlier video blobs are not part of this branch.
+
+In Colab:
 
 ```python
 %cd /content/humanoid-internship-challenge
-!git pull --ff-only
+!git fetch origin
+!git switch colab/data-003-annotations
+!git pull --ff-only origin colab/data-003-annotations
 !MUJOCO_GL=osmesa /content/micromamba/envs/libero/bin/python scripts/annotate_transfer_demos.py
 !MUJOCO_GL=osmesa /content/micromamba/envs/libero/bin/python scripts/plan_transfer_rollouts.py
 # Review mapping_preview.json and optional transport timing fields before consuming any attempt.
