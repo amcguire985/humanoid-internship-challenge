@@ -1,0 +1,5 @@
+﻿from pathlib import Path
+p=Path('scripts/extract_transfer_demos.py'); s=p.read_text()
+s=s.replace("'source_video':summary['video'],'source_tracking':str(source),", "'source_video':summary['video'],'source_tracking':str(source),\n            'usable_for_retargeting':not flags and c['calibration_verified'] and c['vertical_verified'],\n            'geometry_review_required':not(c['calibration_verified'] and c['vertical_verified']),\n            'phase_boundary_sources':{k:('manual_override' if k in item.get('phase_overrides',{}) else 'reviewed_motion_bracket' if k in ('pickup_time','release_time') else 'automatic_clamped_to_carry_interval') for k in bounds},\n            'active_tracking_gaps':[dict(start_time_s=float(tt[g[0]]),end_time_s=float(tt[g[-1]]),missing_frames=len(g),missing_duration_s=float(tt[g[-1]]-tt[g[0]]+np.median(np.diff(tt)))) for g in segments(tt,active & ~valid,c['max_gap_span'])],")
+s=s.replace("accepted=sum(not r['reject'] for r in reports),", "accepted=sum(not r['reject'] for r in reports),usable_for_retargeting=sum(r['usable_for_retargeting'] for r in reports),")
+p.write_text(s)

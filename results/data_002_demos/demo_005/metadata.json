@@ -1,0 +1,152 @@
+{
+  "pickup_to_release_path_length": 0.07458892217557962,
+  "pickup_to_release_duration": 8.703333333333333,
+  "object_start_position": [
+    -0.34405301955107986,
+    0.23609338032471902,
+    -0.13476222434825666
+  ],
+  "goal_position": [
+    -0.3956968716440191,
+    0.011187280230766374,
+    -0.11310907143519794
+  ],
+  "final_object_position": [
+    -0.39645733173583664,
+    0.011992672328393598,
+    -0.11104685342149394
+  ],
+  "start_sample_time": 64.39666666666668,
+  "final_sample_time": 66.99833333333333,
+  "task_displacement": [
+    -0.05164385209293926,
+    -0.22490610009395265,
+    0.02165315291305872
+  ],
+  "start_to_goal_distance": 0.2317729499953451,
+  "final_placement_error": 0.002340875716097025,
+  "final_planar_placement_error": 0.001107680451288857,
+  "final_inside_goal_region": true,
+  "final_distance_outside_goal_region": 0.0,
+  "final_goal_height_error": 0.002062218013704001,
+  "max_lift_height": 0.0,
+  "max_lift_height_entire_clip": 0.010370821564574015,
+  "transport_path_length": 0.0014511747839517201,
+  "transport_duration": 0.03333333333333144,
+  "transport_observed_duration": 0.03333333333333144,
+  "average_transport_speed": 0.043535243518554076,
+  "maximum_transport_speed": 0.043535243518554076,
+  "transport_complete": true,
+  "pickup_time": 56.29333333333334,
+  "transport_start": 64.96333333333334,
+  "transport_end": 64.99666666666667,
+  "release_time": 64.99666666666667,
+  "id": "demo_005",
+  "direction": "object -> target",
+  "planar_distance_m": 0.23075927135971902,
+  "world_xy_direction_deg": -102.93230532967287,
+  "maximum_lift_m": 0.03397507829193484,
+  "path_length_m": 0.07458892217557962,
+  "automatic_phase_estimates": {
+    "pickup_time": 64.39666666666668,
+    "transport_start": 64.96333333333334,
+    "transport_end": 65.76333333333334,
+    "release_time": 66.99833333333333
+  },
+  "phase_review_notes": [
+    "Pickup lacks a sustained adjacent stationary period; estimated motion onset only.",
+    "Release lacks a sustained adjacent stationary period; estimated motion end only."
+  ],
+  "rejection_reasons": [
+    "Unfilled tracking gap during pickup-to-release; reject for retargeting."
+  ],
+  "reject": true,
+  "missing_active_frames": 243,
+  "interpolated_frames": 0,
+  "parameters": {
+    "goal_object_offset": [
+      -0.09,
+      0.09,
+      0.0
+    ],
+    "goal_offset_frame": "goal_tag",
+    "goal_offset_verified": true,
+    "goal_coplanar": true,
+    "goal_center_height": 0.0225,
+    "vertical_axis": "z",
+    "vertical_sign": 1,
+    "vertical_verified": false,
+    "calibration_verified": false,
+    "max_reprojection_error": 3.0,
+    "max_speed": 2.0,
+    "max_gap_frames": 3,
+    "max_gap_span": 0.15,
+    "smoothing_window": 7,
+    "stationary_speed": 0.03,
+    "vertical_speed": 0.03,
+    "min_motion_duration": 0.2,
+    "stationary_duration": 0.3,
+    "goal_radius": 0.06,
+    "max_goal_scatter": 0.02,
+    "min_coverage": 0.9,
+    "phase_overrides": {
+      "pickup_time": 56.29333333333334,
+      "release_time": 64.99666666666667,
+      "transport_start": 64.96333333333334,
+      "transport_end": 64.99666666666667
+    },
+    "phase_override_reason": "Seven complete alternating transfers confirmed in 2-second video contact sheets and 1-second placement review. Approximate pickup-to-release brackets include visible carrying and release. Automatic stationary segmentation is incomplete due occlusion and pose jitter. Timing annotations are reviewable, not contact ground truth.",
+    "grasp_time_seconds": null,
+    "release_time_seconds": null,
+    "transport_start_time_seconds": null,
+    "transport_end_time_seconds": null
+  },
+  "selection": {
+    "start_time": 54.99166666666667,
+    "end_time": 66.99833333333333,
+    "pickup_time": 56.29333333333334,
+    "release_time": 64.99666666666667,
+    "start": [
+      -0.34405301955107986,
+      0.23609338032471902,
+      -0.13476222434825666
+    ],
+    "end": [
+      -0.3956968716440191,
+      0.011187280230766374,
+      -0.11310907143519794
+    ],
+    "direction": "object -> target",
+    "review_reason": "Seven complete alternating transfers confirmed in 2-second video contact sheets and 1-second placement review. Approximate pickup-to-release brackets include visible carrying and release. Automatic stationary segmentation is incomplete due occlusion and pose jitter. Timing annotations are reviewable, not contact ground truth.",
+    "phase_overrides": {}
+  },
+  "target_anchor": [
+    -0.4266987398379571,
+    0.0004940504487724456,
+    0.0225
+  ],
+  "coordinate_frame_convention": "W is ID0 centre: +X decoded corner0 to corner1; +Y corner3 to corner0; +Z out of printed face. Standard41 corners reordered [1,0,3,2] for OpenCV IPPE. W_T_tag = inverse(C_T_W) @ C_T_tag. World ID1 is registered to ID0. World axes are not gravity-calibrated. Object centre = face centre minus edge/2 along outward tag Z; common object orientation is unspecified.",
+  "source_video": "videos\\data_002.MOV",
+  "source_tracking": "results\\data_002_raw",
+  "usable_for_retargeting": false,
+  "geometry_review_required": true,
+  "phase_boundary_sources": {
+    "pickup_time": "reviewed_motion_bracket",
+    "transport_start": "automatic_clamped_to_carry_interval",
+    "transport_end": "automatic_clamped_to_carry_interval",
+    "release_time": "reviewed_motion_bracket"
+  },
+  "active_tracking_gaps": [
+    {
+      "start_time_s": 56.29333333333334,
+      "end_time_s": 64.36333333333334,
+      "missing_frames": 243,
+      "missing_duration_s": 8.103333333333339
+    }
+  ],
+  "normalization": "Start origin; longitudinal toward measured endpoint, lateral left, signed world Z; divide lengths by planar displacement. Missing rows preserved. No endpoint correction.",
+  "limitations": [
+    "Motion timings do not measure grasp/contact.",
+    "Inherited landscape calibration/crop and world Z gravity direction remain unverified."
+  ]
+}

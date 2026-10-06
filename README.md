@@ -722,3 +722,24 @@ small CNN plus proprioception MLP. `scripts/evaluate_libero_bc.py` evaluates the
 learned policy at the nominal and +2 cm X starts without scripted control after
 reset preparation. See [the experiment guide](docs/LIBERO_BC_BASELINE.md) and
 [results](results/libero_bc_baseline/README.md).
+
+## Multi-transfer human video extraction
+
+`data_001.MOV` uses the existing test_007 AprilTag configuration. Tracking stays unchanged:
+
+```powershell
+.\.venv\Scripts\python.exe scripts/track_apriltags.py --multi-tag-raw --video videos/data_001.MOV --calibration results/camera_calibration_landscape/calibration.json --family Standard41h12 --tag-size-convention full-pattern --world-ids 0 1 --target-id 2 --hand-ids --world-size 0.060 --body-size 0.040 --cube-edge 0.045 --calibration-fit center-crop --output results/data_001_raw
+.\.venv\Scripts\python.exe scripts/extract_transfer_demos.py results/data_001_raw --config config/data_001_demos.json --output results/data_001_demos
+```
+
+The extractor calls the existing `clean_trajectory`: reprojection rejection, isolated spike rejection, bounded interpolation (at most 3 missing frames and 0.15 seconds between anchors), and SG7 smoothing independently within continuous segments. Raw tracking is preserved. `automatic_candidates.json` retains stationary-based proposals; this video's first three transfers were merged by the automatic detector because resting poses were noisy. Seven reviewed splits and alternating directions are therefore recorded explicitly in the configuration.
+
+Each `demo_NNN` contains `processed_demo.csv` (authoritative smoothed object coordinates with validity/provenance), `transport.csv` (pickup through release, including missing rows), `raw_trajectory.csv`, `cleaned_trajectory.csv` (rejected measurements before filling/smoothing), `normalized_task_trajectory.csv`, `metadata.json`, and `diagnostic.png`. Start/end positions are robust measured resting positions, rather than forced target-tag positions. The fixed target anchor is retained separately. Path length sums only valid adjacent edges; missing active samples reject a transfer. Lift maxima in rejected transfers are maxima of available observations, and path lengths are partial observed paths.
+
+Normalization translates the measured resting start to the origin, aligns longitudinal XY with the measured start-to-end displacement, uses perpendicular-left XY for lateral motion and configured signed Z for lift, then divides all lengths by horizontal task distance. Time is normalized using pickup/release; stationary context may have times outside [0,1]. No resampling, endpoint correction, hand inference, or motion across large gaps is introduced.
+
+Edit `config/data_001_demos.json` to adjust segment windows, resting endpoints, directions, `pickup_time` and `release_time`. Per-transfer `phase_overrides` accepts `pickup_time`, `transport_start`, `transport_end`, and `release_time` in absolute video seconds. Requested event times snap to source timestamps using the existing phase routine. Metadata retains automatic estimates and timing sources. Object-motion estimates do not detect contact; review grasp/release semantics against video before robot use. Landscape calibration/crop and world-Z gravity are still unverified, so even the gap-free candidate remains behind the geometry review gate. This step does not run LIBERO or training.
+
+For `videos/data_002.MOV`, the same tracker settings produced `results/data_002_raw/`. Reviewed transfer configuration is `config/data_002_demos.json`; exports, whole-video review images and per-transfer diagnostics are in `results/data_002_demos/`. See `results/data_002_demos/REPORT.md` for the independent export audit and quality assessment. Reprocess with the same extractor command above, replacing `data_001` with `data_002` in all paths.
+
+The short `videos/test__008_shutterspeed500.MOV` test uses the same tracker and cleaner. Outputs are in `results/test_008_raw/` and `results/test_008_demos/`; `results/test_008_demos/REPORT.md` records coverage, one video-complete transfer, remaining tracking gaps and its export audit. Timing overrides are in `config/test_008_demos.json`.

@@ -1,0 +1,149 @@
+{
+  "processing": {
+    "goal_object_offset": [
+      -0.09,
+      0.09,
+      0.0
+    ],
+    "goal_offset_verified": true,
+    "goal_coplanar": true,
+    "goal_center_height": 0.0225,
+    "goal_radius": 0.06,
+    "stationary_duration": 0.3
+  },
+  "demonstrations": [
+    {
+      "start_time": 0.0,
+      "end_time": 16.508333333333333,
+      "pickup_time": 4.135000000000001,
+      "release_time": 11.005,
+      "start": [
+        -0.1640877350467573,
+        0.3014293894669934,
+        -0.09494183608999535
+      ],
+      "end": [
+        -0.348089227856347,
+        0.04086760390732167,
+        -0.11039258537040596
+      ],
+      "direction": "object -> target",
+      "review_reason": "Transfer identity/direction reviewed in video contact sheet and full measured trajectory. Motion onset/end timings are approximate; edit phase_overrides for contact-reviewed boundaries. Early quiet detection failed due pose jitter; seven transfers selected explicitly.",
+      "phase_overrides": {}
+    },
+    {
+      "start_time": 16.508333333333333,
+      "end_time": 27.011666666666667,
+      "pickup_time": 17.208333333333336,
+      "release_time": 24.511666666666667,
+      "start": [
+        -0.3401565639165328,
+        0.0437631804620958,
+        -0.10832348148208919
+      ],
+      "end": [
+        -0.43874544629971324,
+        0.30300098982940527,
+        -0.17613459042433677
+      ],
+      "direction": "target -> object",
+      "review_reason": "Transfer identity/direction reviewed in video contact sheet and full measured trajectory. Motion onset/end timings are approximate; edit phase_overrides for contact-reviewed boundaries. Early quiet detection failed due pose jitter; seven transfers selected explicitly.",
+      "phase_overrides": {}
+    },
+    {
+      "start_time": 27.011666666666667,
+      "end_time": 40.985,
+      "pickup_time": 28.713333333333335,
+      "release_time": 36.21666666666667,
+      "start": [
+        -0.4509569091066267,
+        0.28621748935060026,
+        -0.18033954648478812
+      ],
+      "end": [
+        -0.3939253979000851,
+        0.016893383495385886,
+        -0.09843910139001122
+      ],
+      "direction": "object -> target",
+      "review_reason": "Transfer identity/direction reviewed in video contact sheet and full measured trajectory. Motion onset/end timings are approximate; edit phase_overrides for contact-reviewed boundaries. Early quiet detection failed due pose jitter; seven transfers selected explicitly.",
+      "phase_overrides": {}
+    },
+    {
+      "start_time": 40.985,
+      "end_time": 50.99,
+      "pickup_time": 42.82,
+      "release_time": 48.155,
+      "start": [
+        -0.39266042404174495,
+        0.020876443950323068,
+        -0.09868908133114929
+      ],
+      "end": [
+        -0.08347722035210026,
+        0.25519444970269123,
+        -0.05954261207297655
+      ],
+      "direction": "target -> object",
+      "review_reason": "Transfer identity/direction reviewed in video contact sheet and full measured trajectory. Motion onset/end timings are approximate; edit phase_overrides for contact-reviewed boundaries. Early quiet detection failed due pose jitter; seven transfers selected explicitly.",
+      "phase_overrides": {}
+    },
+    {
+      "start_time": 50.99,
+      "end_time": 60.995000000000005,
+      "pickup_time": 52.525000000000006,
+      "release_time": 57.46,
+      "start": [
+        -0.08347722035210026,
+        0.25519444970269123,
+        -0.05954261207297655
+      ],
+      "end": [
+        -0.3617231118832773,
+        0.019901587592878786,
+        -0.09422517308248267
+      ],
+      "direction": "object -> target",
+      "review_reason": "Transfer identity/direction reviewed in video contact sheet and full measured trajectory. Motion onset/end timings are approximate; edit phase_overrides for contact-reviewed boundaries. Early quiet detection failed due pose jitter; seven transfers selected explicitly.",
+      "phase_overrides": {}
+    },
+    {
+      "start_time": 60.995000000000005,
+      "end_time": 71.5,
+      "pickup_time": 63.39666666666667,
+      "release_time": 67.99833333333333,
+      "start": [
+        -0.3617231118832773,
+        0.019901587592878786,
+        -0.09422517308248267
+      ],
+      "end": [
+        -0.5682200662522394,
+        0.1276392928781619,
+        -0.17094056777437555
+      ],
+      "direction": "target -> object",
+      "review_reason": "Transfer identity/direction reviewed in video contact sheet and full measured trajectory. Motion onset/end timings are approximate; edit phase_overrides for contact-reviewed boundaries. Early quiet detection failed due pose jitter; seven transfers selected explicitly.",
+      "phase_overrides": {}
+    },
+    {
+      "start_time": 71.5,
+      "end_time": 80.2366666666667,
+      "pickup_time": 72.93333333333334,
+      "release_time": 78.57000000000002,
+      "start": [
+        -0.5682200662522394,
+        0.1276392928781619,
+        -0.17094056777437555
+      ],
+      "end": [
+        -0.38257973842284954,
+        0.02082819426770832,
+        -0.11507647933935378
+      ],
+      "direction": "object -> target",
+      "review_reason": "Transfer identity/direction reviewed in video contact sheet and full measured trajectory. Motion onset/end timings are approximate; edit phase_overrides for contact-reviewed boundaries. Early quiet detection failed due pose jitter; seven transfers selected explicitly.",
+      "phase_overrides": {}
+    }
+  ]
+}

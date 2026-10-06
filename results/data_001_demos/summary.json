@@ -1,0 +1,1520 @@
+{
+  "source": "results\\data_001_raw",
+  "target_estimation": {
+    "accepted_samples": 2255,
+    "method": "Fixed componentwise median of transformed goal observations; yaw-only / z=0 projection",
+    "coplanar_with_world": true,
+    "goal_area_center": [
+      -0.42562285134875605,
+      -0.0018974833293795845,
+      0.0
+    ],
+    "desired_object_center_height_m": 0.0225,
+    "anchor_before_time": null,
+    "stationary_during_manipulation": true,
+    "scatter_p95_m": 0.018043638658596556,
+    "max_scatter_m": 0.027771111860997132,
+    "raw_plane_z_median_m": -0.15006083111997037,
+    "raw_plane_tilt_median_deg": 10.309145736035896
+  },
+  "demonstrations": [
+    {
+      "pickup_to_release_path_length": 0.3501163898135935,
+      "pickup_to_release_duration": 6.87,
+      "object_start_position": [
+        -0.1640877350467573,
+        0.3014293894669934,
+        -0.09494183608999535
+      ],
+      "goal_position": [
+        -0.348089227856347,
+        0.04086760390732167,
+        -0.11039258537040596
+      ],
+      "final_object_position": [
+        -0.3460203239170858,
+        0.04407952778361196,
+        -0.11171988205011252
+      ],
+      "start_sample_time": 0.0,
+      "final_sample_time": 16.508333333333333,
+      "task_displacement": [
+        -0.1840014928095897,
+        -0.2605617855596717,
+        -0.015450749280410611
+      ],
+      "start_to_goal_distance": 0.3193551613854518,
+      "final_placement_error": 0.004044568576861335,
+      "final_planar_placement_error": 0.0038205782935275727,
+      "final_inside_goal_region": true,
+      "final_distance_outside_goal_region": 0.0,
+      "final_goal_height_error": 0.0013272966797065605,
+      "max_lift_height": 0.14970105275719478,
+      "max_lift_height_entire_clip": 0.14970105275719478,
+      "transport_path_length": 0.08077740672320985,
+      "transport_duration": 4.168333333333334,
+      "transport_observed_duration": 0.1999999999999993,
+      "average_transport_speed": 0.40388703361605066,
+      "maximum_transport_speed": 0.5927811692590901,
+      "transport_complete": false,
+      "pickup_time": 4.135000000000001,
+      "transport_start": 6.303333333333334,
+      "transport_end": 10.471666666666668,
+      "release_time": 11.005,
+      "id": "demo_001",
+      "direction": "object -> target",
+      "planar_distance_m": 0.31898118040129236,
+      "world_xy_direction_deg": -125.22867608963149,
+      "maximum_lift_m": 0.14674952131876112,
+      "path_length_m": 0.3501163898135935,
+      "automatic_phase_estimates": {
+        "pickup_time": 4.168333333333334,
+        "transport_start": 6.303333333333334,
+        "transport_end": 10.471666666666668,
+        "release_time": 16.508333333333333
+      },
+      "phase_review_notes": [
+        "Release lacks a sustained adjacent stationary period; estimated motion end only."
+      ],
+      "rejection_reasons": [
+        "Unfilled tracking gap during pickup-to-release; reject for retargeting."
+      ],
+      "reject": true,
+      "missing_active_frames": 116,
+      "interpolated_frames": 8,
+      "parameters": {
+        "goal_object_offset": [
+          -0.09,
+          0.09,
+          0.0
+        ],
+        "goal_offset_frame": "goal_tag",
+        "goal_offset_verified": true,
+        "goal_coplanar": true,
+        "goal_center_height": 0.0225,
+        "vertical_axis": "z",
+        "vertical_sign": 1,
+        "vertical_verified": false,
+        "calibration_verified": false,
+        "max_reprojection_error": 3.0,
+        "max_speed": 2.0,
+        "max_gap_frames": 3,
+        "max_gap_span": 0.15,
+        "smoothing_window": 7,
+        "stationary_speed": 0.03,
+        "vertical_speed": 0.03,
+        "min_motion_duration": 0.2,
+        "stationary_duration": 0.3,
+        "goal_radius": 0.06,
+        "max_goal_scatter": 0.02,
+        "min_coverage": 0.9,
+        "phase_overrides": {
+          "pickup_time": 4.135000000000001,
+          "release_time": 11.005,
+          "transport_start": 6.303333333333334,
+          "transport_end": 10.471666666666668
+        },
+        "phase_override_reason": "Transfer identity/direction reviewed in video contact sheet and full measured trajectory. Motion onset/end timings are approximate; edit phase_overrides for contact-reviewed boundaries. Early quiet detection failed due pose jitter; seven transfers selected explicitly.",
+        "grasp_time_seconds": null,
+        "release_time_seconds": null,
+        "transport_start_time_seconds": null,
+        "transport_end_time_seconds": null
+      },
+      "selection": {
+        "start_time": 0.0,
+        "end_time": 16.508333333333333,
+        "pickup_time": 4.135000000000001,
+        "release_time": 11.005,
+        "start": [
+          -0.1640877350467573,
+          0.3014293894669934,
+          -0.09494183608999535
+        ],
+        "end": [
+          -0.348089227856347,
+          0.04086760390732167,
+          -0.11039258537040596
+        ],
+        "direction": "object -> target",
+        "review_reason": "Transfer identity/direction reviewed in video contact sheet and full measured trajectory. Motion onset/end timings are approximate; edit phase_overrides for contact-reviewed boundaries. Early quiet detection failed due pose jitter; seven transfers selected explicitly.",
+        "phase_overrides": {}
+      },
+      "target_anchor": [
+        -0.42562285134875605,
+        -0.0018974833293795845,
+        0.0225
+      ],
+      "coordinate_frame_convention": "W is ID0 centre: +X decoded corner0 to corner1; +Y corner3 to corner0; +Z out of printed face. Standard41 corners reordered [1,0,3,2] for OpenCV IPPE. W_T_tag = inverse(C_T_W) @ C_T_tag. World ID1 is registered to ID0. World axes are not gravity-calibrated. Object centre = face centre minus edge/2 along outward tag Z; common object orientation is unspecified.",
+      "source_video": "videos\\data_001.MOV",
+      "source_tracking": "results\\data_001_raw",
+      "usable_for_retargeting": false,
+      "geometry_review_required": true,
+      "phase_boundary_sources": {
+        "pickup_time": "reviewed_motion_bracket",
+        "transport_start": "automatic_clamped_to_carry_interval",
+        "transport_end": "automatic_clamped_to_carry_interval",
+        "release_time": "reviewed_motion_bracket"
+      },
+      "active_tracking_gaps": [
+        {
+          "start_time_s": 6.336666666666667,
+          "end_time_s": 6.503333333333334,
+          "missing_frames": 6,
+          "missing_duration_s": 0.20000000000000018
+        },
+        {
+          "start_time_s": 6.57,
+          "end_time_s": 8.736666666666666,
+          "missing_frames": 66,
+          "missing_duration_s": 2.1999999999999993
+        },
+        {
+          "start_time_s": 8.870000000000001,
+          "end_time_s": 10.305000000000001,
+          "missing_frames": 44,
+          "missing_duration_s": 1.4683333333333337
+        }
+      ],
+      "normalization": "Start origin; longitudinal toward measured endpoint, lateral left, signed world Z; divide lengths by planar displacement. Missing rows preserved. No endpoint correction.",
+      "limitations": [
+        "Motion timings do not measure grasp/contact.",
+        "Inherited landscape calibration/crop and world Z gravity direction remain unverified."
+      ]
+    },
+    {
+      "pickup_to_release_path_length": 0.7935483244308408,
+      "pickup_to_release_duration": 7.303333333333331,
+      "object_start_position": [
+        -0.3401565639165328,
+        0.0437631804620958,
+        -0.10832348148208919
+      ],
+      "goal_position": [
+        -0.43874544629971324,
+        0.30300098982940527,
+        -0.17613459042433677
+      ],
+      "final_object_position": [
+        -0.4448094806003187,
+        0.29384314200907097,
+        -0.17810647664682222
+      ],
+      "start_sample_time": 16.508333333333333,
+      "final_sample_time": 27.011666666666667,
+      "task_displacement": [
+        -0.09858888238318042,
+        0.25923780936730945,
+        -0.06781110894224758
+      ],
+      "start_to_goal_distance": 0.2855212006683627,
+      "final_placement_error": 0.011159167709724117,
+      "final_planar_placement_error": 0.010983564480591965,
+      "final_inside_goal_region": true,
+      "final_distance_outside_goal_region": 0.0,
+      "final_goal_height_error": 0.0019718862224854528,
+      "max_lift_height": 0.14177585980633362,
+      "max_lift_height_entire_clip": 0.14177585980633362,
+      "transport_path_length": 0.2924973777257206,
+      "transport_duration": 2.668333333333333,
+      "transport_observed_duration": 1.134999999999998,
+      "average_transport_speed": 0.2577069407275076,
+      "maximum_transport_speed": 0.7294181021038036,
+      "transport_complete": false,
+      "pickup_time": 17.208333333333336,
+      "transport_start": 19.175,
+      "transport_end": 21.843333333333334,
+      "release_time": 24.511666666666667,
+      "id": "demo_002",
+      "direction": "target -> object",
+      "planar_distance_m": 0.27735177939780026,
+      "world_xy_direction_deg": 110.8219529402136,
+      "maximum_lift_m": 0.1383794592383103,
+      "path_length_m": 0.7935483244308408,
+      "automatic_phase_estimates": {
+        "pickup_time": 16.64166666666667,
+        "transport_start": 19.175,
+        "transport_end": 21.843333333333334,
+        "release_time": 27.011666666666667
+      },
+      "phase_review_notes": [
+        "Pickup lacks a sustained adjacent stationary period; estimated motion onset only.",
+        "Release lacks a sustained adjacent stationary period; estimated motion end only."
+      ],
+      "rejection_reasons": [
+        "Unfilled tracking gap during pickup-to-release; reject for retargeting."
+      ],
+      "reject": true,
+      "missing_active_frames": 57,
+      "interpolated_frames": 18,
+      "parameters": {
+        "goal_object_offset": [
+          -0.09,
+          0.09,
+          0.0
+        ],
+        "goal_offset_frame": "goal_tag",
+        "goal_offset_verified": true,
+        "goal_coplanar": true,
+        "goal_center_height": 0.0225,
+        "vertical_axis": "z",
+        "vertical_sign": 1,
+        "vertical_verified": false,
+        "calibration_verified": false,
+        "max_reprojection_error": 3.0,
+        "max_speed": 2.0,
+        "max_gap_frames": 3,
+        "max_gap_span": 0.15,
+        "smoothing_window": 7,
+        "stationary_speed": 0.03,
+        "vertical_speed": 0.03,
+        "min_motion_duration": 0.2,
+        "stationary_duration": 0.3,
+        "goal_radius": 0.06,
+        "max_goal_scatter": 0.02,
+        "min_coverage": 0.9,
+        "phase_overrides": {
+          "pickup_time": 17.208333333333336,
+          "release_time": 24.511666666666667,
+          "transport_start": 19.175,
+          "transport_end": 21.843333333333334
+        },
+        "phase_override_reason": "Transfer identity/direction reviewed in video contact sheet and full measured trajectory. Motion onset/end timings are approximate; edit phase_overrides for contact-reviewed boundaries. Early quiet detection failed due pose jitter; seven transfers selected explicitly.",
+        "grasp_time_seconds": null,
+        "release_time_seconds": null,
+        "transport_start_time_seconds": null,
+        "transport_end_time_seconds": null
+      },
+      "selection": {
+        "start_time": 16.508333333333333,
+        "end_time": 27.011666666666667,
+        "pickup_time": 17.208333333333336,
+        "release_time": 24.511666666666667,
+        "start": [
+          -0.3401565639165328,
+          0.0437631804620958,
+          -0.10832348148208919
+        ],
+        "end": [
+          -0.43874544629971324,
+          0.30300098982940527,
+          -0.17613459042433677
+        ],
+        "direction": "target -> object",
+        "review_reason": "Transfer identity/direction reviewed in video contact sheet and full measured trajectory. Motion onset/end timings are approximate; edit phase_overrides for contact-reviewed boundaries. Early quiet detection failed due pose jitter; seven transfers selected explicitly.",
+        "phase_overrides": {}
+      },
+      "target_anchor": [
+        -0.42562285134875605,
+        -0.0018974833293795845,
+        0.0225
+      ],
+      "coordinate_frame_convention": "W is ID0 centre: +X decoded corner0 to corner1; +Y corner3 to corner0; +Z out of printed face. Standard41 corners reordered [1,0,3,2] for OpenCV IPPE. W_T_tag = inverse(C_T_W) @ C_T_tag. World ID1 is registered to ID0. World axes are not gravity-calibrated. Object centre = face centre minus edge/2 along outward tag Z; common object orientation is unspecified.",
+      "source_video": "videos\\data_001.MOV",
+      "source_tracking": "results\\data_001_raw",
+      "usable_for_retargeting": false,
+      "geometry_review_required": true,
+      "phase_boundary_sources": {
+        "pickup_time": "reviewed_motion_bracket",
+        "transport_start": "automatic_clamped_to_carry_interval",
+        "transport_end": "automatic_clamped_to_carry_interval",
+        "release_time": "reviewed_motion_bracket"
+      },
+      "active_tracking_gaps": [
+        {
+          "start_time_s": 17.208333333333336,
+          "end_time_s": 17.34166666666667,
+          "missing_frames": 5,
+          "missing_duration_s": 0.16666666666666785
+        },
+        {
+          "start_time_s": 17.975,
+          "end_time_s": 18.208333333333336,
+          "missing_frames": 8,
+          "missing_duration_s": 0.26666666666666927
+        },
+        {
+          "start_time_s": 20.17666666666667,
+          "end_time_s": 21.41,
+          "missing_frames": 38,
+          "missing_duration_s": 1.2666666666666657
+        },
+        {
+          "start_time_s": 21.51,
+          "end_time_s": 21.67666666666667,
+          "missing_frames": 6,
+          "missing_duration_s": 0.20000000000000284
+        }
+      ],
+      "normalization": "Start origin; longitudinal toward measured endpoint, lateral left, signed world Z; divide lengths by planar displacement. Missing rows preserved. No endpoint correction.",
+      "limitations": [
+        "Motion timings do not measure grasp/contact.",
+        "Inherited landscape calibration/crop and world Z gravity direction remain unverified."
+      ]
+    },
+    {
+      "pickup_to_release_path_length": 0.8434133136838555,
+      "pickup_to_release_duration": 7.503333333333334,
+      "object_start_position": [
+        -0.4509569091066267,
+        0.28621748935060026,
+        -0.18033954648478812
+      ],
+      "goal_position": [
+        -0.3939253979000851,
+        0.016893383495385886,
+        -0.09843910139001122
+      ],
+      "final_object_position": [
+        -0.3960999512034588,
+        0.022178119644765258,
+        -0.1002239650975897
+      ],
+      "start_sample_time": 27.011666666666667,
+      "final_sample_time": 40.985,
+      "task_displacement": [
+        0.05703151120654165,
+        -0.2693241058552144,
+        0.0819004450947769
+      ],
+      "start_to_goal_distance": 0.2872207342305481,
+      "final_placement_error": 0.0059868904025714,
+      "final_planar_placement_error": 0.005714640691921999,
+      "final_inside_goal_region": true,
+      "final_distance_outside_goal_region": 0.0,
+      "final_goal_height_error": 0.0017848637075784796,
+      "max_lift_height": 0.2932619927819887,
+      "max_lift_height_entire_clip": 0.2932619927819887,
+      "transport_path_length": 0.21823361201278935,
+      "transport_duration": 3.734999999999996,
+      "transport_observed_duration": 1.5999999999999979,
+      "average_transport_speed": 0.13639600750799352,
+      "maximum_transport_speed": 0.4498325717997055,
+      "transport_complete": false,
+      "pickup_time": 28.713333333333335,
+      "transport_start": 30.313333333333336,
+      "transport_end": 34.04833333333333,
+      "release_time": 36.21666666666667,
+      "id": "demo_003",
+      "direction": "object -> target",
+      "planar_distance_m": 0.27529632628353873,
+      "world_xy_direction_deg": -78.04378812811434,
+      "maximum_lift_m": 0.2954950626199546,
+      "path_length_m": 0.8434133136838555,
+      "automatic_phase_estimates": {
+        "pickup_time": 27.011666666666667,
+        "transport_start": 30.313333333333336,
+        "transport_end": 34.04833333333333,
+        "release_time": 40.985
+      },
+      "phase_review_notes": [
+        "Pickup lacks a sustained adjacent stationary period; estimated motion onset only.",
+        "Release lacks a sustained adjacent stationary period; estimated motion end only."
+      ],
+      "rejection_reasons": [
+        "Unfilled tracking gap during pickup-to-release; reject for retargeting."
+      ],
+      "reject": true,
+      "missing_active_frames": 62,
+      "interpolated_frames": 2,
+      "parameters": {
+        "goal_object_offset": [
+          -0.09,
+          0.09,
+          0.0
+        ],
+        "goal_offset_frame": "goal_tag",
+        "goal_offset_verified": true,
+        "goal_coplanar": true,
+        "goal_center_height": 0.0225,
+        "vertical_axis": "z",
+        "vertical_sign": 1,
+        "vertical_verified": false,
+        "calibration_verified": false,
+        "max_reprojection_error": 3.0,
+        "max_speed": 2.0,
+        "max_gap_frames": 3,
+        "max_gap_span": 0.15,
+        "smoothing_window": 7,
+        "stationary_speed": 0.03,
+        "vertical_speed": 0.03,
+        "min_motion_duration": 0.2,
+        "stationary_duration": 0.3,
+        "goal_radius": 0.06,
+        "max_goal_scatter": 0.02,
+        "min_coverage": 0.9,
+        "phase_overrides": {
+          "pickup_time": 28.713333333333335,
+          "release_time": 36.21666666666667,
+          "transport_start": 30.313333333333336,
+          "transport_end": 34.04833333333333
+        },
+        "phase_override_reason": "Transfer identity/direction reviewed in video contact sheet and full measured trajectory. Motion onset/end timings are approximate; edit phase_overrides for contact-reviewed boundaries. Early quiet detection failed due pose jitter; seven transfers selected explicitly.",
+        "grasp_time_seconds": null,
+        "release_time_seconds": null,
+        "transport_start_time_seconds": null,
+        "transport_end_time_seconds": null
+      },
+      "selection": {
+        "start_time": 27.011666666666667,
+        "end_time": 40.985,
+        "pickup_time": 28.713333333333335,
+        "release_time": 36.21666666666667,
+        "start": [
+          -0.4509569091066267,
+          0.28621748935060026,
+          -0.18033954648478812
+        ],
+        "end": [
+          -0.3939253979000851,
+          0.016893383495385886,
+          -0.09843910139001122
+        ],
+        "direction": "object -> target",
+        "review_reason": "Transfer identity/direction reviewed in video contact sheet and full measured trajectory. Motion onset/end timings are approximate; edit phase_overrides for contact-reviewed boundaries. Early quiet detection failed due pose jitter; seven transfers selected explicitly.",
+        "phase_overrides": {}
+      },
+      "target_anchor": [
+        -0.42562285134875605,
+        -0.0018974833293795845,
+        0.0225
+      ],
+      "coordinate_frame_convention": "W is ID0 centre: +X decoded corner0 to corner1; +Y corner3 to corner0; +Z out of printed face. Standard41 corners reordered [1,0,3,2] for OpenCV IPPE. W_T_tag = inverse(C_T_W) @ C_T_tag. World ID1 is registered to ID0. World axes are not gravity-calibrated. Object centre = face centre minus edge/2 along outward tag Z; common object orientation is unspecified.",
+      "source_video": "videos\\data_001.MOV",
+      "source_tracking": "results\\data_001_raw",
+      "usable_for_retargeting": false,
+      "geometry_review_required": true,
+      "phase_boundary_sources": {
+        "pickup_time": "reviewed_motion_bracket",
+        "transport_start": "automatic_clamped_to_carry_interval",
+        "transport_end": "automatic_clamped_to_carry_interval",
+        "release_time": "reviewed_motion_bracket"
+      },
+      "active_tracking_gaps": [
+        {
+          "start_time_s": 30.346666666666668,
+          "end_time_s": 31.915000000000003,
+          "missing_frames": 48,
+          "missing_duration_s": 1.6016666666666666
+        },
+        {
+          "start_time_s": 32.04833333333333,
+          "end_time_s": 32.48166666666667,
+          "missing_frames": 14,
+          "missing_duration_s": 0.46666666666666856
+        }
+      ],
+      "normalization": "Start origin; longitudinal toward measured endpoint, lateral left, signed world Z; divide lengths by planar displacement. Missing rows preserved. No endpoint correction.",
+      "limitations": [
+        "Motion timings do not measure grasp/contact.",
+        "Inherited landscape calibration/crop and world Z gravity direction remain unverified."
+      ]
+    },
+    {
+      "pickup_to_release_path_length": 0.6396122500520227,
+      "pickup_to_release_duration": 5.335000000000001,
+      "object_start_position": [
+        -0.39266042404174495,
+        0.020876443950323068,
+        -0.09868908133114929
+      ],
+      "goal_position": [
+        -0.08347722035210026,
+        0.25519444970269123,
+        -0.05954261207297655
+      ],
+      "final_object_position": [
+        -0.08325836611552731,
+        0.2552483654145743,
+        -0.059313001232255684
+      ],
+      "start_sample_time": 40.985,
+      "final_sample_time": 50.99,
+      "task_displacement": [
+        0.3091832036896447,
+        0.23431800575236816,
+        0.039146469258172736
+      ],
+      "start_to_goal_distance": 0.3899123328633505,
+      "final_placement_error": 0.0003217533512340284,
+      "final_planar_placement_error": 0.0002253976061403162,
+      "final_inside_goal_region": true,
+      "final_distance_outside_goal_region": 0.0,
+      "final_goal_height_error": 0.00022961084072086607,
+      "max_lift_height": 0.14762786107325107,
+      "max_lift_height_entire_clip": 0.14762786107325107,
+      "transport_path_length": 0.22848576876431276,
+      "transport_duration": 1.9666666666666686,
+      "transport_observed_duration": 1.7999999999999972,
+      "average_transport_speed": 0.12693653820239617,
+      "maximum_transport_speed": 0.4086941926345743,
+      "transport_complete": false,
+      "pickup_time": 42.82,
+      "transport_start": 42.82,
+      "transport_end": 44.78666666666667,
+      "release_time": 48.155,
+      "id": "demo_004",
+      "direction": "target -> object",
+      "planar_distance_m": 0.38794223959702967,
+      "world_xy_direction_deg": 37.157082410242346,
+      "maximum_lift_m": 0.14609297730681067,
+      "path_length_m": 0.6396122500520227,
+      "automatic_phase_estimates": {
+        "pickup_time": 40.985,
+        "transport_start": 41.620000000000005,
+        "transport_end": 44.78666666666667,
+        "release_time": 46.68833333333334
+      },
+      "phase_review_notes": [
+        "Pickup lacks a sustained adjacent stationary period; estimated motion onset only.",
+        "Release lacks a sustained adjacent stationary period; estimated motion end only.",
+        "Lowering begins away from the goal region; placement label is based on height motion only."
+      ],
+      "rejection_reasons": [
+        "Unfilled tracking gap during pickup-to-release; reject for retargeting."
+      ],
+      "reject": true,
+      "missing_active_frames": 24,
+      "interpolated_frames": 11,
+      "parameters": {
+        "goal_object_offset": [
+          -0.09,
+          0.09,
+          0.0
+        ],
+        "goal_offset_frame": "goal_tag",
+        "goal_offset_verified": true,
+        "goal_coplanar": true,
+        "goal_center_height": 0.0225,
+        "vertical_axis": "z",
+        "vertical_sign": 1,
+        "vertical_verified": false,
+        "calibration_verified": false,
+        "max_reprojection_error": 3.0,
+        "max_speed": 2.0,
+        "max_gap_frames": 3,
+        "max_gap_span": 0.15,
+        "smoothing_window": 7,
+        "stationary_speed": 0.03,
+        "vertical_speed": 0.03,
+        "min_motion_duration": 0.2,
+        "stationary_duration": 0.3,
+        "goal_radius": 0.06,
+        "max_goal_scatter": 0.02,
+        "min_coverage": 0.9,
+        "phase_overrides": {
+          "pickup_time": 42.82,
+          "release_time": 48.155,
+          "transport_start": 42.82,
+          "transport_end": 44.78666666666667
+        },
+        "phase_override_reason": "Transfer identity/direction reviewed in video contact sheet and full measured trajectory. Motion onset/end timings are approximate; edit phase_overrides for contact-reviewed boundaries. Early quiet detection failed due pose jitter; seven transfers selected explicitly.",
+        "grasp_time_seconds": null,
+        "release_time_seconds": null,
+        "transport_start_time_seconds": null,
+        "transport_end_time_seconds": null
+      },
+      "selection": {
+        "start_time": 40.985,
+        "end_time": 50.99,
+        "pickup_time": 42.82,
+        "release_time": 48.155,
+        "start": [
+          -0.39266042404174495,
+          0.020876443950323068,
+          -0.09868908133114929
+        ],
+        "end": [
+          -0.08347722035210026,
+          0.25519444970269123,
+          -0.05954261207297655
+        ],
+        "direction": "target -> object",
+        "review_reason": "Transfer identity/direction reviewed in video contact sheet and full measured trajectory. Motion onset/end timings are approximate; edit phase_overrides for contact-reviewed boundaries. Early quiet detection failed due pose jitter; seven transfers selected explicitly.",
+        "phase_overrides": {}
+      },
+      "target_anchor": [
+        -0.42562285134875605,
+        -0.0018974833293795845,
+        0.0225
+      ],
+      "coordinate_frame_convention": "W is ID0 centre: +X decoded corner0 to corner1; +Y corner3 to corner0; +Z out of printed face. Standard41 corners reordered [1,0,3,2] for OpenCV IPPE. W_T_tag = inverse(C_T_W) @ C_T_tag. World ID1 is registered to ID0. World axes are not gravity-calibrated. Object centre = face centre minus edge/2 along outward tag Z; common object orientation is unspecified.",
+      "source_video": "videos\\data_001.MOV",
+      "source_tracking": "results\\data_001_raw",
+      "usable_for_retargeting": false,
+      "geometry_review_required": true,
+      "phase_boundary_sources": {
+        "pickup_time": "reviewed_motion_bracket",
+        "transport_start": "automatic_clamped_to_carry_interval",
+        "transport_end": "automatic_clamped_to_carry_interval",
+        "release_time": "reviewed_motion_bracket"
+      },
+      "active_tracking_gaps": [
+        {
+          "start_time_s": 43.720000000000006,
+          "end_time_s": 43.82,
+          "missing_frames": 4,
+          "missing_duration_s": 0.13333333333332575
+        },
+        {
+          "start_time_s": 46.72166666666667,
+          "end_time_s": 46.82166666666667,
+          "missing_frames": 4,
+          "missing_duration_s": 0.13333333333333286
+        },
+        {
+          "start_time_s": 47.555,
+          "end_time_s": 48.055,
+          "missing_frames": 16,
+          "missing_duration_s": 0.5333333333333314
+        }
+      ],
+      "normalization": "Start origin; longitudinal toward measured endpoint, lateral left, signed world Z; divide lengths by planar displacement. Missing rows preserved. No endpoint correction.",
+      "limitations": [
+        "Motion timings do not measure grasp/contact.",
+        "Inherited landscape calibration/crop and world Z gravity direction remain unverified."
+      ]
+    },
+    {
+      "pickup_to_release_path_length": 0.690069301559275,
+      "pickup_to_release_duration": 4.934999999999995,
+      "object_start_position": [
+        -0.08347722035210026,
+        0.25519444970269123,
+        -0.05954261207297655
+      ],
+      "goal_position": [
+        -0.3617231118832773,
+        0.019901587592878786,
+        -0.09422517308248267
+      ],
+      "final_object_position": [
+        -0.3622233491619746,
+        0.020698068637808695,
+        -0.09244971329139025
+      ],
+      "start_sample_time": 50.99,
+      "final_sample_time": 60.995000000000005,
+      "task_displacement": [
+        -0.27824589153117707,
+        -0.23529286210981243,
+        -0.03468256100950612
+      ],
+      "start_to_goal_distance": 0.36604151014876013,
+      "final_placement_error": 0.0020091980638346756,
+      "final_planar_placement_error": 0.0009405420723875492,
+      "final_inside_goal_region": true,
+      "final_distance_outside_goal_region": 0.0,
+      "final_goal_height_error": 0.0017754597910924208,
+      "max_lift_height": 0.13648510496655153,
+      "max_lift_height_entire_clip": 0.13648510496655153,
+      "transport_path_length": 0.4260275778020455,
+      "transport_duration": 2.4016666666666637,
+      "transport_observed_duration": 2.4016666666666637,
+      "average_transport_speed": 0.1773883044283328,
+      "maximum_transport_speed": 0.3569022075304078,
+      "transport_complete": true,
+      "pickup_time": 52.525000000000006,
+      "transport_start": 54.025000000000006,
+      "transport_end": 56.42666666666667,
+      "release_time": 57.46,
+      "id": "demo_005",
+      "direction": "object -> target",
+      "planar_distance_m": 0.36439471334503026,
+      "world_xy_direction_deg": -139.78116257860805,
+      "maximum_lift_m": 0.1367147158072724,
+      "path_length_m": 0.690069301559275,
+      "automatic_phase_estimates": {
+        "pickup_time": 52.55833333333334,
+        "transport_start": 54.025000000000006,
+        "transport_end": 56.42666666666667,
+        "release_time": 60.26166666666667
+      },
+      "phase_review_notes": [
+        "Release lacks a sustained adjacent stationary period; estimated motion end only."
+      ],
+      "rejection_reasons": [],
+      "reject": false,
+      "missing_active_frames": 0,
+      "interpolated_frames": 0,
+      "parameters": {
+        "goal_object_offset": [
+          -0.09,
+          0.09,
+          0.0
+        ],
+        "goal_offset_frame": "goal_tag",
+        "goal_offset_verified": true,
+        "goal_coplanar": true,
+        "goal_center_height": 0.0225,
+        "vertical_axis": "z",
+        "vertical_sign": 1,
+        "vertical_verified": false,
+        "calibration_verified": false,
+        "max_reprojection_error": 3.0,
+        "max_speed": 2.0,
+        "max_gap_frames": 3,
+        "max_gap_span": 0.15,
+        "smoothing_window": 7,
+        "stationary_speed": 0.03,
+        "vertical_speed": 0.03,
+        "min_motion_duration": 0.2,
+        "stationary_duration": 0.3,
+        "goal_radius": 0.06,
+        "max_goal_scatter": 0.02,
+        "min_coverage": 0.9,
+        "phase_overrides": {
+          "pickup_time": 52.525000000000006,
+          "release_time": 57.46,
+          "transport_start": 54.025000000000006,
+          "transport_end": 56.42666666666667
+        },
+        "phase_override_reason": "Transfer identity/direction reviewed in video contact sheet and full measured trajectory. Motion onset/end timings are approximate; edit phase_overrides for contact-reviewed boundaries. Early quiet detection failed due pose jitter; seven transfers selected explicitly.",
+        "grasp_time_seconds": null,
+        "release_time_seconds": null,
+        "transport_start_time_seconds": null,
+        "transport_end_time_seconds": null
+      },
+      "selection": {
+        "start_time": 50.99,
+        "end_time": 60.995000000000005,
+        "pickup_time": 52.525000000000006,
+        "release_time": 57.46,
+        "start": [
+          -0.08347722035210026,
+          0.25519444970269123,
+          -0.05954261207297655
+        ],
+        "end": [
+          -0.3617231118832773,
+          0.019901587592878786,
+          -0.09422517308248267
+        ],
+        "direction": "object -> target",
+        "review_reason": "Transfer identity/direction reviewed in video contact sheet and full measured trajectory. Motion onset/end timings are approximate; edit phase_overrides for contact-reviewed boundaries. Early quiet detection failed due pose jitter; seven transfers selected explicitly.",
+        "phase_overrides": {}
+      },
+      "target_anchor": [
+        -0.42562285134875605,
+        -0.0018974833293795845,
+        0.0225
+      ],
+      "coordinate_frame_convention": "W is ID0 centre: +X decoded corner0 to corner1; +Y corner3 to corner0; +Z out of printed face. Standard41 corners reordered [1,0,3,2] for OpenCV IPPE. W_T_tag = inverse(C_T_W) @ C_T_tag. World ID1 is registered to ID0. World axes are not gravity-calibrated. Object centre = face centre minus edge/2 along outward tag Z; common object orientation is unspecified.",
+      "source_video": "videos\\data_001.MOV",
+      "source_tracking": "results\\data_001_raw",
+      "usable_for_retargeting": false,
+      "geometry_review_required": true,
+      "phase_boundary_sources": {
+        "pickup_time": "reviewed_motion_bracket",
+        "transport_start": "automatic_clamped_to_carry_interval",
+        "transport_end": "automatic_clamped_to_carry_interval",
+        "release_time": "reviewed_motion_bracket"
+      },
+      "active_tracking_gaps": [],
+      "normalization": "Start origin; longitudinal toward measured endpoint, lateral left, signed world Z; divide lengths by planar displacement. Missing rows preserved. No endpoint correction.",
+      "limitations": [
+        "Motion timings do not measure grasp/contact.",
+        "Inherited landscape calibration/crop and world Z gravity direction remain unverified."
+      ]
+    },
+    {
+      "pickup_to_release_path_length": 0.5879470767316537,
+      "pickup_to_release_duration": 4.601666666666667,
+      "object_start_position": [
+        -0.3617231118832773,
+        0.019901587592878786,
+        -0.09422517308248267
+      ],
+      "goal_position": [
+        -0.5682200662522394,
+        0.1276392928781619,
+        -0.17094056777437555
+      ],
+      "final_object_position": [
+        -0.546008317030572,
+        0.11861436449975363,
+        -0.15938091126643397
+      ],
+      "start_sample_time": 60.995000000000005,
+      "final_sample_time": 71.5,
+      "task_displacement": [
+        -0.2064969543689621,
+        0.1077377052852831,
+        -0.07671539469189288
+      ],
+      "start_to_goal_distance": 0.24522164889448209,
+      "final_placement_error": 0.026616475993324888,
+      "final_planar_placement_error": 0.02397521920070063,
+      "final_inside_goal_region": true,
+      "final_distance_outside_goal_region": 0.0,
+      "final_goal_height_error": 0.01155965650794158,
+      "max_lift_height": 0.0738851727193269,
+      "max_lift_height_entire_clip": 0.0738851727193269,
+      "transport_path_length": 0.3955104562474989,
+      "transport_duration": 2.56666666666667,
+      "transport_observed_duration": 2.2333333333333414,
+      "average_transport_speed": 0.17709423414067052,
+      "maximum_transport_speed": 0.5188697751171479,
+      "transport_complete": false,
+      "pickup_time": 63.39666666666667,
+      "transport_start": 63.56333333333334,
+      "transport_end": 66.13000000000001,
+      "release_time": 67.99833333333333,
+      "id": "demo_006",
+      "direction": "target -> object",
+      "planar_distance_m": 0.23291287062718483,
+      "world_xy_direction_deg": 152.44715268257136,
+      "maximum_lift_m": 0.07566063251041932,
+      "path_length_m": 0.5879470767316537,
+      "automatic_phase_estimates": {
+        "pickup_time": 61.12833333333334,
+        "transport_start": 63.56333333333334,
+        "transport_end": 66.13000000000001,
+        "release_time": 70.9
+      },
+      "phase_review_notes": [
+        "Pickup lacks a sustained adjacent stationary period; estimated motion onset only.",
+        "Release lacks a sustained adjacent stationary period; estimated motion end only."
+      ],
+      "rejection_reasons": [
+        "Unfilled tracking gap during pickup-to-release; reject for retargeting."
+      ],
+      "reject": true,
+      "missing_active_frames": 9,
+      "interpolated_frames": 8,
+      "parameters": {
+        "goal_object_offset": [
+          -0.09,
+          0.09,
+          0.0
+        ],
+        "goal_offset_frame": "goal_tag",
+        "goal_offset_verified": true,
+        "goal_coplanar": true,
+        "goal_center_height": 0.0225,
+        "vertical_axis": "z",
+        "vertical_sign": 1,
+        "vertical_verified": false,
+        "calibration_verified": false,
+        "max_reprojection_error": 3.0,
+        "max_speed": 2.0,
+        "max_gap_frames": 3,
+        "max_gap_span": 0.15,
+        "smoothing_window": 7,
+        "stationary_speed": 0.03,
+        "vertical_speed": 0.03,
+        "min_motion_duration": 0.2,
+        "stationary_duration": 0.3,
+        "goal_radius": 0.06,
+        "max_goal_scatter": 0.02,
+        "min_coverage": 0.9,
+        "phase_overrides": {
+          "pickup_time": 63.39666666666667,
+          "release_time": 67.99833333333333,
+          "transport_start": 63.56333333333334,
+          "transport_end": 66.13000000000001
+        },
+        "phase_override_reason": "Transfer identity/direction reviewed in video contact sheet and full measured trajectory. Motion onset/end timings are approximate; edit phase_overrides for contact-reviewed boundaries. Early quiet detection failed due pose jitter; seven transfers selected explicitly.",
+        "grasp_time_seconds": null,
+        "release_time_seconds": null,
+        "transport_start_time_seconds": null,
+        "transport_end_time_seconds": null
+      },
+      "selection": {
+        "start_time": 60.995000000000005,
+        "end_time": 71.5,
+        "pickup_time": 63.39666666666667,
+        "release_time": 67.99833333333333,
+        "start": [
+          -0.3617231118832773,
+          0.019901587592878786,
+          -0.09422517308248267
+        ],
+        "end": [
+          -0.5682200662522394,
+          0.1276392928781619,
+          -0.17094056777437555
+        ],
+        "direction": "target -> object",
+        "review_reason": "Transfer identity/direction reviewed in video contact sheet and full measured trajectory. Motion onset/end timings are approximate; edit phase_overrides for contact-reviewed boundaries. Early quiet detection failed due pose jitter; seven transfers selected explicitly.",
+        "phase_overrides": {}
+      },
+      "target_anchor": [
+        -0.42562285134875605,
+        -0.0018974833293795845,
+        0.0225
+      ],
+      "coordinate_frame_convention": "W is ID0 centre: +X decoded corner0 to corner1; +Y corner3 to corner0; +Z out of printed face. Standard41 corners reordered [1,0,3,2] for OpenCV IPPE. W_T_tag = inverse(C_T_W) @ C_T_tag. World ID1 is registered to ID0. World axes are not gravity-calibrated. Object centre = face centre minus edge/2 along outward tag Z; common object orientation is unspecified.",
+      "source_video": "videos\\data_001.MOV",
+      "source_tracking": "results\\data_001_raw",
+      "usable_for_retargeting": false,
+      "geometry_review_required": true,
+      "phase_boundary_sources": {
+        "pickup_time": "reviewed_motion_bracket",
+        "transport_start": "automatic_clamped_to_carry_interval",
+        "transport_end": "automatic_clamped_to_carry_interval",
+        "release_time": "reviewed_motion_bracket"
+      },
+      "active_tracking_gaps": [
+        {
+          "start_time_s": 65.43,
+          "end_time_s": 65.69666666666667,
+          "missing_frames": 9,
+          "missing_duration_s": 0.29999999999999716
+        }
+      ],
+      "normalization": "Start origin; longitudinal toward measured endpoint, lateral left, signed world Z; divide lengths by planar displacement. Missing rows preserved. No endpoint correction.",
+      "limitations": [
+        "Motion timings do not measure grasp/contact.",
+        "Inherited landscape calibration/crop and world Z gravity direction remain unverified."
+      ]
+    },
+    {
+      "pickup_to_release_path_length": 0.7616228499137542,
+      "pickup_to_release_duration": 5.6366666666666845,
+      "object_start_position": [
+        -0.5682200662522394,
+        0.1276392928781619,
+        -0.17094056777437555
+      ],
+      "goal_position": [
+        -0.38257973842284954,
+        0.02082819426770832,
+        -0.11507647933935378
+      ],
+      "final_object_position": [
+        -0.37834353715723656,
+        0.019473633441835905,
+        -0.09356585713216575
+      ],
+      "start_sample_time": 71.5,
+      "final_sample_time": 80.2366666666667,
+      "task_displacement": [
+        0.18564032782938988,
+        -0.10681109861045357,
+        0.055864088435021775
+      ],
+      "start_to_goal_distance": 0.2213407745528404,
+      "final_placement_error": 0.021965589086890877,
+      "final_planar_placement_error": 0.00444749774522361,
+      "final_inside_goal_region": true,
+      "final_distance_outside_goal_region": 0.0,
+      "final_goal_height_error": 0.021510622207188024,
+      "max_lift_height": 0.15270084092829303,
+      "max_lift_height_entire_clip": 0.15270084092829303,
+      "transport_path_length": 0.2371550247080151,
+      "transport_duration": 1.9333333333333371,
+      "transport_observed_duration": 1.2333333333333343,
+      "average_transport_speed": 0.19228785787136346,
+      "maximum_transport_speed": 0.43135312986181723,
+      "transport_complete": false,
+      "pickup_time": 72.93333333333334,
+      "transport_start": 74.46833333333333,
+      "transport_end": 76.40166666666667,
+      "release_time": 78.57000000000002,
+      "id": "demo_007",
+      "direction": "object -> target",
+      "planar_distance_m": 0.21417502679578537,
+      "world_xy_direction_deg": -29.914651107338496,
+      "maximum_lift_m": 0.1642604974362346,
+      "path_length_m": 0.7616228499137542,
+      "automatic_phase_estimates": {
+        "pickup_time": 72.96666666666667,
+        "transport_start": 74.46833333333333,
+        "transport_end": 76.40166666666667,
+        "release_time": 79.80333333333334
+      },
+      "phase_review_notes": [
+        "Release lacks a sustained adjacent stationary period; estimated motion end only."
+      ],
+      "rejection_reasons": [
+        "Unfilled tracking gap during pickup-to-release; reject for retargeting."
+      ],
+      "reject": true,
+      "missing_active_frames": 19,
+      "interpolated_frames": 9,
+      "parameters": {
+        "goal_object_offset": [
+          -0.09,
+          0.09,
+          0.0
+        ],
+        "goal_offset_frame": "goal_tag",
+        "goal_offset_verified": true,
+        "goal_coplanar": true,
+        "goal_center_height": 0.0225,
+        "vertical_axis": "z",
+        "vertical_sign": 1,
+        "vertical_verified": false,
+        "calibration_verified": false,
+        "max_reprojection_error": 3.0,
+        "max_speed": 2.0,
+        "max_gap_frames": 3,
+        "max_gap_span": 0.15,
+        "smoothing_window": 7,
+        "stationary_speed": 0.03,
+        "vertical_speed": 0.03,
+        "min_motion_duration": 0.2,
+        "stationary_duration": 0.3,
+        "goal_radius": 0.06,
+        "max_goal_scatter": 0.02,
+        "min_coverage": 0.9,
+        "phase_overrides": {
+          "pickup_time": 72.93333333333334,
+          "release_time": 78.57000000000002,
+          "transport_start": 74.46833333333333,
+          "transport_end": 76.40166666666667
+        },
+        "phase_override_reason": "Transfer identity/direction reviewed in video contact sheet and full measured trajectory. Motion onset/end timings are approximate; edit phase_overrides for contact-reviewed boundaries. Early quiet detection failed due pose jitter; seven transfers selected explicitly.",
+        "grasp_time_seconds": null,
+        "release_time_seconds": null,
+        "transport_start_time_seconds": null,
+        "transport_end_time_seconds": null
+      },
+      "selection": {
+        "start_time": 71.5,
+        "end_time": 80.2366666666667,
+        "pickup_time": 72.93333333333334,
+        "release_time": 78.57000000000002,
+        "start": [
+          -0.5682200662522394,
+          0.1276392928781619,
+          -0.17094056777437555
+        ],
+        "end": [
+          -0.38257973842284954,
+          0.02082819426770832,
+          -0.11507647933935378
+        ],
+        "direction": "object -> target",
+        "review_reason": "Transfer identity/direction reviewed in video contact sheet and full measured trajectory. Motion onset/end timings are approximate; edit phase_overrides for contact-reviewed boundaries. Early quiet detection failed due pose jitter; seven transfers selected explicitly.",
+        "phase_overrides": {}
+      },
+      "target_anchor": [
+        -0.42562285134875605,
+        -0.0018974833293795845,
+        0.0225
+      ],
+      "coordinate_frame_convention": "W is ID0 centre: +X decoded corner0 to corner1; +Y corner3 to corner0; +Z out of printed face. Standard41 corners reordered [1,0,3,2] for OpenCV IPPE. W_T_tag = inverse(C_T_W) @ C_T_tag. World ID1 is registered to ID0. World axes are not gravity-calibrated. Object centre = face centre minus edge/2 along outward tag Z; common object orientation is unspecified.",
+      "source_video": "videos\\data_001.MOV",
+      "source_tracking": "results\\data_001_raw",
+      "usable_for_retargeting": false,
+      "geometry_review_required": true,
+      "phase_boundary_sources": {
+        "pickup_time": "reviewed_motion_bracket",
+        "transport_start": "automatic_clamped_to_carry_interval",
+        "transport_end": "automatic_clamped_to_carry_interval",
+        "release_time": "reviewed_motion_bracket"
+      },
+      "active_tracking_gaps": [
+        {
+          "start_time_s": 74.50166666666667,
+          "end_time_s": 74.66833333333334,
+          "missing_frames": 6,
+          "missing_duration_s": 0.20000000000000284
+        },
+        {
+          "start_time_s": 74.735,
+          "end_time_s": 75.135,
+          "missing_frames": 13,
+          "missing_duration_s": 0.4333333333333371
+        }
+      ],
+      "normalization": "Start origin; longitudinal toward measured endpoint, lateral left, signed world Z; divide lengths by planar displacement. Missing rows preserved. No endpoint correction.",
+      "limitations": [
+        "Motion timings do not measure grasp/contact.",
+        "Inherited landscape calibration/crop and world Z gravity direction remain unverified."
+      ]
+    }
+  ],
+  "complete_demonstrations": 7,
+  "accepted": 1,
+  "usable_for_retargeting": 0,
+  "cleaning_gaps": [
+    {
+      "first_missing_index": 190,
+      "last_missing_index": 195,
+      "missing_frames": 6,
+      "endpoint_span_s": 0.2333333333333334,
+      "filled": false
+    },
+    {
+      "first_missing_index": 197,
+      "last_missing_index": 262,
+      "missing_frames": 66,
+      "endpoint_span_s": 2.2333333333333343,
+      "filled": false
+    },
+    {
+      "first_missing_index": 264,
+      "last_missing_index": 264,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666666643,
+      "filled": true
+    },
+    {
+      "first_missing_index": 266,
+      "last_missing_index": 309,
+      "missing_frames": 44,
+      "endpoint_span_s": 1.501666666666667,
+      "filled": false
+    },
+    {
+      "first_missing_index": 311,
+      "last_missing_index": 311,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666666643,
+      "filled": true
+    },
+    {
+      "first_missing_index": 345,
+      "last_missing_index": 345,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666666643,
+      "filled": true
+    },
+    {
+      "first_missing_index": 352,
+      "last_missing_index": 352,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.0666666666666682,
+      "filled": true
+    },
+    {
+      "first_missing_index": 354,
+      "last_missing_index": 354,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666666643,
+      "filled": true
+    },
+    {
+      "first_missing_index": 359,
+      "last_missing_index": 360,
+      "missing_frames": 2,
+      "endpoint_span_s": 0.09999999999999964,
+      "filled": true
+    },
+    {
+      "first_missing_index": 362,
+      "last_missing_index": 362,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666666643,
+      "filled": true
+    },
+    {
+      "first_missing_index": 516,
+      "last_missing_index": 520,
+      "missing_frames": 5,
+      "endpoint_span_s": 0.1999999999999993,
+      "filled": false
+    },
+    {
+      "first_missing_index": 527,
+      "last_missing_index": 529,
+      "missing_frames": 3,
+      "endpoint_span_s": 0.13333333333333286,
+      "filled": true
+    },
+    {
+      "first_missing_index": 534,
+      "last_missing_index": 534,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666666643,
+      "filled": true
+    },
+    {
+      "first_missing_index": 536,
+      "last_missing_index": 536,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666666643,
+      "filled": true
+    },
+    {
+      "first_missing_index": 539,
+      "last_missing_index": 546,
+      "missing_frames": 8,
+      "endpoint_span_s": 0.3000000000000007,
+      "filled": false
+    },
+    {
+      "first_missing_index": 548,
+      "last_missing_index": 548,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666666643,
+      "filled": true
+    },
+    {
+      "first_missing_index": 550,
+      "last_missing_index": 552,
+      "missing_frames": 3,
+      "endpoint_span_s": 0.13333333333333286,
+      "filled": true
+    },
+    {
+      "first_missing_index": 576,
+      "last_missing_index": 577,
+      "missing_frames": 2,
+      "endpoint_span_s": 0.10000000000000142,
+      "filled": true
+    },
+    {
+      "first_missing_index": 583,
+      "last_missing_index": 583,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666666643,
+      "filled": true
+    },
+    {
+      "first_missing_index": 585,
+      "last_missing_index": 585,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666666643,
+      "filled": true
+    },
+    {
+      "first_missing_index": 605,
+      "last_missing_index": 642,
+      "missing_frames": 38,
+      "endpoint_span_s": 1.3000000000000007,
+      "filled": false
+    },
+    {
+      "first_missing_index": 645,
+      "last_missing_index": 650,
+      "missing_frames": 6,
+      "endpoint_span_s": 0.23333333333333428,
+      "filled": false
+    },
+    {
+      "first_missing_index": 669,
+      "last_missing_index": 671,
+      "missing_frames": 3,
+      "endpoint_span_s": 0.13333333333333286,
+      "filled": true
+    },
+    {
+      "first_missing_index": 681,
+      "last_missing_index": 681,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666666643,
+      "filled": true
+    },
+    {
+      "first_missing_index": 703,
+      "last_missing_index": 703,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666666643,
+      "filled": true
+    },
+    {
+      "first_missing_index": 910,
+      "last_missing_index": 957,
+      "missing_frames": 48,
+      "endpoint_span_s": 1.634999999999998,
+      "filled": false
+    },
+    {
+      "first_missing_index": 959,
+      "last_missing_index": 959,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666666643,
+      "filled": true
+    },
+    {
+      "first_missing_index": 961,
+      "last_missing_index": 974,
+      "missing_frames": 14,
+      "endpoint_span_s": 0.5,
+      "filled": false
+    },
+    {
+      "first_missing_index": 978,
+      "last_missing_index": 978,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666666288,
+      "filled": true
+    },
+    {
+      "first_missing_index": 1311,
+      "last_missing_index": 1314,
+      "missing_frames": 4,
+      "endpoint_span_s": 0.1666666666666714,
+      "filled": false
+    },
+    {
+      "first_missing_index": 1336,
+      "last_missing_index": 1336,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666666288,
+      "filled": true
+    },
+    {
+      "first_missing_index": 1340,
+      "last_missing_index": 1340,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666666998,
+      "filled": true
+    },
+    {
+      "first_missing_index": 1343,
+      "last_missing_index": 1343,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666666288,
+      "filled": true
+    },
+    {
+      "first_missing_index": 1401,
+      "last_missing_index": 1404,
+      "missing_frames": 4,
+      "endpoint_span_s": 0.1666666666666643,
+      "filled": false
+    },
+    {
+      "first_missing_index": 1407,
+      "last_missing_index": 1407,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666666998,
+      "filled": true
+    },
+    {
+      "first_missing_index": 1412,
+      "last_missing_index": 1412,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666666998,
+      "filled": true
+    },
+    {
+      "first_missing_index": 1414,
+      "last_missing_index": 1416,
+      "missing_frames": 3,
+      "endpoint_span_s": 0.13333333333333286,
+      "filled": true
+    },
+    {
+      "first_missing_index": 1418,
+      "last_missing_index": 1418,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666666998,
+      "filled": true
+    },
+    {
+      "first_missing_index": 1421,
+      "last_missing_index": 1422,
+      "missing_frames": 2,
+      "endpoint_span_s": 0.10000000000000142,
+      "filled": true
+    },
+    {
+      "first_missing_index": 1426,
+      "last_missing_index": 1441,
+      "missing_frames": 16,
+      "endpoint_span_s": 0.56666666666667,
+      "filled": false
+    },
+    {
+      "first_missing_index": 1955,
+      "last_missing_index": 1955,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666666288,
+      "filled": true
+    },
+    {
+      "first_missing_index": 1958,
+      "last_missing_index": 1958,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666666288,
+      "filled": true
+    },
+    {
+      "first_missing_index": 1962,
+      "last_missing_index": 1970,
+      "missing_frames": 9,
+      "endpoint_span_s": 0.3333333333333286,
+      "filled": false
+    },
+    {
+      "first_missing_index": 1973,
+      "last_missing_index": 1973,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666666288,
+      "filled": true
+    },
+    {
+      "first_missing_index": 1976,
+      "last_missing_index": 1977,
+      "missing_frames": 2,
+      "endpoint_span_s": 0.09999999999999432,
+      "filled": true
+    },
+    {
+      "first_missing_index": 1981,
+      "last_missing_index": 1981,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666666288,
+      "filled": true
+    },
+    {
+      "first_missing_index": 2016,
+      "last_missing_index": 2016,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666666288,
+      "filled": true
+    },
+    {
+      "first_missing_index": 2039,
+      "last_missing_index": 2039,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666666288,
+      "filled": true
+    },
+    {
+      "first_missing_index": 2194,
+      "last_missing_index": 2196,
+      "missing_frames": 3,
+      "endpoint_span_s": 0.13333333333332575,
+      "filled": true
+    },
+    {
+      "first_missing_index": 2224,
+      "last_missing_index": 2224,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666666288,
+      "filled": true
+    },
+    {
+      "first_missing_index": 2227,
+      "last_missing_index": 2227,
+      "missing_frames": 1,
+      "endpoint_span_s": 0.06666666666667709,
+      "filled": true
+    },
+    {
+      "first_missing_index": 2230,
+      "last_missing_index": 2231,
+      "missing_frames": 2,
+      "endpoint_span_s": 0.09999999999999432,
+      "filled": true
+    },
+    {
+      "first_missing_index": 2234,
+      "last_missing_index": 2239,
+      "missing_frames": 6,
+      "endpoint_span_s": 0.23333333333333428,
+      "filled": false
+    },
+    {
+      "first_missing_index": 2241,
+      "last_missing_index": 2253,
+      "missing_frames": 13,
+      "endpoint_span_s": 0.46666666666666856,
+      "filled": false
+    },
+    {
+      "first_missing_index": 2256,
+      "last_missing_index": 2257,
+      "missing_frames": 2,
+      "endpoint_span_s": 0.10000000000000853,
+      "filled": true
+    }
+  ],
+  "config": "config\\data_001_demos.json"
+}
