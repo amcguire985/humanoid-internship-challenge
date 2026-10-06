@@ -79,7 +79,8 @@ def prepare(demo,annotation_path,output):
     b,e=bounds['transport_start'],bounds['transport_end']
     if b is None or e is None or e<=b: reasons.append('Transport interval must have positive duration.')
     carry=(t>=bounds['pickup_time'])&(t<=bounds['release_time'])
-    if not np.isfinite(p[carry]).all() or np.any(np.diff(t[carry])>c['max_gap_span']):
+    if (not np.isfinite(p[carry]).all() or np.any(np.diff(t[carry])>c['max_gap_span'])
+            or any(row['valid_processed'] != '1' for row, selected in zip(rows, carry) if selected)):
         reasons.append('Pickup-to-release trajectory contains missing measurements or large timestamp gaps.')
     if m['direction'] not in ('object -> target','target -> object'): reasons.append('Direction unresolved.')
     updated={**m,**bounds,'manual_event_annotations':{k:a.get(k) for k in FIELDS},
@@ -107,7 +108,9 @@ def prepare(demo,annotation_path,output):
         maximum_lift_m=m['maximum_lift_m'],grasp_time_seconds=bounds['pickup_time'],
         release_time_seconds=bounds['release_time'],transport_start_time_seconds=b,
         transport_end_time_seconds=e,transport_duration_seconds=e-b if b is not None and e is not None else None,
-        suitable_for_retargeting=not reasons,blocking_reasons=reasons,phase_boundary_sources=sources,
+        suitable_for_retargeting=not reasons,source_tracking_and_timing_suitable=not reasons,
+        suitability_scope="Source samples and timing only; rollout_inputs.json includes geometry and annotation-review gates.",
+        blocking_reasons=reasons,phase_boundary_sources=sources,
         automatic_estimates=m['automatic_phase_estimates'],manual_annotations={k:a.get(k) for k in FIELDS},
         geometry_limitations=m.get('limitations',[]),source_demo=demo.as_posix(),annotation_path=annotation_path.as_posix(),prepared_demo=output.as_posix(),
         annotation_sha256=hashlib.sha256(annotation_path.read_bytes()).hexdigest(),

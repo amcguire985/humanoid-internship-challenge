@@ -1,0 +1,71 @@
+{
+  "demo_id": "demo_003",
+  "direction": "object -> target",
+  "nominal_preview_only": true,
+  "retargeting": {
+    "axis_matrix": [
+      [
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "human_start": [
+      -0.3461154176994059,
+      0.3557352080368391,
+      -0.0966634447285247
+    ],
+    "human_goal": [
+      -0.3455190773576847,
+      0.05432991391094802,
+      -0.07036877579860995
+    ],
+    "sim_start": [
+      -0.06390143206336037,
+      0.20345985704175618,
+      0.9784041501882155
+    ],
+    "sim_goal": [
+      0.07287702006820722,
+      0.21238385502430443,
+      0.9804998346662078
+    ],
+    "human_start_to_goal_distance_m": 0.3025506842878593,
+    "libero_start_to_goal_distance_m": 0.13708528221852026,
+    "horizontal_scale_factor": 0.45476637880281146,
+    "lateral_scale_factor": 1.0,
+    "vertical_scale_factor": 1.0,
+    "human_transport_endpoint_progress": 1.014163255132763,
+    "human_transport_endpoint_goal_error_m": 0.009109407162118673,
+    "endpoint_correction_m": [
+      -0.0023921602963231647,
+      0.006846369775620115,
+      0.004334165747828078
+    ],
+    "endpoint_correction_norm_m": 0.008448680531152523,
+    "start_error_m": 0.0,
+    "final_error_m": 0.0,
+    "maximum_lift_m": 0.1494004841436869,
+    "path_length_m": 1.548650596634099
+  },
+  "time_scale_used": 33.32226971264628,
+  "transport_steps": 7136,
+  "robot_duration_seconds": 356.75,
+  "mapping_suitable": true,
+  "reasons": [],
+  "transport_step_budget": 8000,
+  "baseline_transport_step_budget": 2000,
+  "robot_max_eef_speed_m_s": 0.02,
+  "maximum_endpoint_correction_m": 0.06,
+  "limitation": "Nominal scene and configured offset only; live grasp state and measured offset may differ. Not a physical rollout or IK certificate."
+}

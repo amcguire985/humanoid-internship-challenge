@@ -5,9 +5,9 @@
   "source_video": "videos\\data_003.MOV",
   "grasp_time_seconds": 24.5,
   "release_time_seconds": 36.5,
-  "transport_start_time_seconds": null,
-  "transport_end_time_seconds": null,
-  "notes": "Manual grasp/degrasp annotations provided by the user on 2026-10-06. Demo 1 5:30 interpreted as 5.30 absolute video seconds. Future rollouts require manual annotations.",
+  "transport_start_time_seconds": 25.4,
+  "transport_end_time_seconds": 35.5,
+  "notes": "Manual grasp/degrasp annotations provided by the user on 2026-10-06. Demo 1 5:30 interpreted as 5.30 absolute video seconds. Future rollouts require manual annotations. Manual transport start/end provided by the user on 2026-10-06; all four event fields are now manually labeled.",
   "suggested_motion_brackets": {
     "grasp_time_seconds": 25.611666666666668,
     "release_time_seconds": 36.78333333333334,
