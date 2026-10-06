@@ -13,7 +13,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from prepare_transfer_rollouts import load_config, claim_attempt
-from record_transfer_demos import run, combine
+from record_transfer_demos import run, combine, runtime_language_instruction, archive_task_check_errors, TASK_CHECK_ERROR
 
 
 class HandoffTests(unittest.TestCase):
@@ -91,6 +91,45 @@ class HandoffTests(unittest.TestCase):
             self.assertTrue(prepared["ready_for_rollout"])
             self.assertLess(prepared["mapping_preview"]["transport_steps"], entry["transport_step_budget"])
             self.assertLess(prepared["mapping_preview"]["retargeting"]["endpoint_correction_norm_m"], .06)
+
+
+    def test_language_description_does_not_have_to_equal_task_identifier(self):
+        from types import SimpleNamespace
+        language = "Pick up the black bowl between the plate and ramekin, then place it on the plate."
+        self.assertEqual(runtime_language_instruction(SimpleNamespace(language_instruction=language)), language)
+        with self.assertRaises(ValueError): runtime_language_instruction(SimpleNamespace(language_instruction=""))
+
+    def test_explicit_recovery_preserves_setup_diagnostics(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            attempt = root/"attempts/demo_001"
+            attempt.mkdir(parents=True)
+            text = json.dumps(dict(status="error", error=TASK_CHECK_ERROR, accepted=False, first_physical_failure=None))
+            (attempt/"status.json").write_text(text)
+            archived = archive_task_check_errors(root, ["demo_001"])
+            self.assertEqual(len(archived), 1)
+            self.assertFalse(attempt.exists())
+            self.assertEqual((Path(archived[0])/"status.json").read_text(), text)
+            self.assertEqual(archive_task_check_errors(root, ["demo_001"]), [])
+
+    def test_recovery_never_archives_motion_or_unrelated_failure(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            attempt = root/"attempts/demo_001"
+            attempt.mkdir(parents=True)
+            status = dict(status="error", error=TASK_CHECK_ERROR, accepted=False, first_physical_failure=None)
+            (attempt/"status.json").write_text(json.dumps(status))
+            (attempt/"episode.partial.h5").touch()
+            with self.assertRaises(ValueError): archive_task_check_errors(root, ["demo_001"])
+            self.assertTrue(attempt.exists())
+            (attempt/"episode.partial.h5").unlink()
+            status["physical_rollout_started"] = True
+            (attempt/"status.json").write_text(json.dumps(status))
+            with self.assertRaises(ValueError): archive_task_check_errors(root, ["demo_001"])
+            status["error"] = "Physical grasp failed"
+            (attempt/"status.json").write_text(json.dumps(status))
+            self.assertEqual(archive_task_check_errors(root, ["demo_001"]), [])
+            self.assertTrue(attempt.exists())
 
 
 if __name__ == "__main__": unittest.main()
