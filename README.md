@@ -753,3 +753,11 @@ The short `test__008_shutterspeed500.MOV` test uses the same tracker and cleaner
 Manual `data_003` annotations and the single-attempt Colab recording workflow are documented in [docs/DATA_003_COLAB.md](docs/DATA_003_COLAB.md). Edit one JSON file per demo in `config/data_003_annotations/`, then regenerate with `scripts/annotate_transfer_demos.py`. Windows performs preparation only; physical LIBERO rollouts run in the validated Colab micromamba environment. No training is included.
 
 The reviewed `data_003` Colab rollout manifest is [`config/data_003_rollouts.json`](config/data_003_rollouts.json). Its [handoff guide](docs/DATA_003_COLAB.md) includes the single command for one recorded rollout per demo; all four contact/transport timing fields are now manually supplied.
+
+## Gravity-relative upright-mug baseline
+
+The current research direction is to test whether a pretrained VLA completes
+LIBERO's white-mug-to-plate task while tilting the mug despite an explicit
+liquid/upright constraint. Normal LIBERO success and maximum gravity-relative
+tilt remain separate metrics. No new post-training is included.
+See [the task, coordinate conventions, Colab commands and outputs](docs/UPRIGHT_MUG_BASELINE.md).

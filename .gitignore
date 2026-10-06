@@ -9,3 +9,7 @@ __pycache__/
 *.[wW][eE][bB][mM]
 *.[mM]4[vV]
 videos/
+
+# Generated upright-mug baseline artifacts (including alternative run names).
+results/upright_mug*/
+config/upright_mug_stats.json
