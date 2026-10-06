@@ -12,7 +12,7 @@ def load_rows(path):
         return list(csv.DictReader(handle))
 
 
-def run(root):
+def run(root, video_output=None):
     root=Path(root)
     summary=json.loads((root/'summary.json').read_text())
     trajectories={body:load_rows(root/path/'gap_filled_10_frames/gentle_smoothing/savgol_7.csv')
@@ -29,9 +29,8 @@ def run(root):
         camera[:3,3]=[float(record['camera_'+a+'_m']) for a in 'xyz']
         camera[:3,:3]=cv2.Rodrigues(np.array([float(record['camera_relative_'+a+'_rad']) for a in ('rx','ry','rz')]))[0]
         world_by_frame[int(record['frame'])]=camera@np.linalg.inv(layout[tag])
-    video=Path(summary['video'])
-    if not video.is_absolute():
-        video=Path(__file__).resolve().parents[1]/video
+    from video_paths import resolve_video, output_video
+    video=resolve_video(summary['video'])
     cap=cv2.VideoCapture(str(video))
     cap.set(cv2.CAP_PROP_ORIENTATION_AUTO,1)
     fps=cap.get(cv2.CAP_PROP_FPS)
@@ -39,7 +38,7 @@ def run(root):
     if not ok or not np.isfinite(fps) or fps<=0:
         raise RuntimeError('Cannot decode source video')
     height,width=frame.shape[:2]
-    destination=root/'sg7_gap_filled_annotated.mp4'
+    destination=output_video(root, 'sg7_gap_filled_annotated.mp4', video_output)
     writer=cv2.VideoWriter(str(destination),cv2.VideoWriter_fourcc(*'mp4v'),fps,(width,height))
     if not writer.isOpened():
         cap.release()
@@ -117,4 +116,6 @@ def run(root):
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('run_directory',type=Path)
-    run(parser.parse_args().run_directory)
+    parser.add_argument("--video-output", type=Path, help="External overlay MP4 path")
+    args=parser.parse_args()
+    run(args.run_directory, args.video_output)
