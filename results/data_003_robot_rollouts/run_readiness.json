@@ -1,0 +1,16 @@
+{
+  "status": "deferred_to_colab_by_user",
+  "manual_annotations_present": true,
+  "requested_rollouts_per_demo": 1,
+  "automatic_retries": false,
+  "actual_rollouts": 0,
+  "prepared_demos": [
+    "results/data_003_annotated/demo_001",
+    "results/data_003_annotated/demo_002",
+    "results/data_003_annotated/demo_003"
+  ],
+  "execution_runtime": "/content/micromamba/envs/libero/bin/python",
+  "MUJOCO_GL": "osmesa",
+  "colab_repo": "/content/humanoid-internship-challenge",
+  "pending": "Review optional transport windows and run unchanged-controller mapping preflight in Colab before any physical attempt."
+}

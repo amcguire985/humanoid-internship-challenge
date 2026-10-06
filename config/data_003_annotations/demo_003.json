@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "demo_id": "demo_003",
+  "time_basis": "absolute source video seconds",
+  "source_video": "videos\\data_003.MOV",
+  "grasp_time_seconds": 41.1,
+  "release_time_seconds": 55.0,
+  "transport_start_time_seconds": null,
+  "transport_end_time_seconds": null,
+  "notes": "Manual grasp/degrasp annotations provided by the user on 2026-10-06. Demo 1 5:30 interpreted as 5.30 absolute video seconds. Future rollouts require manual annotations.",
+  "suggested_motion_brackets": {
+    "grasp_time_seconds": 42.586666666666666,
+    "release_time_seconds": 56.593333333333334,
+    "transport_start_time_seconds": 43.45333333333333,
+    "transport_end_time_seconds": 47.08833333333334
+  },
+  "automatic_estimates": {
+    "pickup_time": 39.985,
+    "transport_start": 43.45333333333333,
+    "transport_end": 47.08833333333334,
+    "release_time": 53.99166666666667
+  }
+}
