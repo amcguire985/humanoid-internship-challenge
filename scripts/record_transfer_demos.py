@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path
 import shutil
+import uuid
 import numpy as np
 from annotate_transfer_demos import read_json,write_json
 
@@ -53,8 +54,49 @@ def combine(base,new,output,expected=None):
         episodes=episodes,selected_existing_episodes=[1,2],new_successful_episodes=sum(e['origin']=='data_003' for e in episodes),
         new_attempts=[read_json(p) for p in sorted((new/'attempts').glob('*/status.json'))],
         rejected_demos=[read_json(p) for p in sorted((new/'rejected').glob('*.json'))],
+        setup_errors=[dict(archive_path=p.as_posix(),status=read_json(p)) for p in sorted((new/'setup_errors').glob('*/*/status.json'))],
         format='Existing robot-native HDF5: N actions / N+1 observations; no policy training.')
     write_json(output/'summary.json',result); return result
+
+
+
+TASK_CHECK_ERROR = 'ValueError: Runtime task does not match the configured bowl-to-plate task'
+
+
+def runtime_language_instruction(env):
+    # make_env validates benchmark task.name against TASK before constructing the
+    # environment. Natural-language descriptions are not canonical task IDs.
+    instruction = env.language_instruction
+    if not isinstance(instruction, str) or not instruction.strip():
+        raise ValueError('Runtime task has no language instruction')
+    return instruction
+
+
+def archive_task_check_errors(output, demo_ids):
+    """Explicit recovery for the known pre-controller startup bug only."""
+    candidates = []
+    for demo_id in demo_ids:
+        directory = Path(output)/'attempts'/demo_id
+        status_file = directory/'status.json'
+        if not status_file.exists():
+            continue
+        status = read_json(status_file)
+        if status.get('error') != TASK_CHECK_ERROR or status.get('status') != 'error':
+            continue
+        allowed = {'status.json', 'retargeting_input.json'}
+        if (status.get('accepted') is not False or status.get('first_physical_failure') is not None
+                or status.get('physical_rollout_started', False)
+                or status.get('transitions', 0) != 0
+                or any(p.name not in allowed or not p.is_file() for p in directory.iterdir())):
+            raise ValueError('Refusing to archive an attempt with possible robot motion: '+str(directory))
+        candidates.append(directory)
+    archived = []
+    for directory in candidates:
+        destination = Path(output)/'setup_errors'/('task_check_'+uuid.uuid4().hex)/directory.name
+        destination.parent.mkdir(parents=True, exist_ok=False)
+        directory.rename(destination)
+        archived.append(destination.as_posix())
+    return archived
 
 
 def run(config_path,prepare_only=False):
@@ -117,7 +159,7 @@ def run(config_path,prepare_only=False):
             print('Already attempted; no retry: '+demo_id,flush=True); continue
         status=dict(human_demo_id=demo_id,episode_id=episode_id,direction=v['direction'],status='started',
                     accepted=False,rollout_limit=1,first_physical_failure=None,
-                    provenance=entry['provenance'],task=config['task'],seed=config['seed'])
+                    provenance=entry['provenance'],task=config['task'],seed=config['seed'],physical_rollout_started=False)
         write_json(directory/'status.json',status)
         env=None; runner=None; temporary=directory/'episode.partial.h5'
         write_json(directory/'retargeting_input.json',entry)
@@ -132,8 +174,7 @@ def run(config_path,prepare_only=False):
                 raise ValueError('Prepared input changed after preflight; rerun preparation.')
             human=load_transport(demo/'processed_demo.csv',demo/'metadata.json',mapping['max_source_gap_s'])
             env=make_env(config['seed'])
-            if env.language_instruction.replace('_',' ').strip()!=config['task'].replace('_',' ').strip():
-                raise ValueError('Runtime task does not match the configured bowl-to-plate task')
+            instruction=runtime_language_instruction(env)
             with h5py.File(temporary,'w') as f:
                 wrapped=RecordingEnv(env,f,episode_id,config['image_resolution'])
                 runner=NominalRecording(wrapped,human,robot,mapping,directory); wrapped.runner=runner
@@ -144,10 +185,12 @@ def run(config_path,prepare_only=False):
                     human_provenance_json=json.dumps(entry['provenance']),task=config['task'],seed=config['seed'],
                     human_manual_annotations_json=json.dumps(v['manual_annotations']),
                     robot_settings_json=json.dumps(robot),mapping_settings_json=json.dumps(mapping),
-                    language_instruction=env.language_instruction,
+                    language_instruction=instruction,
                     control_frequency_hz=runner.frequency,image_convention='RGB uint8 HWC, top-left origin (MuJoCo vertical flip)',
                     eef_pose_convention='world xyz metres + quaternion xyzw',
                     proprio_order='joint_pos[7], joint_vel[7], gripper_qpos[2], gripper_qvel[2]')
+                status['physical_rollout_started']=True
+                write_json(directory/'status.json',status)
                 report=runner.run()
                 report.update(human_demo_id=demo_id,human_direction=v['direction'],source_metadata=human[-1],
                     annotation_file=v['annotation_path'],settings=robot,mapping_settings=mapping,seed=config['seed'],
@@ -183,7 +226,7 @@ def run(config_path,prepare_only=False):
                 combine(base,output,combined,expected)
         print(json.dumps(status),flush=True)
     readiness['status']='finished'
-    readiness['simulation_executed']=bool(list((output/'attempts').glob('*/status.json')))
+    readiness['simulation_executed']=any(read_json(p).get('physical_rollout_started',False) for p in (output/'attempts').glob('*/status.json'))
     readiness['attempts']=[read_json(p) for p in sorted((output/'attempts').glob('*/status.json'))]
     write_json(output/'run_readiness.json',readiness)
     print(json.dumps(combine(base,output,combined,expected),indent=2))
@@ -193,9 +236,16 @@ if __name__=='__main__':
     parser.add_argument('--combine-only',action='store_true')
     parser.add_argument('--config',type=Path,default=Path('config/data_003_rollouts.json'))
     parser.add_argument('--prepare-only',action='store_true',help='Refresh human inputs/plots/preflight only; no simulator imports or execution')
+    parser.add_argument('--archive-task-check-errors',action='store_true',help='Archive only known pre-motion task-language-check errors; no rollouts or retries')
     a=parser.parse_args()
+    if sum((a.combine_only,a.prepare_only,a.archive_task_check_errors))>1:
+        parser.error('Select at most one preparation/combine/recovery mode')
     os.chdir(Path(__file__).resolve().parents[1])
-    if a.combine_only:
+    if a.archive_task_check_errors:
+        from prepare_transfer_rollouts import load_config
+        config=load_config(a.config)
+        print(json.dumps({'archived_setup_errors':archive_task_check_errors(Path(config['rollout_output']),[d['demo_id'] for d in config['demos']]),'physical_rollouts_executed':0},indent=2))
+    elif a.combine_only:
         from prepare_transfer_rollouts import load_config
         config=load_config(a.config)
         result=combine(Path(config['baseline_dataset']),Path(config['rollout_output']),Path(config['combined_dataset']),

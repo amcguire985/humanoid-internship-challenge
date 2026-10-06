@@ -78,3 +78,15 @@ Both old episodes and new recordings use the existing success-only HDF5 schema: 
 ```
 
 `--prepare-only` never probes/imports the simulator. `--combine-only` validates and combines already recorded HDF5 data without simulation. A normal rollout invocation on Windows is refused before simulator imports.
+
+## Recovery from the task-language comparison bug
+
+The original recorder incorrectly compared LIBERO's language instruction to its canonical task ID. The validated `make_env` already checks the canonical benchmark task name. The corrected recorder uses that identity check and records the runtime language description separately.
+
+If an attempt has exactly `ValueError: Runtime task does not match the configured bowl-to-plate task`, it stopped before constructing the controller or stepping the robot. After pulling the fix, explicitly archive only those setup errors:
+
+```bash
+MUJOCO_GL=osmesa /content/micromamba/envs/libero/bin/python scripts/record_transfer_demos.py --archive-task-check-errors
+```
+
+This recovery command runs no simulation and preserves the original status/input files under `results/data_003_robot_rollouts/setup_errors/`. It refuses any attempt with partial HDF5 data, motion diagnostics, recorded transitions, or a physical-start marker. Other failures are untouched. Then run the normal recording command to obtain the first physical rollout for each demo. Physical failures still cannot be automatically retried.
