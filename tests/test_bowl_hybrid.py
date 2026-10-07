@@ -8,9 +8,9 @@ import numpy as np
 from scipy.spatial.transform import Rotation
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
 from bowl_human_reference import Reference,prepare,rotation
-from bowl_transport_guidance import Guidance,Phases,Settings,pose
+from bowl_transport_guidance import Guidance,Phases,Settings,pose,physical_placement_goal
 from calibrate_bowl_reference import gravity_rotation
-from evaluate_bowl_hybrid import analyze,DynamicPrompt,CONTEXT,LIQUID,HybridObserver,compare
+from evaluate_bowl_hybrid import analyze,DynamicPrompt,CONTEXT,LIQUID,HybridObserver,compare,write_condition_report
 import evaluate_bowl_liquid as official
 from unittest.mock import patch
 
@@ -78,6 +78,29 @@ class HybridTests(unittest.TestCase):
         result,info=guide.apply(model,pose([.1,0,.4],np.eye(3)),eef,.2,.05)
         self.assertTrue(info['slip_detected']); np.testing.assert_array_equal(result,model)
 
+    def test_placement_uses_physical_collision_surface_not_extent_markers(self):
+        from types import SimpleNamespace
+        model=SimpleNamespace(body_name2id=lambda name:{'bowl':0,'plate':1}[name],geom_name2id=lambda name:{'bowl_bottom':0,'plate_center':1,'plate_rim':2}[name],geom_type=np.array([6,6,6]),geom_size=np.array([[.03,.03,.003],[.03,.03,.002],[.02,.02,.003]]))
+        data=SimpleNamespace(body_xpos=np.array([[0.,0.,.95],[.1,.2,.90]]),body_xmat=np.tile(np.eye(3).reshape(1,9),(2,1)),geom_xpos=np.array([[0.,0.,.923],[.1,.2,.903],[.1,.25,.910]]),geom_xmat=np.tile(np.eye(3).reshape(1,9),(3,1)))
+        base=SimpleNamespace(sim=SimpleNamespace(model=model,data=data))
+        bowl=SimpleNamespace(root_body='bowl',contact_geoms=['bowl_bottom'],bottom_offset=[0,0,-.06])
+        plate=SimpleNamespace(root_body='plate',contact_geoms=['plate_center','plate_rim'],top_offset=[0,0,.04])
+        goal,audit=physical_placement_goal(base,bowl,plate)
+        np.testing.assert_allclose(goal,[.1,.2,.935])
+        self.assertEqual(audit['plate_support_geom'],'plate_center')
+        self.assertLess(goal[2],1.)
+
+    def test_guidance_diagnostics_are_strict_json_serializable(self):
+        start=pose([0,0,.4],np.eye(3)); eef=pose([0,0,.45],np.eye(3))
+        guide=Guidance(reference(),start,eef,[.2,0,.4],controller(),Settings())
+        for elapsed in (0.,.05,float(guide.reference.t[-1])):
+            _,info=guide.apply(np.array([0.,0.,0.,0.,0.,0.,1.]),start,eef,elapsed,.05)
+            self.assertIs(type(info['reference_finished']),bool)
+            self.assertIs(type(info['slip_detected']),bool)
+            json.dumps(info,allow_nan=False)
+        _,info=guide.apply(np.ones(7),pose([.1,0,.4],np.eye(3)),eef,.1,.05)
+        json.dumps(info,allow_nan=False)
+
     def test_human_orientation_and_time_change_correction(self):
         start=pose([0,0,.4],np.eye(3)); eef=pose([0,0,.45],np.eye(3)); s=Settings(ramp_s=.01,correction_slew_per_s=10,correction_limit=1,position_blend=1,orientation_blend=1)
         first=Guidance(reference(),start,eef,[.2,0,.4],controller(),s)
@@ -97,6 +120,13 @@ class HybridTests(unittest.TestCase):
         summary,a=analyze(rows); self.assertEqual(summary['max_tilt_deg'],8); self.assertAlmostEqual(summary['max_acceleration_m_s2'],2); self.assertIsNone(a[2])
         for r in rows: r['phase']='FAILED'
         summary,_=analyze(rows); self.assertIsNone(summary['max_tilt_deg']); self.assertIsNone(summary['max_acceleration_m_s2'])
+
+    def test_parent_wrapper_report_exists_with_unavailable_metrics(self):
+        with tempfile.TemporaryDirectory() as d:
+            write_condition_report(Path(d),dict(libero_success=False,transport_detected=False,max_tilt_deg=None,max_acceleration_m_s2=None,transport_duration_s=None,failure_reason='grasp_timeout'))
+            report=(Path(d)/'comparison.md').read_text()
+            self.assertIn('| max_tilt_deg | unavailable |',report)
+            self.assertIn('| failure_reason | grasp_timeout |',report)
 
     def test_comparison_pairs_states_and_exports_unavailable_metrics(self):
         with tempfile.TemporaryDirectory() as d:

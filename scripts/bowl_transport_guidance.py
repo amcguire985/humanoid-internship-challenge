@@ -12,6 +12,35 @@ def pose(position, orientation):
     return result
 
 
+def physical_placement_goal(base, bowl_object, plate_object):
+    """Use collision boxes, never asset top/bottom extent sites, for placement."""
+    sim=base.sim
+    bowl_id=sim.model.body_name2id(bowl_object.root_body)
+    plate_id=sim.model.body_name2id(plate_object.root_body)
+    bowl_position=np.asarray(sim.data.body_xpos[bowl_id])
+    bowl_rotation=np.asarray(sim.data.body_xmat[bowl_id]).reshape(3,3)
+    plate_position=np.asarray(sim.data.body_xpos[plate_id])
+    bottoms=[]
+    for name in bowl_object.contact_geoms:
+        geom=sim.model.geom_name2id(name)
+        if int(sim.model.geom_type[geom])!=6: raise ValueError('Placement audit requires bowl collision boxes')
+        local_position=bowl_rotation.T@(sim.data.geom_xpos[geom]-bowl_position)
+        local_rotation=bowl_rotation.T@sim.data.geom_xmat[geom].reshape(3,3)
+        bottoms.append(float(local_position[2]-np.abs(local_rotation[2])@sim.model.geom_size[geom]))
+    candidates=[]
+    for name in plate_object.contact_geoms:
+        geom=sim.model.geom_name2id(name)
+        if int(sim.model.geom_type[geom])!=6: raise ValueError('Placement audit requires plate collision boxes')
+        center=np.asarray(sim.data.geom_xpos[geom]); orient=sim.data.geom_xmat[geom].reshape(3,3)
+        top=float(center[2]+np.abs(orient[2])@sim.model.geom_size[geom])
+        candidates.append((float(np.linalg.norm(center[:2]-plate_position[:2])),top,name))
+    if not bottoms or not candidates: raise ValueError('Missing bowl/plate collision geometry')
+    distance,surface,name=min(candidates,key=lambda item:item[0])
+    if distance>.02: raise ValueError('No central plate collision support surface')
+    goal=plate_position.copy(); goal[2]=surface-min(bottoms)
+    return goal,dict(method='Central plate collision-box top minus upright bowl collision-box bottom; ignores extent sites',plate_support_geom=name,plate_surface_z_m=surface,bowl_upright_bottom_offset_m=min(bottoms),placement_goal_m=goal.tolist())
+
+
 @dataclass
 class Settings:
     position_blend: float=.25
@@ -91,7 +120,7 @@ class Guidance:
         p,r=self.reference.sample([elapsed]); desired=pose(p[0],r[0])
         velocity=[float(np.interp(elapsed,self.reference.t,self.reference_velocity[:,i])) for i in range(3)]
         acceleration=[float(np.interp(elapsed,self.reference.t,self.reference_acceleration[:,i])) for i in range(3)]
-        info.update(desired_bowl_velocity_m_s=velocity,desired_bowl_acceleration_m_s2=acceleration,desired_bowl_position_m=p[0].tolist(),desired_bowl_rotation=r[0].tolist(),reference_elapsed_s=float(elapsed),reference_finished=elapsed>=self.reference.t[-1])
+        info.update(desired_bowl_velocity_m_s=velocity,desired_bowl_acceleration_m_s2=acceleration,desired_bowl_position_m=p[0].tolist(),desired_bowl_rotation=r[0].tolist(),reference_elapsed_s=float(elapsed),reference_finished=bool(elapsed>=self.reference.t[-1]))
         if info['slip_detected']:
             info['guidance_disabled_reason']='rigid_grasp_transform_drift'
             return action.copy(),info

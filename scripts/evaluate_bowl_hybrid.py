@@ -12,7 +12,7 @@ import numpy as np
 from scipy.spatial.transform import Rotation
 import evaluate_bowl_liquid as official
 from bowl_human_reference import Reference
-from bowl_transport_guidance import Guidance, Phases, Settings, pose
+from bowl_transport_guidance import Guidance, Phases, Settings, pose, physical_placement_goal
 from replay_libero_transport import inspect_controller
 
 LIQUID=official.ORIGINAL+'. The bowl is full of liquid. Do not spill it.'
@@ -91,8 +91,8 @@ class HybridObserver(official.BowlObserver):
                 if len(plates)!=1: raise ValueError('Ambiguous plate placement target')
                 plate=plates[0]; body=base.sim.model.body_name2id(plate.root_body)
                 bowl_obj=base.objects_dict[official.OBJECT]
-                goal=np.asarray(base.sim.data.body_xpos[body]).copy()
-                goal[2]+=np.asarray(plate.top_offset)[2]-np.asarray(bowl_obj.bottom_offset)[2]
+                goal,placement_audit=physical_placement_goal(base,bowl_obj,plate)
+                official.write_json(self.directory/'placement_target.json',placement_audit)
                 self.guidance=Guidance(self.reference,bowl,eef,goal,self.controller,self.settings)
                 self.guidance.reference.save(self.directory/'aligned_reference.csv')
                 from bowl_human_reference import preview
@@ -178,6 +178,17 @@ def analyze(rows):
     return summary,accelerations
 
 
+
+def write_condition_report(output, summary):
+    """Fulfil the parent official wrapper's printable report contract."""
+    fields=('libero_success','transport_detected','max_tilt_deg','max_acceleration_m_s2','transport_duration_s','failure_reason')
+    lines=['| Metric | Value |','|---|---|']
+    for key in fields:
+        value=summary.get(key)
+        lines.append(f"| {key} | {'unavailable' if value is None else value} |")
+    Path(output,'comparison.md').write_text('\n'.join(lines)+'\n',encoding='utf-8')
+
+
 def process_outputs(output,baseline_root,condition,episodes=1):
     directory=output/'ground_truth/episode_000'
     rows=[json.loads(line) for line in (directory/'trajectory.jsonl').read_text().splitlines()]
@@ -192,12 +203,13 @@ def process_outputs(output,baseline_root,condition,episodes=1):
         writer=csv.writer(f); writer.writerow(['timestep','sim_time_s','phase','tilt_deg','acceleration_m_s2','grasp','x_m','y_m','z_m'])
         for r,a in zip(rows,acceleration): writer.writerow([r['timestep'],r['sim_time_s'],r['phase'],r['tilt_deg'],a,r['grasp'],*r['bowl_position_m']])
     plot_rollout(directory,rows,acceleration,summary)
-    manifest=json.loads((output/'experiment.json').read_text()); manifest.update(condition=summary['condition'],prompt_design='Original until confirmed grasp/lift; liquid appended for B/C transport',policy_instruction_transport=official.ORIGINAL if summary['condition']=='A' else LIQUID,settings=json.loads(os.environ['BOWL_HYBRID_SETTINGS']),human_reference=os.environ.get('BOWL_HYBRID_REFERENCE'),pairing=summary['state_pairing'],weights_updated=False)
+    manifest=json.loads((output/'experiment.json').read_text()); manifest.update(condition=summary['condition'],prompt_design='Original until confirmed grasp/lift; liquid appended for B/C transport',policy_instruction_transport=official.ORIGINAL if summary['condition']=='A' else LIQUID,settings=json.loads(os.environ['BOWL_HYBRID_SETTINGS']),human_reference=os.environ.get('BOWL_HYBRID_REFERENCE'),pairing=summary['state_pairing'],weights_updated=False,guidance_algorithm='collision_surface_placement_v2')
     if summary['condition']=='C':
         refpath=Path(os.environ['BOWL_HYBRID_REFERENCE'])
         manifest['reference_sha256']=hashlib.sha256(refpath.read_bytes()).hexdigest()
         manifest['reference_metadata']=json.loads(Path(str(refpath)+'.json').read_text())
     official.write_json(output/'experiment.json',manifest)
+    write_condition_report(output,summary)
     print(json.dumps(summary,indent=2),flush=True)
 
 
@@ -231,6 +243,7 @@ def compare(root):
             if init[key]!=inits[0][key]: raise ValueError('Unmatched initial state: '+key)
         if manifest['checkpoint_sha256']!=manifests[0]['checkpoint_sha256']: raise ValueError('Checkpoint mismatch')
         if manifest['settings']!=manifests[0]['settings']: raise ValueError('Different controller settings')
+        if manifest.get('guidance_algorithm')!=manifests[0].get('guidance_algorithm'): raise ValueError('Different guidance algorithm versions; preserve the earlier failed run separately')
     # Quantify divergence at phase entry rather than claiming shared grasp state.
     grasp_poses={}
     for path in paths:
