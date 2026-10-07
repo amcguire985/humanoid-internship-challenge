@@ -42,10 +42,10 @@ Primary metrics will include:
 
 ## Repository
 
-- `PROJECT.md` — requirements, risks, current plan
-- `EXPERIMENTS.md` — experiment log and decisions
-- `scripts/` — code
-- `results/` — plots, images, trajectory tables and metrics
+- `PROJECT.md` â€” requirements, risks, current plan
+- `EXPERIMENTS.md` â€” experiment log and decisions
+- `scripts/` â€” code
+- `results/` â€” plots, images, trajectory tables and metrics
 ## External video storage
 
 Recordings and generated overlay videos live outside Git in Google Drive. Set `HUMANOID_VIDEO_ROOT` to the local or mounted Drive folder before running video tools. See [the storage setup and migration guide](docs/VIDEO_STORAGE.md). Existing commands can use recording names such as `data_003.MOV`; `--output` still selects the repository directory for CSV, JSON and plots.
@@ -659,8 +659,8 @@ being labelled usable for retargeting until geometry/calibration, coverage and
 phase confidence have been checked. No robot control or learning is included.
 
 
-The reviewed test_007 configuration uses transport **4.336667–10.306667 s**
-(requested 4.33–10.30 s), including carrying, lowering, and the final hold.
+The reviewed test_007 configuration uses transport **4.336667â€“10.306667 s**
+(requested 4.33â€“10.30 s), including carrying, lowering, and the final hold.
 Release is annotated at **10.508333 s**. The automatic 6.405 s transport end
 confused a mid-carry descent with placement, and the 8.107 s release estimate
 missed slow lowering. Original automatic estimates remain in metadata. See
@@ -770,3 +770,13 @@ validation runner](docs/LIBERO_INTERFACE_VALIDATION.md) before further constrain
 rollouts. It uses a LIBERO-trained checkpoint, its own saved normalization,
 two-camera/8D EEF observations, and explicit action/gripper diagnostics. No new
 training is performed; real task competence still requires Colab validation.
+
+### Human-video-guided bowl experiment
+
+The bowl experiment uses the validated LIBERO Spatial index 2 checkpoint and
+original-instruction grasping, then compares liquid-language transport with and
+without bounded guidance from phone-derived object poses. This is inference-time
+hybrid control with unchanged model weights. See [the implementation, calibration
+preflight, minimal Colab cells, and validation status](docs/BOWL_HUMAN_HYBRID.md).
+Phone reference alignment uses the user-confirmed top tag ID6 and upward-facing
+world tag ID0. Real simulation validation remains pending; no performance result is claimed.

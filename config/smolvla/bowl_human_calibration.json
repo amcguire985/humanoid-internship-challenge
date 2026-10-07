@@ -1,0 +1,105 @@
+{
+  "gravity_verified": true,
+  "mounting_verified": true,
+  "calibration_verified": true,
+  "gravity_from_world_rotation": [
+    [
+      1.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "object_from_tag_rotations": {
+    "6": [
+      [
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "4": [
+      [
+        0.05896956487559335,
+        0.0028927802524005043,
+        -0.9982555896366396
+      ],
+      [
+        -0.01896943335747199,
+        0.9998184854311248,
+        0.0017767352950751273
+      ],
+      [
+        0.9980795314084345,
+        0.018831569574086444,
+        0.05901373544266397
+      ]
+    ],
+    "5": [
+      [
+        0.05383307833654674,
+        -0.9984481091459486,
+        0.014260891265656328
+      ],
+      [
+        -0.06761792120827936,
+        -0.017893813797531216,
+        -0.9975508148256158
+      ],
+      [
+        0.996257906572531,
+        0.0527369393372325,
+        -0.0684762646546884
+      ]
+    ]
+  },
+  "top_tag": 6,
+  "mounting_fit": {
+    "(4, 5)": {
+      "samples": 265,
+      "retained": 236,
+      "discarded": 29,
+      "p95_scatter_deg": 2.796495778904558
+    },
+    "(4, 6)": {
+      "samples": 1646,
+      "retained": 1331,
+      "discarded": 315,
+      "p95_scatter_deg": 5.554365788472682
+    },
+    "(5, 6)": {
+      "samples": 307,
+      "retained": 274,
+      "discarded": 33,
+      "p95_scatter_deg": 4.617626742268224
+    },
+    "graph_closure_error_deg": {
+      "(4, 5)": 1.052721225388849,
+      "(4, 6)": 0.0,
+      "(5, 6)": 0.0
+    }
+  },
+  "object_axis_definition": "Object +Z = specified top tag outward normal; XY = decoded top tag axes. Fixed face transforms estimated from co-visible observations; no human hand orientation.",
+  "warning": null,
+  "verification_source": "User confirmed 2026-10-07: ID6 on cube top, ID0 flat on table printed face upward, matching camera calibration.",
+  "source_detections": "results/data_003_raw/detections.csv"
+}

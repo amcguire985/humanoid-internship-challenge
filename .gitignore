@@ -16,3 +16,7 @@ config/upright_mug_stats.json
 
 # Generated ordinary LIBERO interface checks.
 results/libero_interface*/
+
+# Generated human-guided bowl rollouts and reference diagnostics.
+results/bowl_hybrid*/
+results/bowl_human_reference/
