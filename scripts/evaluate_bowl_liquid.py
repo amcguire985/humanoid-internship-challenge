@@ -15,7 +15,8 @@ from upright_orientation import compute_upright_deviation_deg, get_mug_orientati
 
 REVISION = '8c920c4270460851cedd2737657584586d3dc66f'
 ORIGINAL = 'pick up the black bowl from table center and place it on the plate'
-LIQUID = 'The bowl is full of liquid. Do not spill it.'
+CONSTRAINT = 'the bowl is full of liquid, do not spill it'
+LIQUID = ORIGINAL + '. ' + CONSTRAINT
 OBJECT = 'akita_black_bowl_1'
 
 
@@ -180,7 +181,7 @@ def analyze_transport(rows):
     return summary,trace
 
 
-def process_outputs(output, baseline_root, condition):
+def process_outputs(output, baseline_root, condition, episodes=1):
     import csv
     import matplotlib
     matplotlib.use('Agg')
@@ -201,7 +202,7 @@ def process_outputs(output, baseline_root, condition):
         write_json(directory/'summary.json',summary);reports.append(summary)
         with (directory/'metrics.csv').open('w',newline='',encoding='utf-8') as f:
             writer=csv.DictWriter(f,fieldnames=list(trace[0]));writer.writeheader();writer.writerows(trace)
-        for field,label,name in [('tilt_deg','Bowl tilt (degrees)','tilt.png'),('acceleration_raw_m_s2','Bowl acceleration (m/s²)','acceleration.png')]:
+        for field,label,name in [('tilt_deg','Bowl tilt (degrees)','tilt.png'),('acceleration_raw_m_s2','Bowl acceleration (m/sÃ‚Â²)','acceleration.png')]:
             fig,ax=plt.subplots()
             selected=[r for r in trace if r['in_transport']]
             ax.plot([r['time_since_settled_reset_s'] for r in selected],
@@ -209,27 +210,72 @@ def process_outputs(output, baseline_root, condition):
             if not selected:ax.text(.5,.5,'No transport detected',transform=ax.transAxes,ha='center')
             ax.set(xlabel='Simulation time since settled reset (s)',ylabel=label,title=f'{condition} episode {episode}: transport phase')
             fig.tight_layout();fig.savefig(directory/name);plt.close(fig)
-    if len(reports)!=3:raise ValueError('Expected exactly three recorded episodes')
+    if len(reports)!=episodes:raise ValueError('Unexpected recorded episode count')
     baseline_path=baseline_root/'libero_spatial_2/eval_info.json'
     baseline=json.loads(baseline_path.read_text())['per_task'][0]['metrics']['successes']
     if baseline != [True,True,True]:raise ValueError('Expected the validated three-success original baseline')
-    table=['| Episode | Prompt | LIBERO success | Max tilt (deg) | Max acceleration (m/s²) |',
+    table=['| Episode | Prompt | LIBERO success | Max tilt (deg) | Max acceleration (m/s?) |',
            '|---|---|---|---|---|']
     for r in reports:
-        table.append(f"| {r['episode']} | original | True | unavailable | unavailable |")
         tilt='unavailable' if r['max_tilt_deg'] is None else f"{r['max_tilt_deg']:.3f}"
         acc='unavailable' if r['max_acceleration_m_s2'] is None else f"{r['max_acceleration_m_s2']:.3f}"
         table.append(f"| {r['episode']} | {condition} | {r['libero_success']} | {tilt} | {acc} |")
-    (output/'comparison.md').write_text('\n'.join(table)+'\n\nPaired tilt/acceleration differences unavailable: previous baseline has no ground-truth object trace. No significance testing.\n',encoding='utf-8')
-    write_json(output/'comparison.json',dict(episodes=reports,original_successes=baseline,
-        delta_tilt_deg=[None]*3,delta_acceleration_m_s2=[None]*3,
-        limitation='Original object-pose trajectories unavailable; no quantitative paired dynamics comparison yet'))
+    (output/'comparison.md').write_text('\n'.join(table)+'\n',encoding='utf-8')
+    write_json(output/'comparison.json',dict(episodes=reports,condition=condition,
+        historical_original_successes=baseline,
+        limitation='Use the new logged original run for paired dynamics; historical baseline lacks object poses'))
+
+
+def compare_pair(original, liquid, output):
+    """Compare already completed matched episodes; never launches a simulation."""
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    import csv
+    output=Path(output)
+    original=Path(original);liquid=Path(liquid)
+    a=json.loads((original/'comparison.json').read_text())['episodes']
+    b=json.loads((liquid/'comparison.json').read_text())['episodes']
+    if len(a)!=1 or len(b)!=1:raise ValueError('This comparison expects one episode per condition')
+    for path,prompt in [(original,ORIGINAL),(liquid,LIQUID)]:
+        verification=json.loads((path/'prompt_verification.json').read_text())
+        if verification['policy_instruction']!=prompt:raise ValueError('Incorrect comparison prompt')
+    ia=json.loads((original/'ground_truth/episode_000/initialization.json').read_text())
+    ib=json.loads((liquid/'ground_truth/episode_000/initialization.json').read_text())
+    for key in ['seed','init_state_index','init_state_sha256','bddl_sha256','local_opening_axis']:
+        if ia[key]!=ib[key]:raise ValueError('Unmatched conditions: '+key)
+    ea=json.loads((original/'experiment.json').read_text())
+    eb=json.loads((liquid/'experiment.json').read_text())
+    if ea['checkpoint_sha256']!=eb['checkpoint_sha256']:raise ValueError('Different checkpoints')
+    differences={}
+    for field in ['max_tilt_deg','max_acceleration_m_s2']:
+        differences['delta_'+field]=None if a[0][field] is None or b[0][field] is None else b[0][field]-a[0][field]
+    write_json(output/'paired_comparison.json',dict(original=a[0],liquid=b[0],**differences,
+        interpretation='Liquid minus original; unavailable if either run has no valid transport metric. One pair cannot establish a general effect.'))
+    lines=['| Prompt | LIBERO success | Max tilt (deg) | Max acceleration (m/s?) |','|---|---|---|---|']
+    for name,r in [('original',a[0]),('original + liquid',b[0])]:
+        values=['unavailable' if r[k] is None else f"{r[k]:.3f}" for k in ['max_tilt_deg','max_acceleration_m_s2']]
+        lines.append(f"| {name} | {r['libero_success']} | {values[0]} | {values[1]} |")
+    lines.extend(['','Liquid minus original: '+json.dumps(differences),'','No significance testing; one matched pair.'])
+    (output/'paired_comparison.md').write_text('\n'.join(lines)+'\n',encoding='utf-8')
+    for field,label,filename in [('tilt_deg','Bowl tilt (degrees)','paired_tilt.png'),('acceleration_raw_m_s2','Bowl acceleration (m/s?)','paired_acceleration.png')]:
+        fig,ax=plt.subplots()
+        for path,name in [(original,'original'),(liquid,'original + liquid')]:
+            with (path/'ground_truth/episode_000/metrics.csv').open(encoding='utf-8') as stream:
+                rows=list(csv.DictReader(stream))
+            selected=[r for r in rows if r['in_transport']=='True' and r[field]]
+            ax.plot([float(r['time_since_settled_reset_s']) for r in selected],
+                    [float(r[field]) for r in selected],label=name)
+        ax.set(xlabel='Simulation time since settled reset (s)',ylabel=label)
+        ax.legend();fig.tight_layout();fig.savefig(output/filename);plt.close(fig)
+    print((output/'paired_comparison.md').read_text(),flush=True)
 
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--baseline-root',type=Path,required=True)
-    parser.add_argument('--condition',choices=['liquid'],default='liquid')
+    parser.add_argument('--condition',choices=['original','liquid'],default='liquid')
+    parser.add_argument('--episodes',type=int,choices=[1,3],default=1)
     args,official_args=parser.parse_known_args()
     output_option=next((a.split('=',1)[1] for a in official_args if a.startswith('--output_dir=')),None)
     if not output_option:raise ValueError('Use --output_dir=<new directory>')
@@ -244,7 +290,7 @@ def main():
     required=['--env.type=libero','--env.task=libero_spatial','--env.task_ids=[2]',
         '--env.control_mode=relative','--env.init_states=true','--env.hard_reset=true',
         '--env.observation_height=256','--env.observation_width=256','--env.max_parallel_tasks=1',
-        '--eval.batch_size=1','--eval.n_episodes=3','--seed=0','--policy.device=cuda','--policy.load_vlm_weights=false']
+        '--eval.batch_size=1',f'--eval.n_episodes={args.episodes}','--seed=0','--policy.device=cuda','--policy.load_vlm_weights=false']
     if any(a not in official_args for a in required):raise ValueError('Use the documented matched official configuration')
     allowed={a.split('=',1)[0] for a in required}|{'--policy.path','--output_dir'}
     keys=[a.split('=',1)[0] for a in official_args]
@@ -289,19 +335,20 @@ def main():
     original_processors=evaluator.make_pre_post_processors
     from transformers import AutoTokenizer
     tokenizer=AutoTokenizer.from_pretrained(config['vlm_model_name'])
+    prompt=ORIGINAL if args.condition=='original' else LIQUID
     def processors(*a,**kw):
         pre,post=original_processors(*a,**kw)
-        return PromptProcessor(pre,tokenizer,LIQUID,output),post
+        return PromptProcessor(pre,tokenizer,prompt,output),post
     evaluator.make_pre_post_processors=processors
-    write_json(output/'experiment.json',dict(condition='liquid',policy_instruction=LIQUID,
+    write_json(output/'experiment.json',dict(condition=args.condition,policy_instruction=prompt,
         environment_instruction=ORIGINAL,checkpoint_sha256=checkpoint_hashes,baseline_root=str(args.baseline_root),original_manifest=manifest,
-        matched_seeds=[0,1,2],expected_initial_state_indices=[0,1,2],
-        prompt_design='Exact constraint-only replacement specified by user; task goal language is absent',
+        matched_seeds=list(range(args.episodes)),expected_initial_state_indices=list(range(args.episodes)),
+        prompt_design='Original task instruction unchanged; liquid condition appends the physical constraint',
         baseline_limitation='Original official recording=False; ground-truth bowl poses unavailable',
         override_location='Policy preprocessor input only; environment task_description and BDDL unchanged'))
     sys.argv=[sys.argv[0]]+official_args
     evaluator.main()
-    process_outputs(output,args.baseline_root,args.condition)
+    process_outputs(output,args.baseline_root,args.condition,args.episodes)
     print((output/'comparison.md').read_text(),flush=True)
 
 

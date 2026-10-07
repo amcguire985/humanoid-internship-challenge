@@ -1,4 +1,4 @@
-﻿"""Offline checks for the official-evaluator observer and transport-only metrics."""
+"""Offline checks for the official-evaluator observer and transport-only metrics."""
 import json
 from pathlib import Path
 import sys
@@ -63,6 +63,27 @@ class TransportTests(unittest.TestCase):
         self.assertEqual(experiment.compute_upright_deviation_deg(rotation),0)
 
 
+class PairTests(unittest.TestCase):
+    def test_matched_differences_and_wrong_state_rejection(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp)
+            for name,prompt,tilt,acc in [('original',experiment.ORIGINAL,20.,4.),('liquid',experiment.LIQUID,12.,3.)]:
+                path=root/name;trace=path/'ground_truth/episode_000';trace.mkdir(parents=True)
+                experiment.write_json(path/'comparison.json',{'episodes':[{'libero_success':True,'max_tilt_deg':tilt,'max_acceleration_m_s2':acc}]})
+                experiment.write_json(path/'prompt_verification.json',{'policy_instruction':prompt})
+                experiment.write_json(path/'experiment.json',{'checkpoint_sha256':{'model':'same'}})
+                experiment.write_json(trace/'initialization.json',dict(seed=0,init_state_index=0,init_state_sha256='same',bddl_sha256='same',local_opening_axis=[0,0,1]))
+                (trace/'metrics.csv').write_text('in_transport,time_since_settled_reset_s,tilt_deg,acceleration_raw_m_s2\nTrue,0.1,10,2\n')
+            experiment.compare_pair(root/'original',root/'liquid',root)
+            paired=json.loads((root/'paired_comparison.json').read_text())
+            self.assertEqual(paired['delta_max_tilt_deg'],-8)
+            self.assertEqual(paired['delta_max_acceleration_m_s2'],-1)
+            self.assertTrue((root/'paired_tilt.png').exists())
+            init=root/'liquid/ground_truth/episode_000/initialization.json'
+            data=json.loads(init.read_text());data['init_state_index']=1;experiment.write_json(init,data)
+            with self.assertRaises(ValueError):experiment.compare_pair(root/'original',root/'liquid',root)
+
+
 class Tensor:
     def __init__(self,value):self.value=np.asarray(value)
     def __getitem__(self,index):return Tensor(self.value[index.value if isinstance(index,Tensor) else index])
@@ -73,6 +94,10 @@ class Tensor:
 
 
 class PromptTests(unittest.TestCase):
+    def test_liquid_appends_constraint_to_exact_original_task(self):
+        self.assertEqual(experiment.LIQUID, experiment.ORIGINAL + '. the bowl is full of liquid, do not spill it')
+        self.assertTrue(experiment.LIQUID.startswith(experiment.ORIGINAL))
+
     def test_policy_only_override_and_full_token_check(self):
         class Tokenizer:
             def __call__(self,text,**kwargs):return {'input_ids':[ord(c) for c in text]}
