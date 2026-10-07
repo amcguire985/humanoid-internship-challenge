@@ -43,6 +43,29 @@ class InterfaceTests(unittest.TestCase):
         flat['observation.state.mean']=np.ones(18)
         with self.assertRaises(ValueError):validation.checked_stats(flat)
 
+    def test_postprocessor_needs_only_action_statistics(self):
+        flat={'action.'+name:np.ones(7) for name in ('mean','std')}
+        self.assertEqual(set(validation.checked_stats(flat,fields=(('action',7),))),{'action'})
+
+    def test_both_videos_encode_policy_oriented_rgb(self):
+        import cv2
+        with tempfile.TemporaryDirectory() as temp,patch.dict('os.environ',{'HUMANOID_VIDEO_ROOT':temp}):
+            video=validation.RolloutVideo(Path(temp)/'run',0,20)
+            obs={camera:np.zeros((256,256,3),dtype=np.uint8) for camera in validation.CAMERAS}
+            for rgb in obs.values():rgb[:128,:128]=[255,0,0]
+            try:
+                for _ in range(3):video.append(obs)
+            finally:video.close()
+            self.assertEqual(len(video.paths),2)
+            for path in video.paths:
+                cap=cv2.VideoCapture(path)
+                try:
+                    ok,bgr=cap.read();self.assertTrue(ok)
+                    self.assertGreater(int(bgr[200,200,2]),200)
+                    self.assertLess(int(bgr[20,20,2]),20)
+                    self.assertEqual(int(cap.get(cv2.CAP_PROP_FRAME_COUNT)),3)
+                finally:cap.release()
+
     def test_standalone_probe_distinguishes_commands_from_motion(self):
         class Env:
             aperture=.08
@@ -52,11 +75,11 @@ class InterfaceTests(unittest.TestCase):
         result=validation.gripper_probe(Env(),{'robot0_gripper_qpos':[.04,-.04]},50)
         self.assertTrue(result['physically_closes']);self.assertTrue(result['physically_reopens'])
 
-    def test_default_is_single_ordinary_rollout_and_checkpoint_horizon(self):
+    def test_default_is_five_ordinary_rollouts_and_checkpoint_horizon(self):
         args=validation.parser().parse_args([])
-        self.assertEqual(args.num_rollouts,1)
+        self.assertEqual(args.num_rollouts,5)
         self.assertIsNone(args.execute_steps)
-        self.assertEqual(args.checkpoint,'lerobot/smolvla_libero')
+        self.assertEqual(args.checkpoint,'HuggingFaceVLA/smolvla_libero')
         self.assertFalse(hasattr(args,'policy_instruction'))
 
     def test_rollout_action_chain_and_original_prompt(self):
@@ -65,7 +88,7 @@ class InterfaceTests(unittest.TestCase):
                 self.count=0;self.z=.8
                 controller=SimpleNamespace(scale_action=lambda a:a*np.r_[[.05]*3,[.5]*3])
                 self.sim=SimpleNamespace(model=SimpleNamespace(body_name2id=lambda name:0),
-                                         data=SimpleNamespace(body_xpos=np.array([[0.,0.,self.z]])))
+                                         data=SimpleNamespace(body_xpos=np.array([[0.,0.,self.z]]),body_xmat=np.eye(3).reshape(1,9),body_xquat=np.array([[1.,0.,0.,0.]])))
                 robot=SimpleNamespace(controller=controller,gripper=object())
                 self.env=SimpleNamespace(sim=self.sim,robots=[robot],objects_dict={validation.OBJECT:SimpleNamespace(root_body='mug')},
                                          action_spec=(-np.ones(7),np.ones(7)),_check_grasp=lambda *args:self.count>10)
@@ -95,7 +118,7 @@ class InterfaceTests(unittest.TestCase):
             'evaluate_libero_bc':SimpleNamespace(rendering_settings=lambda sim:None)}
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp);(root/'suite').mkdir();(root/'suite/task.bddl').write_text('goal unchanged')
-            args=validation.parser().parse_args(['--output',str(root/'run')])
+            args=validation.parser().parse_args(['--output',str(root/'run'),'--num-rollouts','1','--no-video'])
             runtime=Runtime()
             with patch.dict(sys.modules,modules),patch.object(validation,'controller_audit',lambda env:{}),contextlib.redirect_stdout(io.StringIO()):
                 validation.evaluate(args,runtime)
@@ -104,6 +127,9 @@ class InterfaceTests(unittest.TestCase):
             self.assertEqual(report['libero_successes'],1)
             self.assertEqual(report['rollouts_with_grasp'],1)
             self.assertEqual(report['rollouts_with_lift'],1)
+            self.assertTrue(report['ordinary_baseline_validated'])
+            self.assertIn('| 0 | True | True | True |', (root/'run/results.md').read_text())
+            self.assertEqual(json.loads((root/'run/rollout_000/summary.json').read_text())['max_mug_tilt_deg'],0)
             rows=[json.loads(l) for l in (root/'run/rollout_000/trajectory.jsonl').read_text().splitlines()]
             self.assertEqual(len(rows),2)
             self.assertEqual(rows[0]['final_libero_action'][0],.8)

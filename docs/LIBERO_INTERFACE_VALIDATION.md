@@ -36,47 +36,27 @@ unrelated normalization and base-model domain mismatch are plausible causes of
 failure. Downward drift alone cannot identify which cause dominates. The earlier
 trace saved only final actions, so it cannot fully reconstruct raw model output.
 
-## Explicit checkpoint choice
+## Requested checkpoint
 
-The new runner is `scripts/validate_libero_interface.py`. It explicitly selects
-`lerobot/smolvla_libero`, pinned revision
-`31d453f7edd78c839a8bbc39744a292686daf0de`.
-This is a published LIBERO-trained derivative of SmolVLA. Its `train_config.json`
-records `lerobot/libero`, 25,000 steps, and relative control. **We perform no local
-training.** It is a candidate for interface validation, not yet a successful
-ordinary mug baseline.
+The runner now selects `HuggingFaceVLA/smolvla_libero`, pinned revision
+`6721902bc4d61e50a3bfdb11dfb4cb626f05d102`. Its native configuration has
+8D state, two cameras (`image`, `image2`), 7D action, chunk size 50,
+`n_action_steps=1` and flow-matching `num_steps=10`. No metadata correction,
+Panda adapter, local training or bowl statistics are used. Strictly load the
+model and its saved processors from the same snapshot. The checkpoint does not
+include a training config or task-coverage manifest; do not infer competence on
+our task from the LIBERO name or from another checkpoint's training metadata.
 
-The dataset has 40 tasks from Spatial/Object/Goal/Long. Our unchanged task is
-`libero_90`, canonical task 72,
-`LIVING_ROOM_SCENE6_put_the_white_mug_on_the_plate`, language
-`put the white mug on the plate`. This single-goal task is outside those standard
-40 training tasks; success here is a generalization test and is not promised by
-the checkpoint's LIBERO label. Related white-mug tasks in Long are multi-goal.
-If input/action diagnostics pass but this task still fails, unseen-task
-generalization is a leading remaining hypothesis. We must inspect the new
-rollouts before attributing failure to it.
-
-### Metadata correction, with evidence
-
-The checkpoint declares 6D state and three image features, but its serialized
-normalization safetensors actually contain **8D state mean/std and 7D action
-mean/std**. Both its training dataset metadata and the official LIBERO processor
-use eight state elements. The runner rejects unexpected dimensions, explicitly
-corrects state feature metadata from 6 to 8 in the model and saved normalizer,
-and logs the original config and correction. The learned 32D projection and
-weights are unchanged, loaded strictly. This is a metadata correction, not a
-trained adapter or a claim that dimensions alone imply competence.
-
-Camera3 is stale inherited metadata: the dataset contains only two images, and
-`empty_cameras=0` means the model consumes only present cameras. It is not
-filled with a fabricated view. Actual model camera ordering and masks are logged.
+The task stays `libero_90`, canonical index 72,
+`LIVING_ROOM_SCENE6_put_the_white_mug_on_the_plate`, with original language
+`put the white mug on the plate`. Resolve its index by exact name at runtime.
 
 ## Observation and action contract
 
 | Source | Final policy input |
 |---|---|
-| `agentview_image` | `observation.images.image` renamed to `camera1` |
-| `robot0_eye_in_hand_image` | `observation.images.image2` renamed to `camera2` |
+| `agentview_image` | `observation.images.image` (first camera) |
+| `robot0_eye_in_hand_image` | `observation.images.image2` (second camera) |
 | `robot0_eef_pos` | State elements 0-2, world XYZ metres |
 | `robot0_eef_quat` | xyzw converted to axis-angle, state elements 3-5 radians |
 | `robot0_gripper_qpos` | State elements 6-7, signed finger positions |
@@ -118,37 +98,76 @@ optional standalone simulator probe measures finger aperture under both signs.
 
 ## Colab commands
 
-Use the existing validated simulator environment and the already installed
-Python 3.12 CUDA SmolVLA environment. Pull the new code after it is committed and
-pushed. Do not rerun the previous constrained evaluator or generate bowl stats.
-
-Optional standalone gripper probe (no model download/inference):
+Run from `/content/humanoid-internship-challenge` after transferring these
+changes. The edits are local until committed/pushed; `git pull` alone cannot
+retrieve uncommitted changes. On the local checkout, if Git delivery is desired:
 
 ```bash
-MUJOCO_GL=osmesa /content/micromamba/envs/libero/bin/python scripts/validate_libero_interface.py --gripper-probe-only --output results/libero_interface_gripper_probe
+git add scripts/validate_libero_interface.py tests/test_libero_interface.py docs/LIBERO_INTERFACE_VALIDATION.md
+git commit -m "Validate requested LIBERO SmolVLA checkpoint with videos"
+git push origin HEAD
 ```
 
-First run **one ordinary task**:
+In Colab, use the existing validated micromamba simulator and CUDA policy
+ environments. No new LeRobot version is needed. The pinned source is
+`8c920c4270460851cedd2737657584586d3dc66f`; worker metadata records actual
+LeRobot/Transformers/PyTorch versions. Ensure the policy dependencies and
+simulator video encoder are installed:
 
 ```bash
-MUJOCO_GL=osmesa OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 LP_NUM_THREADS=2 /content/micromamba/envs/libero/bin/python scripts/validate_libero_interface.py --policy-python /content/micromamba/envs/smolvla/bin/python --num-rollouts 1 --horizon 300 --output results/libero_interface_validation_001
+%cd /content/humanoid-internship-challenge
+!git pull --ff-only
+!/content/micromamba/envs/smolvla/bin/python -m pip install -r config/smolvla/requirements-gpu.txt
+!/content/micromamba/envs/libero/bin/python -m pip install 'opencv-python-headless==4.10.0.84'
 ```
 
-If diagnostics show sensible behavior, choose a fresh output folder and run a
-small check with `--num-rollouts 3`. The default executes the checkpoint's saved
-`n_action_steps=50` before replanning (not the earlier four-action setting).
-`--execute-steps` can change it explicitly; the value is recorded. Progress logs
-show inference and elapsed time at every replan. Horizon is 300 control steps,
-not 300 seconds; inference wall time is independent of simulated time.
+Mount Google Drive once, to retain videos outside Git:
 
-The script permits only the audited checkpoint name; a different model requires
-an explicit interface audit. It offers no instruction override: every policy
-request uses `task.language`. No upright metric or phone-video code is changed.
-Outputs refuse to overwrite prior experiments.
+```python
+from google.colab import drive
+drive.mount('/content/drive')
+```
+
+Five ordinary-prompt rollouts (two videos per rollout):
+
+```bash
+!HUMANOID_VIDEO_ROOT=/content/drive/MyDrive/humanoid_videos MUJOCO_GL=osmesa OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 LP_NUM_THREADS=2 /content/micromamba/envs/libero/bin/python scripts/validate_libero_interface.py --policy-python /content/micromamba/envs/smolvla/bin/python --num-rollouts 5 --seed 0 --horizon 300 --output results/smolvla_libero_ordinary_5
+```
+
+More rollouts, with a fresh directory and reproducible seed:
+
+```bash
+!HUMANOID_VIDEO_ROOT=/content/drive/MyDrive/humanoid_videos MUJOCO_GL=osmesa OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 LP_NUM_THREADS=2 /content/micromamba/envs/libero/bin/python scripts/validate_libero_interface.py --policy-python /content/micromamba/envs/smolvla/bin/python --num-rollouts 10 --seed 100 --horizon 300 --output results/smolvla_libero_ordinary_10
+```
+
+Saved execution defaults to one action before replanning, as this checkpoint
+specifies, rather than the other checkpoint's 50. `num_steps=10` is the inference
+denoising count, not rollout horizon. `--execute-steps` is an explicit experimental
+override and is recorded. Five 300-step runs can require substantial GPU time
+because each step replans. Seeded initial-state permutations contain no duplicate
+states within a run, though separate runs can overlap.
+
+The public checkpoint and tokenizer were accessible without authentication.
+The first run downloads model weights plus SmolVLM configuration/tokenizer;
+CUDA and internet access are required. If Hub access/rate limits require login,
+run `/content/micromamba/envs/smolvla/bin/hf auth login` in a terminal; never
+commit a token. No dataset download or local statistics extraction is needed.
+
+Optional standalone physical gripper probe:
+
+```bash
+!MUJOCO_GL=osmesa /content/micromamba/envs/libero/bin/python scripts/validate_libero_interface.py --gripper-probe-only --no-video --output results/libero_interface_gripper_probe
+```
+
+Stop after ordinary runs. Review videos and diagnostics if all runs fail before
+grasp; do not launch the constrained comparison automatically.
 
 ## Outputs and report status
 
-- `experiment.json`: task/prompt, pinned checkpoint, original/corrected metadata,
+- `runtime_sanity.json`: concise input/action/controller/chunk settings.
+- `results.md`: requested per-rollout Markdown table; closure means aperture reduced by >1 mm, not merely a close command.
+- Videos: `/content/drive/MyDrive/humanoid_videos/processed/smolvla_libero_ordinary_5/rollout_NNN_agentview_image.mp4` and `rollout_NNN_robot0_eye_in_hand_image.mp4`; paths also appear in rollout summaries. Both views are rotated 180 degrees like policy inputs, and encoded at the simulator control frequency.
+- `experiment.json`: task/prompt, pinned checkpoint, native metadata,
   actual normalization tensors/hashes, action/state/camera conventions.
 - `rollout_NNN/controller.json`: observed mode, scaling and gripper sign mapping.
 - `rollout_NNN/observation.json`: actual postprocessed model tensor keys,
@@ -165,7 +184,7 @@ Outputs refuse to overwrite prior experiments.
 - `error.json`: interrupted/failed rollout status; not counted as a completion.
 
 Mug lift >=2 cm is a simple diagnostic, not an orientation threshold or a change
-to task success. Lift by itself does not prove grasp/transport. Root-body distance
+to task success. Lift by itself does not prove grasp/transport. Maximum gravity-relative tilt is retained as a diagnostic only; no orientation conclusions are drawn. Root-body distance
 is not fingertip-to-surface distance. Finger closure alone does not prove grasp.
 The normal `env.check_success()` remains the only task-success predicate.
 
@@ -178,12 +197,27 @@ base-checkpoint failures remain separate evidence, not results for this model.
 
 ## Primary sources inspected
 
-- [SmolVLA base model card](https://huggingface.co/lerobot/smolvla_base)
-- [LIBERO-trained checkpoint](https://huggingface.co/lerobot/smolvla_libero)
-- [Pinned checkpoint configuration](https://huggingface.co/lerobot/smolvla_libero/blob/31d453f7edd78c839a8bbc39744a292686daf0de/config.json)
-- [Pinned training configuration](https://huggingface.co/lerobot/smolvla_libero/blob/31d453f7edd78c839a8bbc39744a292686daf0de/train_config.json)
-- [Training dataset metadata](https://huggingface.co/datasets/lerobot/libero/blob/main/meta/info.json)
-- [LeRobot LIBERO processor](https://github.com/huggingface/lerobot/blob/8c920c4270460851cedd2737657584586d3dc66f/src/lerobot/processor/env_processor.py)
-- [LeRobot model image/action processing](https://github.com/huggingface/lerobot/blob/8c920c4270460851cedd2737657584586d3dc66f/src/lerobot/policies/smolvla/modeling_smolvla.py)
-- [Classic Panda gripper](https://github.com/ARISE-Initiative/robosuite/blob/v1.4.1/robosuite/models/grippers/panda_gripper.py)
-- [Classic OSC scaling configuration](https://github.com/ARISE-Initiative/robosuite/blob/v1.4.1/robosuite/controllers/config/osc_pose.json)
+- [Requested model card](https://huggingface.co/HuggingFaceVLA/smolvla_libero)
+- [Pinned configuration](https://huggingface.co/HuggingFaceVLA/smolvla_libero/blob/6721902bc4d61e50a3bfdb11dfb4cb626f05d102/config.json)
+- [Pinned preprocessor](https://huggingface.co/HuggingFaceVLA/smolvla_libero/blob/6721902bc4d61e50a3bfdb11dfb4cb626f05d102/policy_preprocessor.json)
+- [Pinned postprocessor](https://huggingface.co/HuggingFaceVLA/smolvla_libero/blob/6721902bc4d61e50a3bfdb11dfb4cb626f05d102/policy_postprocessor.json)
+- [Official LIBERO preprocessing](https://github.com/huggingface/lerobot/blob/8c920c4270460851cedd2737657584586d3dc66f/src/lerobot/processor/env_processor.py)
+- [Model image/action processing](https://github.com/huggingface/lerobot/blob/8c920c4270460851cedd2737657584586d3dc66f/src/lerobot/policies/smolvla/modeling_smolvla.py)
+
+## Files controlling the interface
+
+| Setting | Previous baseline | Ordinary validation |
+|---|---|---|
+| Checkpoint/loading | `scripts/evaluate_upright_mug.py` worker | `scripts/validate_libero_interface.py` constants and worker |
+| Library version | `config/smolvla/requirements-gpu.txt` | Same pin; actual versions logged by worker |
+| Task/initial states | `evaluate_upright_mug.py` task resolver | Same resolver, original task instruction |
+| Observation/camera/state | `evaluate_upright_mug.py`, `prepare_libero_smolvla.py` | `encode_observation`, official `LiberoProcessorStep`, saved processors |
+| Normalization | `train_libero_smolvla.py` local bowl stats | Checkpoint processor safetensors, checked by worker |
+| Chunk execution | `evaluate_upright_mug.py` | Native config and `evaluate` loop |
+| Controller scale/mode | `replay_libero_transport.py::inspect_controller` | Reused by `controller_audit` |
+| Gripper mapping | Previous evaluator threshold | Native denormalized sign, checked against live Panda gripper |
+| Tilt | `scripts/upright_orientation.py` | Same functions, diagnostic only |
+
+The domain-trained weights, correct EEF state, wrist camera, matching image
+geometry and checkpoint statistics remove identified integration mismatches.
+They are expected to improve the baseline, but do not guarantee this task's success.

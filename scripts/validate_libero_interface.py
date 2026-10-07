@@ -14,8 +14,8 @@ import numpy as np
 from evaluate_libero_smolvla import WorkerRuntime
 from evaluate_upright_mug import TASK, resolve_task, write_json
 
-CHECKPOINT = 'lerobot/smolvla_libero'
-REVISION = '31d453f7edd78c839a8bbc39744a292686daf0de'
+CHECKPOINT = 'HuggingFaceVLA/smolvla_libero'
+REVISION = '6721902bc4d61e50a3bfdb11dfb4cb626f05d102'
 CAMERAS = ('agentview_image', 'robot0_eye_in_hand_image')
 POLICY_IMAGES = ('observation.images.image', 'observation.images.image2')
 OBJECT = 'porcelain_mug_1'
@@ -50,10 +50,10 @@ def final_libero_action(denormalized, low, high):
     return np.clip(action,low,high)
 
 
-def checked_stats(flat):
+def checked_stats(flat, fields=(('observation.state',8),('action',7))):
     """Validate checkpoint-owned normalization, never substitute bowl statistics."""
     result = {}
-    for key,size in [('observation.state',8),('action',7)]:
+    for key,size in fields:
         result[key] = {}
         for name in ('mean','std'):
             value = flat[key+'.'+name]
@@ -69,7 +69,7 @@ def worker(args):
         import torch
         from huggingface_hub import snapshot_download
         from safetensors.torch import load_file
-        from lerobot.configs import FeatureType, PolicyFeature
+        from lerobot.configs import FeatureType
         from lerobot.policies.factory import make_pre_post_processors
         from lerobot.policies.smolvla.configuration_smolvla import SmolVLAConfig
         from lerobot.policies.smolvla.modeling_smolvla import SmolVLAPolicy
@@ -84,7 +84,7 @@ def worker(args):
         unnorm = next(s for s in post_json['steps'] if s['registry_name']=='unnormalizer_processor')
         flat = load_file(str(root/norm['state_file']))
         stats = checked_stats(flat)
-        post_stats = checked_stats(load_file(str(root/unnorm['state_file'])))
+        post_stats = checked_stats(load_file(str(root/unnorm['state_file'])), fields=(('action',7),))
         if stats['action'] != post_stats['action']:
             raise ValueError('Pre/post action statistics disagree')
         config = SmolVLAConfig.from_pretrained(root)
@@ -93,21 +93,15 @@ def worker(args):
             raise ValueError('Unsupported action parameterization')
         if config.normalization_mapping[FeatureType.STATE].value != 'MEAN_STD' or config.normalization_mapping[FeatureType.ACTION].value != 'MEAN_STD':
             raise ValueError('Expected audited MEAN_STD checkpoint')
-        # Published feature metadata is stale (6), while saved training stats are 8D.
-        # Projection capacity stays 32; no layer replacement, random adapter, or training.
-        if config.input_features['observation.state'].shape not in ((6,),(8,)):
-            raise ValueError('Unexpected state feature metadata')
-        config.input_features['observation.state'] = PolicyFeature(type=FeatureType.STATE,shape=(8,))
-        for key in ('observation.images.camera1','observation.images.camera2'):
-            if config.input_features[key].shape != (3,256,256):
-                raise ValueError('Unexpected camera metadata')
+        if config.input_features['observation.state'].shape != (8,):
+            raise ValueError('Expected checkpoint-native 8D state')
+        if tuple(config.image_features) != POLICY_IMAGES or any(
+                config.image_features[k].shape != (3,256,256) for k in POLICY_IMAGES):
+            raise ValueError('Unexpected checkpoint camera order or shape')
         if config.empty_cameras != 0:
             raise ValueError('Expected no fabricated cameras')
         config.device='cuda'; config.load_vlm_weights=False
-        features=copy.deepcopy(norm['config']['features'])
-        features['observation.state']['shape']=[8]
-        pre,post=make_pre_post_processors(config,pretrained_path=root,
-            preprocessor_overrides={'normalizer_processor':{'features':features}})
+        pre,post=make_pre_post_processors(config,pretrained_path=root)
         policy=SmolVLAPolicy.from_pretrained(root,config=config,strict=True)
         policy.eval(); policy.reset()
         env_processor=LiberoProcessorStep()
@@ -119,15 +113,15 @@ def worker(args):
         if not torch.allclose(recovered,targets,atol=1e-5):
             raise ValueError('Checkpoint action denormalization failed round-trip')
         metadata=dict(checkpoint=args.checkpoint,revision=args.revision,libero_trained=True,
-            training_dataset='lerobot/libero',training_task_coverage='40 tasks; target libero_90 task is outside the standard 40-task dataset',
-            original_input_features=original_features,state_metadata_correction='6 -> 8; backed by serialized statistics and dataset; fixed 32D learned projection unchanged',
-            chunk_size=config.chunk_size,n_action_steps=config.n_action_steps,
+            training_task_coverage='LIBERO checkpoint; competence on this libero_90 task must be measured',
+            original_input_features=original_features,state_metadata_correction=None,
+            chunk_size=config.chunk_size,n_action_steps=config.n_action_steps,num_steps=config.num_steps,
+            versions={name:__import__('importlib.metadata',fromlist=['version']).version(name) for name in ('lerobot','transformers','torch')},
             normalization_source='Checkpoint serialized processors and their safetensors, not local data',
             normalization=stats,processor_hashes={f.name:hashlib.sha256(f.read_bytes()).hexdigest() for f in
                 [root/'policy_preprocessor.json',root/'policy_postprocessor.json',root/norm['state_file'],root/unnorm['state_file']]},
             gripper_roundtrip=dict(normalized=normalized[:,6].tolist(),denormalized=recovered[:,6].tolist()),
-            camera_order=['agentview -> camera1','eye_in_hand -> camera2'],
-            camera3='Declared in saved config but absent in dataset; empty_cameras=0, no fabricated image',
+            camera_order=['agentview -> observation.images.image','eye_in_hand -> observation.images.image2'],
             preprocessing='Official LiberoProcessorStep: rotate raw RGB 180 degrees; xyzw quaternion to axis-angle; EEF pos(3)+axis-angle(3)+gripper qpos(2)',
             image_normalization='uint8 RGB -> CHW float32 /255; model padded resize to 512x512 then 2*x-1',
             action_order=['dx','dy','dz','drot_x','drot_y','drot_z','gripper'],
@@ -244,12 +238,15 @@ def aggregate(reports,metadata):
                 rollouts_with_lift=sum(r['mug_lifted'] for r in reports),
                 libero_successes=sum(r['libero_success'] for r in reports),
                 libero_success_rate=sum(r['libero_success'] for r in reports)/len(reports) if reports else None,
-                ordinary_baseline_validated=any(r['libero_success'] for r in reports),
-                next_step='Inspect failures; do not run orientation experiments' if not any(r['libero_success'] for r in reports)
+                ordinary_baseline_validated=any(r['libero_success'] and r['grasp_ever'] and r['mug_lifted'] and r['finger_aperture_reduced'] for r in reports),
+                next_step='Inspect failures; do not run orientation experiments' if not any(r['libero_success'] and r['grasp_ever'] and r['mug_lifted'] and r['finger_aperture_reduced'] for r in reports)
                           else 'Ordinary-task success observed; review action/observation diagnostics before constraint comparison')
 
 
 def evaluate(args,runtime=None):
+    if not args.no_video:
+        from video_paths import video_root
+        video_root()  # Fail before model download if external video storage is unset.
     os.environ.setdefault('MUJOCO_GL','osmesa')
     from libero.libero import benchmark,get_libero_path
     from libero.libero.envs import OffScreenRenderEnv
@@ -272,7 +269,7 @@ def evaluate(args,runtime=None):
     runtime=runtime or ValidationRuntime(args)
     reports=[]
     try:
-        steps=args.execute_steps or runtime.metadata['n_action_steps']
+        steps=runtime.metadata['n_action_steps'] if args.execute_steps is None else args.execute_steps
         if not 1<=steps<=runtime.metadata['chunk_size']:raise ValueError('Invalid execute-steps')
         manifest=dict(task_name=task.name,task_index=index,suite='libero_90',
             original_task_instruction=task.language,policy_instruction=task.language,
@@ -286,14 +283,25 @@ def evaluate(args,runtime=None):
         for number in range(args.num_rollouts):
             seed=args.seed+number;directory=args.output/f'rollout_{number:03d}';directory.mkdir()
             env=OffScreenRenderEnv(bddl_file_name=str(bddl),camera_heights=256,camera_widths=256)
-            started=time.perf_counter();rows=[]
+            started=time.perf_counter();rows=[];video=None
             try:
                 env.seed(seed);env.reset();obs=env.set_init_state(states[int(init_order[number])])
                 audit=controller_audit(env);write_json(directory/'controller.json',audit)
-                print('Controller:',json.dumps(audit),flush=True)
+                sanity=dict(checkpoint=runtime.metadata['checkpoint'],task_name=task.name,task_index=index,
+                    instruction=task.language,camera_keys=list(CAMERAS),policy_images=list(POLICY_IMAGES),
+                    state_shape=[8],image_shapes=[[256,256,3]]*2,action_dimension=7,
+                    action_order=runtime.metadata.get('action_order'),gripper=runtime.metadata.get('gripper_convention'),
+                    normalization_source=runtime.metadata.get('normalization_source'),controller=audit,
+                    chunk_size=runtime.metadata['chunk_size'],n_action_steps=runtime.metadata['n_action_steps'],
+                    execute_steps=steps,num_steps=runtime.metadata.get('num_steps'),horizon=args.horizon)
+                if number==0:print('Runtime sanity:',json.dumps(sanity),flush=True)
+                write_json(args.output/'runtime_sanity.json',sanity)
                 rendering_settings(env.env.sim)
                 for _ in range(10):obs,_,_,_=env.step(np.r_[np.zeros(6),-1])
                 runtime.reset(seed)
+                if not args.no_video:
+                    video=RolloutVideo(args.output,number,env.env.control_freq)
+                    video.append(obs)
                 obj=env.env.objects_dict[OBJECT]
                 body=env.env.sim.model.body_name2id(obj.root_body)
                 start_z=float(env.env.sim.data.body_xpos[body][2])
@@ -318,6 +326,10 @@ def evaluate(args,runtime=None):
                         obs,_,done,_=env.step(action)
                         position=np.array(env.env.sim.data.body_xpos[body])
                         eef=np.asarray(obs['robot0_eef_pos']);qpos=np.asarray(obs['robot0_gripper_qpos'])
+                        from upright_orientation import get_mug_orientation, compute_upright_deviation_deg
+                        rotation,_=get_mug_orientation(env,OBJECT)
+                        tilt=compute_upright_deviation_deg(rotation)
+                        if video:video.append(obs)
                         grasp=bool(env.env._check_grasp(env.env.robots[0].gripper,obj))
                         row=dict(timestep=step+1,raw_policy_output=raw[i].tolist(),normalized_action=normalized[i].tolist(),
                             denormalized_action=denorm[i].tolist(),final_libero_action=action.tolist(),
@@ -326,7 +338,7 @@ def evaluate(args,runtime=None):
                             gripper_qpos=qpos.tolist(),gripper_aperture_m=float(abs(qpos[0]-qpos[1])),
                             mug_position_m=position.tolist(),mug_height_increase_m=float(position[2]-start_z),
                             eef_mug_distance_m=float(np.linalg.norm(eef-position)),grasp=grasp,
-                            libero_success=bool(env.check_success()))
+                            mug_tilt_deg=tilt,libero_success=bool(env.check_success()))
                         rows.append(row);trace.write(json.dumps(row,allow_nan=False)+'\n');trace.flush()
                         if step<args.diagnostic_steps:print('Action diagnostic:',json.dumps(row),flush=True)
                         if row['libero_success'] or done:
@@ -340,24 +352,63 @@ def evaluate(args,runtime=None):
                     minimum_eef_mug_distance_m=min((r['eef_mug_distance_m'] for r in rows),default=None),
                     max_mug_height_increase_m=max([0]+[r['mug_height_increase_m'] for r in rows]),
                     mug_lifted=any(r['mug_height_increase_m']>=.02 for r in rows),
-                    wall_seconds=time.perf_counter()-started)
+                    max_mug_tilt_deg=max((r['mug_tilt_deg'] for r in rows),default=None),
+                    videos=video.paths if video else [],wall_seconds=time.perf_counter()-started)
                 write_json(directory/'summary.json',report);reports.append(report)
                 write_json(args.output/'validation_report.json',aggregate(reports,runtime.metadata))
+                write_results_table(args.output,reports)
                 print('Rollout summary:',json.dumps(report),flush=True)
             except BaseException as error:
                 write_json(directory/'error.json',dict(type=type(error).__name__,message=str(error),recorded_steps=len(rows)))
                 raise
-            finally:env.close()
+            finally:
+                if video:video.close()
+                env.close()
         print(json.dumps(aggregate(reports,runtime.metadata),indent=2),flush=True)
     finally:
         if owned:runtime.close()
+
+
+
+class RolloutVideo:
+    """Stream both policy-oriented RGB camera views to external storage."""
+    def __init__(self, output, number, fps):
+        import cv2
+        from video_paths import output_video
+        self.cv2=cv2;self.writers=[];self.paths=[]
+        try:
+            for camera in CAMERAS:
+                path=output_video(output,f'rollout_{number:03d}_{camera}.mp4')
+                if path.exists():raise FileExistsError(path)
+                writer=cv2.VideoWriter(str(path),cv2.VideoWriter_fourcc(*'mp4v'),fps,(256,256))
+                self.writers.append(writer)
+                if not writer.isOpened():raise RuntimeError('Cannot open video: '+str(path))
+                self.paths.append(str(path))
+        except BaseException:
+            self.close();raise
+
+    def append(self, obs):
+        for camera,writer in zip(CAMERAS,self.writers):
+            rgb=np.ascontiguousarray(np.asarray(obs[camera])[::-1,::-1])
+            writer.write(self.cv2.cvtColor(rgb,self.cv2.COLOR_RGB2BGR))
+
+    def close(self):
+        for writer in self.writers:writer.release()
+
+
+def write_results_table(output,reports):
+    lines=['| Rollout | LIBERO success | Gripper closed | Mug lifted | Max mug height increase |',
+           '|---|---|---|---|---|']
+    for r in reports:
+        lines.append(f"| {r['rollout_id']} | {r['libero_success']} | {r['finger_aperture_reduced']} | {r['mug_lifted']} | {r['max_mug_height_increase_m']:.4f} m |")
+    (output/'results.md').write_text('\n'.join(lines)+'\n',encoding='utf-8')
 
 
 def parser():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--checkpoint',choices=[CHECKPOINT],default=CHECKPOINT)
     p.add_argument('--revision',default=REVISION)
-    p.add_argument('--num-rollouts',type=int,default=1)
+    p.add_argument('--num-rollouts',type=int,default=5)
     p.add_argument('--seed',type=int,default=0)
     p.add_argument('--horizon',type=int,default=300)
     p.add_argument('--execute-steps',type=int,default=None)
@@ -365,6 +416,7 @@ def parser():
     p.add_argument('--policy-python',default='python')
     p.add_argument('--output',type=Path,default=Path('results/libero_interface_validation'))
     p.add_argument('--gripper-probe-only',action='store_true')
+    p.add_argument('--no-video',action='store_true',help='Explicitly disable validation videos')
     p.add_argument('--worker',action='store_true')
     return p
 
