@@ -1,4 +1,7 @@
-﻿# Upright white-mug pretrained baseline
+# Upright white-mug pretrained baseline
+
+**Deferred:** the first five runs failed ordinary task completion. This setup
+is not a valid orientation baseline. Start with [ordinary interface validation](LIBERO_INTERFACE_VALIDATION.md) before running more constraint experiments.
 
 This branch evaluates gravity-relative object orientation before any new
 post-training. The instruction says the mug contains liquid; LIBERO does not

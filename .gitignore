@@ -13,3 +13,6 @@ videos/
 # Generated upright-mug baseline artifacts (including alternative run names).
 results/upright_mug*/
 config/upright_mug_stats.json
+
+# Generated ordinary LIBERO interface checks.
+results/libero_interface*/

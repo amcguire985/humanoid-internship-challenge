@@ -761,3 +761,12 @@ LIBERO's white-mug-to-plate task while tilting the mug despite an explicit
 liquid/upright constraint. Normal LIBERO success and maximum gravity-relative
 tilt remain separate metrics. No new post-training is included.
 See [the task, coordinate conventions, Colab commands and outputs](docs/UPRIGHT_MUG_BASELINE.md).
+
+### Ordinary LIBERO interface validation comes first
+
+The first upright-mug runs failed the ordinary task and do not establish an
+orientation baseline. Use the [checkpoint/interface audit and ordinary-task
+validation runner](docs/LIBERO_INTERFACE_VALIDATION.md) before further constrained
+rollouts. It uses a LIBERO-trained checkpoint, its own saved normalization,
+two-camera/8D EEF observations, and explicit action/gripper diagnostics. No new
+training is performed; real task competence still requires Colab validation.
