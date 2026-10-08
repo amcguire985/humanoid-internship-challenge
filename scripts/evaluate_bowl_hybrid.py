@@ -89,7 +89,7 @@ class HybridObserver(official.BowlObserver):
             base=self.env._env.env
             np.savez_compressed(self.directory/'grasp_state_diagnostic.npz',sim_state=base.sim.get_state().flatten(),gripper_bowl=self.gripper_bowl,eef_pose=eef,bowl_pose=bowl)
             official.write_json(self.directory/'grasp_snapshot.json',dict(timestep=self.step_number,sim_time_s=row['sim_time_s'],restore_supported=False,reason='MuJoCo state alone omits controller goals, actuator bookkeeping, and policy/RNG state. Comparison uses matched initial states instead of unvalidated restoration.'))
-            if self.condition in ('B','C'):
+            if self.condition in ('B','C','D1'):
                 plates=[obj for name,obj in base.objects_dict.items() if 'plate' in name.lower()]
                 if len(plates)!=1: raise ValueError('Ambiguous plate placement target')
                 plate=plates[0]; body=base.sim.model.body_name2id(plate.root_body)
@@ -97,8 +97,18 @@ class HybridObserver(official.BowlObserver):
                 goal,placement_audit=physical_placement_goal(base,bowl_obj,plate)
                 official.write_json(self.directory/'placement_target.json',placement_audit)
                 self.placement=Placement(goal,self.gripper_bowl,self.controller,PlacementSettings(**json.loads(os.environ.get('BOWL_PLACEMENT_SETTINGS','{}'))))
-            if self.condition=='C':
-                self.guidance=Guidance(self.reference,bowl,eef,goal,self.controller,self.settings)
+            if self.condition=='D1':
+                from bowl_synthetic_reference import generate
+                approach=goal.copy()
+                # Stay at least as high as the grasp; shared placement performs lowering.
+                approach[2]=max(bowl[2,3],goal[2]+self.placement.s.approach_height_m)
+                path=self.directory/'synthetic_reference.csv'
+                generate(bowl[:3,3],approach,bowl[:3,:3],
+                    duration=float(os.environ['BOWL_SYNTHETIC_DURATION'])).save(path)
+                self.reference=Reference.load(path)
+            if self.condition in ('C','D1'):
+                reference_goal=self.reference.p[-1] if self.condition=='D1' else goal
+                self.guidance=Guidance(self.reference,bowl,eef,reference_goal,self.controller,self.settings)
                 self.guidance.reference.save(self.directory/'aligned_reference.csv')
                 from bowl_human_reference import preview
                 preview(self.guidance.reference,self.directory/'aligned_reference.png')
@@ -148,7 +158,7 @@ class HybridObserver(official.BowlObserver):
             row=self.rows[-1]
             actual,diagnostics=self.placement.action(pose(row['bowl_position_m'],row['bowl_rotation_world_from_object']),self.eef_pose())
             self.extra.update(diagnostics)
-        elif self.condition=='C' and self.phases.phase=='TRANSPORT' and not self.slip_latched:
+        elif self.condition in ('C','D1') and self.phases.phase=='TRANSPORT' and not self.slip_latched:
             row=self.rows[-1]; dt=1/self.env._env.env.control_freq
             bowl=pose(row['bowl_position_m'],row['bowl_rotation_world_from_object'])
             elapsed=row['sim_time_s']-self.phases.start[1]
@@ -158,11 +168,11 @@ class HybridObserver(official.BowlObserver):
             if diagnostics['slip_detected']:
                 self.slip_latched=True; self.extra['guidance_disabled_reason']='rigid_grasp_transform_drift'
         elif self.slip_latched: self.extra['guidance_disabled_reason']='rigid_grasp_transform_drift_latched'
-        if self.condition in ('B','C') and self.phases.phase=='TRANSPORT':
+        if self.condition in ('B','C','D1') and self.phases.phase=='TRANSPORT':
             if actual[6]<0: self.extra['shared_gripper_gate_applied']=True
             actual[6]=1.
             self.extra['release_allowed']=False
-        if self.condition=='C':
+        if self.condition in ('C','D1'):
             self.extra['policy_rotation_action']=original[3:6].tolist()
             self.extra['executed_rotation_action']=actual[3:6].tolist()
             self.extra['executed_rotation_delta_world_rad']=(((np.clip(actual[3:6],self.controller['input_min'][3:],self.controller['input_max'][3:])-(self.controller['input_max'][3:]+self.controller['input_min'][3:])/2)*(self.controller['output_max'][3:]-self.controller['output_min'][3:])/(self.controller['input_max'][3:]-self.controller['input_min'][3:]))+(self.controller['output_max'][3:]+self.controller['output_min'][3:])/2).tolist()
@@ -249,6 +259,15 @@ def process_outputs(output,baseline_root,condition,episodes=1):
         refpath=Path(os.environ['BOWL_HYBRID_REFERENCE'])
         manifest['reference_sha256']=hashlib.sha256(refpath.read_bytes()).hexdigest()
         manifest['reference_metadata']=json.loads(Path(str(refpath)+'.json').read_text())
+    if summary['condition']=='D1':
+        manifest.update(reference_source='synthetic_oracle_position_only',
+            synthetic_duration_s=float(os.environ['BOWL_SYNTHETIC_DURATION']),
+            human_reference=None,
+            prompt_design='Original until confirmed grasp/lift; liquid appended for D1 transport')
+        refpath=directory/'synthetic_reference.csv'
+        if refpath.exists():
+            manifest['reference_sha256']=hashlib.sha256(refpath.read_bytes()).hexdigest()
+            manifest['reference_metadata']=json.loads(Path(str(refpath)+'.json').read_text())
     official.write_json(output/'experiment.json',manifest)
     write_condition_report(output,summary)
     if summary['condition']=='C':
@@ -339,13 +358,20 @@ def compare(root):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--hybrid-condition',choices=list('ABC'),required=True)
+    parser.add_argument('--hybrid-condition',choices=['A','B','C','D1'],required=True)
     parser.add_argument('--human-reference',type=Path)
+    parser.add_argument('--synthetic-duration',type=float,default=10.8)
     parser.add_argument('--placement-config',type=Path,default=Path('config/smolvla/bowl_placement.json'))
     parser.add_argument('--guidance-config',type=Path,default=Path('config/smolvla/bowl_hybrid.json'))
     args,remaining=parser.parse_known_args()
     settings=Settings(**json.loads(args.guidance_config.read_text(encoding='utf-8-sig'))).validate()
     placement_settings=PlacementSettings(**json.loads(args.placement_config.read_text(encoding='utf-8-sig'))).validate()
+    if args.hybrid_condition=='D1':
+        if args.human_reference: parser.error('D1 generates its reference at confirmed grasp; omit --human-reference')
+        if not np.isfinite(args.synthetic_duration) or args.synthetic_duration < .1:
+            parser.error('--synthetic-duration must be finite and at least 0.1 seconds')
+        settings.orientation_enabled=False
+        os.environ['BOWL_SYNTHETIC_DURATION']=str(args.synthetic_duration)
     os.environ['BOWL_PLACEMENT_SETTINGS']=json.dumps(vars(placement_settings))
     if args.hybrid_condition=='C':
         if not args.human_reference: parser.error('C requires --human-reference')

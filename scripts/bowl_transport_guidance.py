@@ -151,11 +151,11 @@ class Guidance:
         # Keep actual yaw free; apply the shortest gravity-aligning swing to the bowl
         # and the actual gripper together, avoiding frozen-transform twist correction.
         opening_error=opening_axis_rotation_vector(bowl_pose[:3,:3])
-        swing=Rotation.from_rotvec(ramp*opening_error).as_matrix()
+        swing=Rotation.from_rotvec(ramp*opening_error).as_matrix() if s.orientation_enabled else np.eye(3)
         desired_rotation=swing@bowl_pose[:3,:3]
         target=pose(p[0],desired_rotation)@np.linalg.inv(self.gripper_bowl)
         target[:3,:3]=swing@eef_pose[:3,:3]
-        info.update(orientation_mode='gravity_opening_axis',guidance_mode='transport',
+        info.update(orientation_mode='gravity_opening_axis' if s.orientation_enabled else 'position_only',guidance_mode='transport',
             orientation_target_bowl_rotation=desired_rotation.tolist(),
             orientation_target_opening_axis=desired_rotation[:,2].tolist(),
             opening_axis_error_world_rad=opening_error.tolist(),
