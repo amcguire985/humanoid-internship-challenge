@@ -125,3 +125,59 @@ class PersistentAlignTests(unittest.TestCase):
         c.switch('PLACE','ALIGN',row(6,p=(.04,0,1.03)))
         np.testing.assert_allclose(c.align_setpoint,[.08,0,1.05]);self.assertIsNone(c.align_target)
         c.switch('FAILED','ALIGN',row(7));self.assertIsNone(c.align_setpoint)
+
+
+class PersistentLowerTests(unittest.TestCase):
+    make=PlacementTests.make
+    def lower(self,p=(0,0,1.15)):
+        c=self.make();c.switch('PLACE','LOWER',row(0,p=p))
+        b=pose(p,np.eye(3));e=np.array(row(0,p=p)['eef_pose'])
+        return c,b,e
+
+    def test_lower_entry_initialization_and_accumulation(self):
+        c,b,e=self.lower()
+        np.testing.assert_allclose(c.lower_setpoint,e[:3,3])
+        np.testing.assert_allclose(c.lower_target,[.04,0,1.02])
+        c.action(b,e);first=c.lower_setpoint.copy();c.action(b,e)
+        self.assertAlmostEqual(first[2]-c.lower_setpoint[2],.003)
+        np.testing.assert_allclose(c.lower_setpoint[:2],[.04,0])
+
+    def test_lag_converges_and_does_not_pass_support_target(self):
+        c,b,e=self.lower()
+        for i in range(200):
+            a,d=c.action(b,e)
+            self.assertGreaterEqual(c.lower_setpoint[2],c.lower_target[2]-1e-12)
+            self.assertLessEqual(np.linalg.norm(c.lower_setpoint-e[:3,3]),.012+1e-12)
+            self.assertTrue(np.all(np.abs(a)<=1))
+            e[:3,3]+=.25*(c.lower_setpoint-e[:3,3]);b=e@c.relative
+        np.testing.assert_allclose(b[:3,3],[0,0,1],atol=1e-8)
+
+    def test_horizontal_target_is_preserved_and_exit_resets(self):
+        c,b,e=self.lower(p=(.005,-.003,1.05))
+        for _ in range(3): c.action(b,e)
+        np.testing.assert_allclose(c.lower_target[:2],[.04,0])
+        c.switch('RELEASE','OPEN',row(4,p=(0,0,1)))
+        self.assertIsNone(c.lower_target);self.assertIsNone(c.lower_setpoint)
+        self.assertEqual(c.lower_history,[])
+
+    def test_obstructed_robot_stalls_with_bounded_lead(self):
+        c,b,e=self.lower()
+        for i in range(1,15):
+            c.action(b,e)
+            c.observe(row(i,p=b[:3,3]),False,False,.05)
+            if c.phase=='FAILED': break
+        self.assertEqual(c.failure,'placement_lower_tracking_stall')
+
+    def test_unexpected_contact_holds_descent_and_fails_safely(self):
+        c,b,e=self.lower()
+        c.action(b,e);c.observe(row(1,p=b[:3,3]),True,False,.05)
+        a,d=c.action(b,e)
+        self.assertGreaterEqual(a[2],0.)
+        self.assertTrue(d['placement_lower_contact_hold']);self.assertEqual(a[6],1)
+        for i in (2,3): c.observe(row(i,p=b[:3,3]),True,False,.05)
+        self.assertEqual(c.failure,'placement_lower_unexpected_support_contact')
+
+    def test_excessive_tracking_error_fails_safely(self):
+        c,b,e=self.lower();c.action(b,e)
+        c.observe(row(1,p=(0,0,1.2)),False,False,.05)
+        self.assertEqual(c.failure,'placement_lower_excessive_tracking_error')

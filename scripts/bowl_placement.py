@@ -37,11 +37,21 @@ class Placement:
         self.last_position=None; self.speed=0.; self.release_aperture=None
         self.withdraw_target=None; self.hold_eef=None
         self.align_setpoint=None; self.align_target=None
+        self.lower_setpoint=None; self.lower_target=None
+        self.lower_history=[]; self.lower_supported=False; self.lower_contact_count=0
 
     def switch(self, phase, subphase, row):
         self.align_setpoint=None; self.align_target=None
         if phase=='PLACE' and subphase=='ALIGN':
             self.align_setpoint=np.asarray(row['eef_pose'],float)[:3,3].copy()
+        self.lower_setpoint=None; self.lower_target=None
+        self.lower_history=[]; self.lower_supported=False; self.lower_contact_count=0
+        if phase=='PLACE' and subphase=='LOWER':
+            eef=np.asarray(row['eef_pose'],float)
+            r=np.asarray(row['bowl_rotation_world_from_object'],float)
+            swing=Rotation.from_rotvec(opening_axis_rotation_vector(r)).as_matrix()
+            self.lower_target=(pose(self.goal,swing@r)@np.linalg.inv(self.relative))[:3,3].copy()
+            self.lower_setpoint=eef[:3,3].copy()
         self.phase=phase; self.subphase=subphase; self.phase_step=row['timestep']; self.count=0
 
     def observe(self, row, supported, slip, dt):
@@ -67,9 +77,29 @@ class Placement:
                 self.count=self.count+1 if ready else 0
                 if self.count>=self.s.confirm_steps: self.switch('PLACE','LOWER',row)
             else:
+                self.lower_supported=bool(supported)
+                unexpected_contact=supported and height>self.s.height_tolerance_m
+                self.lower_contact_count=self.lower_contact_count+1 if unexpected_contact else 0
+                self.lower_history.append((row['timestep'],float(p[2])))
+                window=3*self.s.confirm_steps
+                self.lower_history=self.lower_history[-(window+1):]
+                tracking=float(np.linalg.norm(self.lower_setpoint-eef[:3,3])) if self.lower_setpoint is not None else 0.
+                capacity=np.minimum(self.controller['output_max'][:3],-self.controller['output_min'][:3])
+                lead=min(4*self.s.translation_step_m,float(np.min(capacity)))
+                stalled=(len(self.lower_history)==window+1 and
+                    self.lower_history[0][1]-self.lower_history[-1][1]<=.1*self.s.height_tolerance_m and
+                    height>self.s.height_tolerance_m and tracking>=lead-self.s.translation_step_m)
+                reason=None
+                if self.lower_contact_count>=self.s.confirm_steps: reason='placement_lower_unexpected_support_contact'
+                elif (tracking>lead+self.s.translation_step_m and height>self.s.height_tolerance_m and
+                      np.dot(eef[:3,3]-self.lower_setpoint,eef[:3,3]-self.lower_target)>0):
+                    reason='placement_lower_excessive_tracking_error'
+                elif stalled: reason='placement_lower_tracking_stall'
+                if reason:
+                    self.failure=reason; self.switch('FAILED','LOWER',row)
                 ready=distance<=self.s.align_tolerance_m and abs(height)<=self.s.height_tolerance_m and stable and supported and grasp and row['tilt_deg']<=self.s.tilt_tolerance_deg
                 self.count=self.count+1 if ready else 0
-                if self.count>=self.s.confirm_steps:
+                if self.phase=='PLACE' and self.count>=self.s.confirm_steps:
                     self.release_aperture=row['gripper_aperture_m']; self.hold_eef=eef.copy(); self.switch('RELEASE','OPEN',row)
         elif self.phase=='RELEASE':
             opened=row['gripper_aperture_m']>=min(.07,self.release_aperture+.02) and not grasp
@@ -123,6 +153,30 @@ class Placement:
                 placement_align_lead_limit_m=lead,placement_align_lead_capped=bool(capped),
                 placement_align_tracking_error_m=float(np.linalg.norm(candidate-eef[:3,3])))
 
+        if self.phase=='PLACE' and self.subphase=='LOWER':
+            target[:3,3]=self.lower_target
+            remaining=self.lower_target-self.lower_setpoint
+            distance=np.linalg.norm(remaining)
+            candidate=self.lower_setpoint+remaining*min(1.,self.s.translation_step_m/max(distance,1e-12))
+            capacity=np.minimum(self.controller['output_max'][:3],-self.controller['output_min'][:3])
+            lead=min(4*self.s.translation_step_m,float(np.min(capacity)))
+            if lead<=0: raise ValueError('LOWER requires translation scaling straddling zero')
+            offset=candidate-eef[:3,3]; error=np.linalg.norm(offset)
+            capped=error>lead
+            if capped: candidate=eef[:3,3]+offset*(lead/error)
+            if np.linalg.norm(self.lower_target-eef[:3,3])<=lead and np.dot(candidate-self.lower_target,candidate-eef[:3,3])>0:
+                candidate=self.lower_target.copy()
+            # Physical endpoint is a floor, including anti-windup projection.
+            candidate[2]=max(candidate[2],self.lower_target[2])
+            if self.lower_supported: candidate[2]=max(candidate[2],eef[2,3])
+            self.lower_setpoint=candidate.copy(); limited=candidate
+            align_info.update(placement_lower_setpoint_m=candidate.tolist(),
+                placement_lower_fixed_target_m=self.lower_target.tolist(),
+                placement_lower_lead_limit_m=lead,placement_lower_lead_capped=bool(capped),
+                placement_lower_tracking_error_m=float(np.linalg.norm(candidate-eef[:3,3])),
+                placement_lower_contact_hold=bool(self.lower_supported),
+                placement_lower_stall_window_steps=3*self.s.confirm_steps,
+                placement_lower_stall_min_descent_m=.1*self.s.height_tolerance_m)
         vector=Rotation.from_matrix(target[:3,:3]@eef[:3,:3].T).as_rotvec(); norm=np.linalg.norm(vector)
         rot=Rotation.from_rotvec(vector*min(1.,self.s.rotation_step_rad/max(norm,1e-12))).as_matrix()@eef[:3,:3]
         action,clipped=desired_pose_to_action(limited,eef[:3,3],rot,eef[:3,:3],self.controller,clip=1.,gripper=gripper)
