@@ -211,12 +211,17 @@ class HybridObserver(official.BowlObserver):
         if self.phases.phase=='FAILED' and not result[2]:
             observation,reward,terminated,truncated,info=result
             info=dict(info,hybrid_failure=self.phases.failure)
+            self.finish_videos()
             return observation,reward,terminated,True,info
+        if result[2] or result[3]: self.finish_videos()
         return result
 
-    def finish(self):
+    def finish_videos(self):
         for writer in getattr(self,'videos',{}).values(): writer.release()
-        self.videos={}; super().finish()
+        self.videos={}
+
+    def finish(self):
+        self.finish_videos(); super().finish()
 
 
 def create_env(factory):
@@ -269,6 +274,12 @@ def write_condition_report(output, summary):
 
 
 def process_outputs(output,baseline_root,condition,episodes=1):
+    from prepare_bowl_videos import prepare
+    try:
+        prepare(output)
+    except Exception as exc:
+        official.write_json(output/'video_playback_report.json',dict(status='failed',error=str(exc)))
+        print('Video playback preparation failed; original videos and results retained:',exc,flush=True)
     directory=output/'ground_truth/episode_000'
     rows=[json.loads(line) for line in (directory/'trajectory.jsonl').read_text().splitlines()]
     summary,acceleration=analyze(rows)

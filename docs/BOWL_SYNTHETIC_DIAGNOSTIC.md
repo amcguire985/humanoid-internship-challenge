@@ -40,6 +40,7 @@ export MPLBACKEND=Agg MUJOCO_GL=egl
 export LIBERO_CONFIG_PATH=/content/libero-official-config
 export OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 LP_NUM_THREADS=2
 unset PYTHONPATH
+command -v ffmpeg >/dev/null || { apt-get update -qq; apt-get install -y -qq ffmpeg; }
 BASELINE=/content/drive/MyDrive/humanoid_results/libero_official_bowl_20261007_204110
 for FILE in packages.txt sanity_manifest.json libero_spatial_2/eval_info.json; do
   [ -f "$BASELINE/$FILE" ] || { echo "Missing original baseline: $BASELINE/$FILE"; exit 1; }
