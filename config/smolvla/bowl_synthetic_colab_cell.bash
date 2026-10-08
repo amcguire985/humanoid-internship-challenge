@@ -34,6 +34,9 @@ print('Pinned evaluator available; baseline/checkpoint checks run before simulat
 PY
 RUN_ROOT="$(mktemp -d /content/drive/MyDrive/humanoid_results/bowl_hybrid_synthetic_XXXXXXXX)"
 printf '%s\n' "$RUN_ROOT/D1" > /content/bowl_synthetic_last_output.txt
+printf '\nResult folder: %s\n' "$(basename "$RUN_ROOT")"
+printf 'Google Drive: MyDrive/humanoid_results/%s/D1\n' "$(basename "$RUN_ROOT")"
+printf 'Full output path: %s\n\n' "$RUN_ROOT/D1"
 /content/libero-official-env/bin/python scripts/evaluate_bowl_hybrid.py \
   --hybrid-condition D1 --synthetic-duration 10.8 \
   --guidance-config config/smolvla/bowl_hybrid.json \
@@ -46,4 +49,6 @@ printf '%s\n' "$RUN_ROOT/D1" > /content/bowl_synthetic_last_output.txt
   --env.observation_height=256 --env.observation_width=256 \
   --env.max_parallel_tasks=1 --eval.batch_size=1 --eval.n_episodes=1 \
   --seed=0 --output_dir="$RUN_ROOT/D1" 2>&1 | tee "$RUN_ROOT/D1.log"
-printf 'Diagnostic outputs: %s\n' "$RUN_ROOT/D1"
+printf '\nSimulation finished. Result folder: %s\n' "$(basename "$RUN_ROOT")"
+printf 'Google Drive: MyDrive/humanoid_results/%s/D1\n' "$(basename "$RUN_ROOT")"
+printf 'Full output path: %s\n' "$RUN_ROOT/D1"
