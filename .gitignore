@@ -20,3 +20,7 @@ results/libero_interface*/
 # Generated human-guided bowl rollouts and reference diagnostics.
 results/bowl_hybrid*/
 results/bowl_human_reference/
+
+# Local reconstructed references and offline placement diagnostics
+/results/bowl_human_reference_demo_003/
+/results/bowl_placement_diagnosis/

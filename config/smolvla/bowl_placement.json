@@ -1,0 +1,16 @@
+{
+  "approach_radius_m": 0.09,
+  "approach_height_m": 0.025,
+  "align_tolerance_m": 0.012,
+  "height_tolerance_m": 0.004,
+  "speed_tolerance_m_s": 0.025,
+  "tilt_tolerance_deg": 8.0,
+  "confirm_steps": 3,
+  "translation_step_m": 0.003,
+  "rotation_step_rad": 0.02,
+  "align_timeout_steps": 65,
+  "lower_timeout_steps": 65,
+  "release_timeout_steps": 25,
+  "verify_timeout_steps": 35,
+  "withdraw_m": 0.06
+}

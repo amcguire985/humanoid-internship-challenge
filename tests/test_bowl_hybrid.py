@@ -234,7 +234,7 @@ class HybridTests(unittest.TestCase):
 
     def test_observer_preserves_policy_actions_and_truncates_on_failure(self):
         observer=HybridObserver.__new__(HybridObserver)
-        observer.condition='B'; observer.phases=Phases(Settings()); observer.slip_latched=False; observer.step_number=0
+        observer.placement=None; observer.condition='B'; observer.phases=Phases(Settings()); observer.slip_latched=False; observer.step_number=0
         received=[]
         def step(action):
             received.append(action.copy()); return {},0.,False,False,{'is_success':False}
@@ -243,6 +243,8 @@ class HybridTests(unittest.TestCase):
         result=observer.step(model); np.testing.assert_array_equal(received[-1],model); self.assertFalse(result[3])
         observer.phases.phase='TRANSPORT'; observer.phases.start=(1,.05)
         result=observer.step(model); np.testing.assert_array_equal(received[-1],model); self.assertEqual(observer.extra['policy_instruction'],LIQUID)
+        opening=model.copy(); opening[6]=-1
+        observer.step(opening); self.assertEqual(received[-1][6],1.)
         observer.phases.phase='FAILED'; observer.phases.failure='grasp_timeout'
         result=observer.step(model); self.assertTrue(result[3]); self.assertFalse(result[4]['is_success']); self.assertEqual(result[4]['hybrid_failure'],'grasp_timeout')
 

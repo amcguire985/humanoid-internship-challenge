@@ -13,6 +13,7 @@ from scipy.spatial.transform import Rotation
 import evaluate_bowl_liquid as official
 from bowl_human_reference import Reference
 from bowl_transport_guidance import Guidance, Phases, Settings, pose, physical_placement_goal
+from bowl_placement import Placement, PlacementSettings
 from replay_libero_transport import inspect_controller
 
 LIQUID=official.ORIGINAL+'. The bowl is full of liquid. Do not spill it.'
@@ -56,7 +57,7 @@ class HybridObserver(official.BowlObserver):
         self.videos={}; self.guidance=None; self.status={}; self.extra={}
 
     def reset(self,*args,**kwargs):
-        self.phases=Phases(self.settings); self.guidance=None; self.extra={}; self.initial_height=None; self.slip_latched=False
+        self.phases=Phases(self.settings); self.guidance=None; self.extra={}; self.initial_height=None; self.slip_latched=False; self.placement=None
         result=super().reset(*args,**kwargs)
         self.controller=inspect_controller(self.env._env)
         official.write_json(self.directory/'controller.json',{k:v.tolist() for k,v in self.controller.items()})
@@ -78,7 +79,9 @@ class HybridObserver(official.BowlObserver):
         closing=action is not None and action[6]>0
         released=action is not None and action[6]<0 and row['grasp'] is not True and row['gripper_aperture_m']>self.transport_aperture+.001 if self.phases.start is not None else False
         old_phase=self.phases.phase
-        self.phases.update(self.step_number,row['sim_time_s'],row['grasp'],row['bowl_position_m'][2]-self.initial_height,closing,released,row['libero_success'])
+        old_subphase=self.placement.subphase if self.placement is not None else None
+        if self.placement is None or self.placement.phase=='TRANSPORT':
+            self.phases.update(self.step_number,row['sim_time_s'],row['grasp'],row['bowl_position_m'][2]-self.initial_height,closing,released if self.condition=='A' else False,row['libero_success'] if self.condition=='A' else False)
         if old_phase!='TRANSPORT' and self.phases.phase=='TRANSPORT':
             self.transport_aperture=row['gripper_aperture_m']
             bowl=pose(row['bowl_position_m'],row['bowl_rotation_world_from_object'])
@@ -86,13 +89,15 @@ class HybridObserver(official.BowlObserver):
             base=self.env._env.env
             np.savez_compressed(self.directory/'grasp_state_diagnostic.npz',sim_state=base.sim.get_state().flatten(),gripper_bowl=self.gripper_bowl,eef_pose=eef,bowl_pose=bowl)
             official.write_json(self.directory/'grasp_snapshot.json',dict(timestep=self.step_number,sim_time_s=row['sim_time_s'],restore_supported=False,reason='MuJoCo state alone omits controller goals, actuator bookkeeping, and policy/RNG state. Comparison uses matched initial states instead of unvalidated restoration.'))
-            if self.condition=='C':
+            if self.condition in ('B','C'):
                 plates=[obj for name,obj in base.objects_dict.items() if 'plate' in name.lower()]
                 if len(plates)!=1: raise ValueError('Ambiguous plate placement target')
                 plate=plates[0]; body=base.sim.model.body_name2id(plate.root_body)
                 bowl_obj=base.objects_dict[official.OBJECT]
                 goal,placement_audit=physical_placement_goal(base,bowl_obj,plate)
                 official.write_json(self.directory/'placement_target.json',placement_audit)
+                self.placement=Placement(goal,self.gripper_bowl,self.controller,PlacementSettings(**json.loads(os.environ.get('BOWL_PLACEMENT_SETTINGS','{}'))))
+            if self.condition=='C':
                 self.guidance=Guidance(self.reference,bowl,eef,goal,self.controller,self.settings)
                 self.guidance.reference.save(self.directory/'aligned_reference.csv')
                 from bowl_human_reference import preview
@@ -105,7 +110,22 @@ class HybridObserver(official.BowlObserver):
             self.phases.phase='FAILED'; self.phases.failure='episode_horizon'
         if self.phases.start is not None:
             row['slip_detected']=bool(row['grasp_transform_translation_drift_m']>self.settings.slip_translation_m or row['grasp_transform_rotation_drift_deg']>self.settings.slip_rotation_deg)
+        if self.placement is not None and self.phases.phase=='TRANSPORT' and row.get('slip_detected',False):
+            self.phases.phase='FAILED'; self.phases.failure='transport_grasp_transform_slip'
+        if self.placement is not None and self.phases.phase!='FAILED':
+            base=self.env._env.env; sim=base.sim
+            bowl_geoms={sim.model.geom_name2id(n) for n in base.objects_dict[official.OBJECT].contact_geoms}
+            plate_geoms={sim.model.geom_name2id(n) for name,obj in base.objects_dict.items() if 'plate' in name.lower() for n in obj.contact_geoms}
+            supported=any((int(c.geom1) in bowl_geoms and int(c.geom2) in plate_geoms) or (int(c.geom2) in bowl_geoms and int(c.geom1) in plate_geoms) for c in sim.data.contact[:sim.data.ncon])
+            diagnostics=self.placement.observe(row,supported,row.get('slip_detected',False),1/base.control_freq)
+            row.update(diagnostics)
+            if self.placement.phase!='TRANSPORT':
+                if self.phases.phase=='TRANSPORT': self.phases.end=(self.step_number,row['sim_time_s'])
+                self.phases.phase=self.placement.phase; self.phases.failure=self.placement.failure
         row.update(phase=self.phases.phase,phase_before_step=old_phase,transport_started=self.phases.start is not None,failure_reason=self.phases.failure,**self.extra)
+        if old_phase!=self.phases.phase or old_subphase!=row.get('placement_subphase'):
+            with (self.directory/'controller_transitions.jsonl').open('a',encoding='utf-8') as f:
+                f.write(json.dumps(dict(timestep=self.step_number,from_phase=old_phase,to_phase=self.phases.phase,from_subphase=old_subphase,to_subphase=row.get('placement_subphase'),reason=self.phases.failure or row.get('placement_transition_reason')))+'\n')
         self.status={k:row[k] for k in ('timestep','sim_time_s','phase','transport_started')}
         stream.write(json.dumps(row,allow_nan=False)+'\n'); stream.flush()
         self.record_videos(observation)
@@ -124,7 +144,11 @@ class HybridObserver(official.BowlObserver):
 
     def step(self,action):
         original=np.asarray(action,float).copy(); actual=original.copy(); self.extra={'policy_action':original.tolist(),'guidance_active':False}
-        if self.condition=='C' and self.phases.phase=='TRANSPORT' and not self.slip_latched:
+        if self.placement is not None and self.placement.phase!='TRANSPORT':
+            row=self.rows[-1]
+            actual,diagnostics=self.placement.action(pose(row['bowl_position_m'],row['bowl_rotation_world_from_object']),self.eef_pose())
+            self.extra.update(diagnostics)
+        elif self.condition=='C' and self.phases.phase=='TRANSPORT' and not self.slip_latched:
             row=self.rows[-1]; dt=1/self.env._env.env.control_freq
             bowl=pose(row['bowl_position_m'],row['bowl_rotation_world_from_object'])
             elapsed=row['sim_time_s']-self.phases.start[1]
@@ -133,16 +157,22 @@ class HybridObserver(official.BowlObserver):
             self.extra['guidance_slip_detected']=self.extra.pop('slip_detected')
             if diagnostics['slip_detected']:
                 self.slip_latched=True; self.extra['guidance_disabled_reason']='rigid_grasp_transform_drift'
-        elif self.condition=='C' and self.phases.phase=='RELEASE' and not self.slip_latched:
-            actual,diagnostics=self.guidance.release_orientation(original,1/self.env._env.env.control_freq)
-            self.extra.update(diagnostics)
         elif self.slip_latched: self.extra['guidance_disabled_reason']='rigid_grasp_transform_drift_latched'
+        if self.condition in ('B','C') and self.phases.phase=='TRANSPORT':
+            if actual[6]<0: self.extra['shared_gripper_gate_applied']=True
+            actual[6]=1.
+            self.extra['release_allowed']=False
         if self.condition=='C':
             self.extra['policy_rotation_action']=original[3:6].tolist()
             self.extra['executed_rotation_action']=actual[3:6].tolist()
             self.extra['executed_rotation_delta_world_rad']=(((np.clip(actual[3:6],self.controller['input_min'][3:],self.controller['input_max'][3:])-(self.controller['input_max'][3:]+self.controller['input_min'][3:])/2)*(self.controller['output_max'][3:]-self.controller['output_min'][3:])/(self.controller['input_max'][3:]-self.controller['input_min'][3:]))+(self.controller['output_max'][3:]+self.controller['output_min'][3:])/2).tolist()
         self.extra['policy_instruction']=LIQUID if self.phases.start is not None and self.condition!='A' else official.ORIGINAL
         result=super().step(actual)
+        if self.placement is not None and self.phases.phase in ('PLACE','RELEASE','VERIFY') and result[2] and self.rows[-1]['libero_success']:
+            # Keep the original predicate visible; defer success termination for withdrawal.
+            result=(result[0],result[1],False,result[3],result[4])
+        if self.phases.phase=='DONE' and self.placement is not None:
+            result=(result[0],result[1],True,result[3],result[4])
         if self.phases.phase=='FAILED' and not result[2]:
             observation,reward,terminated,truncated,info=result
             info=dict(info,hybrid_failure=self.phases.failure)
@@ -169,10 +199,12 @@ def analyze(rows):
     if starts:
         start=starts[0]; end=len(rows)-1
         for i in range(start+1,len(rows)):
+            if rows[i]['phase']=='PLACE': end=i; break
             if rows[i]['phase']=='RELEASE': end=i-1; break
             if rows[i]['phase']=='DONE': end=i; break
             if rows[i]['phase']=='FAILED': end=i; break
         loss=next((i for i in range(start,end+1) if rows[i]['grasp'] is not True),None)
+        if loss is not None: end=loss-1
         for i in range(start+1,end):
             t0,t1,t2=[rows[j]['sim_time_s'] for j in (i-1,i,i+1)]
             if not t0<t1<t2: raise ValueError('Non-increasing simulator time')
@@ -182,6 +214,8 @@ def analyze(rows):
     acc_indices=[i for i,a in enumerate(accelerations) if a is not None]
     acc_peak=max(acc_indices,key=lambda i:accelerations[i]) if acc_indices else None
     summary.update(transport_start_timestep=start,transport_end_timestep=end,transport_duration_s=None if start is None else rows[end]['sim_time_s']-rows[start]['sim_time_s'],max_tilt_deg=None if tilt_peak is None else rows[tilt_peak]['tilt_deg'],max_acceleration_m_s2=None if acc_peak is None else accelerations[acc_peak],first_possible_grasp_loss_timestep=loss,tilt_peak_timestep=tilt_peak,acceleration_peak_timestep=acc_peak,tilt_peak_after_possible_grasp_loss=None if tilt_peak is None else loss is not None and tilt_peak>=loss,acceleration_peak_after_possible_grasp_loss=None if acc_peak is None else loss is not None and acc_peak>=loss,slip_detected=any(r.get('slip_detected',False) for r in rows if r.get('phase_before_step')=='TRANSPORT'),acceleration_method='Unsmoothed nonuniform-time central three-point second difference, transport interior only; sampled at 20 Hz, not physics substeps',guidance_disabled=any(r.get('guidance_disabled_reason') for r in rows))
+    placement_rows=[r for r in rows if r['phase'] in ('PLACE','RELEASE','VERIFY')]
+    summary.update(final_libero_success=bool(rows[-1]['libero_success']),placement_controller_completed=rows[-1]['phase']=='DONE',transport_end_definition='PLACE entry observation, or last intact-grasp observation before contact loss',placement_attempted=any(r['phase']=='PLACE' for r in rows),release_occurred=any(r['phase'] in ('RELEASE','VERIFY') for r in rows),grasp_lost=any(r['grasp'] is not True for r in rows[start or len(rows):] if r['phase'] not in ('RELEASE','VERIFY','DONE')),placement_entry_timestep=next((r['timestep'] for r in rows if r['phase']=='PLACE'),None),final_bowl_plate_horizontal_error_m=rows[-1].get('bowl_plate_horizontal_error_m'),final_bowl_support_height_error_m=rows[-1].get('bowl_support_height_error_m'),max_placement_tilt_deg=max((r['tilt_deg'] for r in placement_rows),default=None))
     return summary,accelerations
 
 
@@ -210,7 +244,7 @@ def process_outputs(output,baseline_root,condition,episodes=1):
         writer=csv.writer(f); writer.writerow(['timestep','sim_time_s','phase','tilt_deg','acceleration_m_s2','grasp','x_m','y_m','z_m'])
         for r,a in zip(rows,acceleration): writer.writerow([r['timestep'],r['sim_time_s'],r['phase'],r['tilt_deg'],a,r['grasp'],*r['bowl_position_m']])
     plot_rollout(directory,rows,acceleration,summary)
-    manifest=json.loads((output/'experiment.json').read_text()); manifest.update(condition=summary['condition'],prompt_design='Original until confirmed grasp/lift; liquid appended for B/C transport',policy_instruction_transport=official.ORIGINAL if summary['condition']=='A' else LIQUID,settings=json.loads(os.environ['BOWL_HYBRID_SETTINGS']),human_reference=os.environ.get('BOWL_HYBRID_REFERENCE'),pairing=summary['state_pairing'],weights_updated=False,guidance_algorithm='gravity_opening_axis_v3' if summary['condition']=='C' else 'collision_surface_placement_v2')
+    manifest=json.loads((output/'experiment.json').read_text()); manifest.update(condition=summary['condition'],prompt_design='Original until confirmed grasp/lift; liquid appended for B/C transport',policy_instruction_transport=official.ORIGINAL if summary['condition']=='A' else LIQUID,settings=json.loads(os.environ['BOWL_HYBRID_SETTINGS']),human_reference=os.environ.get('BOWL_HYBRID_REFERENCE'),pairing=summary['state_pairing'],weights_updated=False,guidance_algorithm='shared_geometry_placement_v4',placement_settings=json.loads(os.environ.get('BOWL_PLACEMENT_SETTINGS',json.dumps(vars(PlacementSettings())))))
     if summary['condition']=='C':
         refpath=Path(os.environ['BOWL_HYBRID_REFERENCE'])
         manifest['reference_sha256']=hashlib.sha256(refpath.read_bytes()).hexdigest()
@@ -248,6 +282,11 @@ def plot_rollout(directory,rows,acceleration,summary):
     fig,axes=plt.subplots(3,1,sharex=True,figsize=(9,7))
     for i,ax in enumerate(axes): ax.plot(t,p[:,i],label='Actual'); ax.plot(t,desired[:,i],label='Human target'); ax.set_ylabel('xyz'[i]+' (m)')
     axes[0].legend(); axes[-1].set_xlabel('Simulator time (s)'); fig.tight_layout(); fig.savefig(directory/'desired_actual_position.png'); plt.close(fig)
+    fig,axes=plt.subplots(3,1,sharex=True,figsize=(9,7))
+    axes[0].plot(t,[r.get('bowl_plate_horizontal_error_m',np.nan) for r in rows]); axes[0].set_ylabel('Plate XY error (m)')
+    axes[1].plot(t,p[:,2]); axes[1].plot(t,[r.get('plate_target_position_m',[0,0,np.nan])[2] for r in rows]); axes[1].set_ylabel('Bowl height (m)')
+    labels=list(dict.fromkeys(r['phase'] for r in rows)); axes[2].step(t,[labels.index(r['phase']) for r in rows],where='post'); axes[2].set_yticks(range(len(labels)),labels); axes[2].set_xlabel('Time (s)')
+    fig.tight_layout(); fig.savefig(directory/'placement.png'); plt.close(fig)
     fig,ax=plt.subplots(); ax.plot(t,tilt,label='Actual'); ax.plot(t,desired_tilt,label='Human reference')
     if np.isfinite(control_tilt).any(): ax.plot(t,control_tilt,label='Opening-axis control target')
     ax.set(xlabel='Simulator time (s)',ylabel='Gravity-relative tilt (deg)'); ax.legend(); fig.tight_layout(); fig.savefig(directory/'desired_actual_orientation.png'); plt.close(fig)
@@ -264,6 +303,7 @@ def compare(root):
             if init[key]!=inits[0][key]: raise ValueError('Unmatched initial state: '+key)
         if manifest['checkpoint_sha256']!=manifests[0]['checkpoint_sha256']: raise ValueError('Checkpoint mismatch')
         if manifest['settings']!=manifests[0]['settings']: raise ValueError('Different controller settings')
+        if manifest.get('placement_settings')!=manifests[0].get('placement_settings'): raise ValueError('Different placement settings')
         if manifest.get('guidance_algorithm')!=manifests[0].get('guidance_algorithm'): raise ValueError('Different guidance algorithm versions; preserve the earlier failed run separately')
     # Quantify divergence at phase entry rather than claiming shared grasp state.
     grasp_poses={}
@@ -301,9 +341,12 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--hybrid-condition',choices=list('ABC'),required=True)
     parser.add_argument('--human-reference',type=Path)
+    parser.add_argument('--placement-config',type=Path,default=Path('config/smolvla/bowl_placement.json'))
     parser.add_argument('--guidance-config',type=Path,default=Path('config/smolvla/bowl_hybrid.json'))
     args,remaining=parser.parse_known_args()
     settings=Settings(**json.loads(args.guidance_config.read_text(encoding='utf-8-sig'))).validate()
+    placement_settings=PlacementSettings(**json.loads(args.placement_config.read_text(encoding='utf-8-sig'))).validate()
+    os.environ['BOWL_PLACEMENT_SETTINGS']=json.dumps(vars(placement_settings))
     if args.hybrid_condition=='C':
         if not args.human_reference: parser.error('C requires --human-reference')
         Reference.load(args.human_reference)
