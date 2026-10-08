@@ -36,8 +36,12 @@ class Placement:
         self.enter_step=None; self.enter_reason=None; self.phase_step=0; self.failure=None
         self.last_position=None; self.speed=0.; self.release_aperture=None
         self.withdraw_target=None; self.hold_eef=None
+        self.align_setpoint=None; self.align_target=None
 
     def switch(self, phase, subphase, row):
+        self.align_setpoint=None; self.align_target=None
+        if phase=='PLACE' and subphase=='ALIGN':
+            self.align_setpoint=np.asarray(row['eef_pose'],float)[:3,3].copy()
         self.phase=phase; self.subphase=subphase; self.phase_step=row['timestep']; self.count=0
 
     def observe(self, row, supported, slip, dt):
@@ -94,7 +98,32 @@ class Placement:
             target[:3,:3]=swing@eef[:3,:3]; gripper=1.
         delta=target[:3,3]-eef[:3,3]; norm=np.linalg.norm(delta)
         limited=eef[:3,3]+delta*min(1.,self.s.translation_step_m/max(norm,1e-12))
+        align_info={}
+        if self.phase=='PLACE' and self.subphase=='ALIGN':
+            if self.align_setpoint is None: self.align_setpoint=eef[:3,3].copy()
+            if self.align_target is None: self.align_target=target[:3,3].copy()
+            target[:3,3]=self.align_target
+            # Advance only the persistent target. Bound accumulated tracking error
+            # to four existing increments (12 mm), also respecting OSC capacity.
+            capacity=np.minimum(self.controller['output_max'][:3],-self.controller['output_min'][:3])
+            lead=min(4*self.s.translation_step_m,float(np.min(capacity)))
+            if lead<=0: raise ValueError('ALIGN requires translation scaling straddling zero')
+            remaining=self.align_target-self.align_setpoint
+            distance=np.linalg.norm(remaining)
+            candidate=self.align_setpoint+remaining*min(1.,self.s.translation_step_m/max(distance,1e-12))
+            offset=candidate-eef[:3,3]; error=np.linalg.norm(offset)
+            capped=error>lead
+            if capped: candidate=eef[:3,3]+offset*(lead/error)
+            # When the measured EEF has passed the target, stop commanding beyond it.
+            if np.linalg.norm(self.align_target-eef[:3,3])<=lead and np.dot(candidate-self.align_target,candidate-eef[:3,3])>0:
+                candidate=self.align_target.copy()
+            self.align_setpoint=candidate.copy(); limited=candidate
+            align_info=dict(placement_align_setpoint_m=candidate.tolist(),
+                placement_align_fixed_target_m=self.align_target.tolist(),
+                placement_align_lead_limit_m=lead,placement_align_lead_capped=bool(capped),
+                placement_align_tracking_error_m=float(np.linalg.norm(candidate-eef[:3,3])))
+
         vector=Rotation.from_matrix(target[:3,:3]@eef[:3,:3].T).as_rotvec(); norm=np.linalg.norm(vector)
         rot=Rotation.from_rotvec(vector*min(1.,self.s.rotation_step_rad/max(norm,1e-12))).as_matrix()@eef[:3,:3]
         action,clipped=desired_pose_to_action(limited,eef[:3,3],rot,eef[:3,:3],self.controller,clip=1.,gripper=gripper)
-        return action,dict(placement_control=True,placement_command_target_eef=target.tolist(),placement_action_clipped=bool(clipped),guidance_active=False)
+        return action,dict(placement_control=True,placement_command_target_eef=target.tolist(),placement_action_clipped=bool(clipped),guidance_active=False,**align_info)

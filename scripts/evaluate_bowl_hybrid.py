@@ -266,7 +266,20 @@ def process_outputs(output,baseline_root,condition,episodes=1):
         writer=csv.writer(f); writer.writerow(['timestep','sim_time_s','phase','tilt_deg','acceleration_m_s2','grasp','x_m','y_m','z_m'])
         for r,a in zip(rows,acceleration): writer.writerow([r['timestep'],r['sim_time_s'],r['phase'],r['tilt_deg'],a,r['grasp'],*r['bowl_position_m']])
     plot_rollout(directory,rows,acceleration,summary)
-    manifest=json.loads((output/'experiment.json').read_text()); manifest.update(condition=summary['condition'],prompt_design='Original until confirmed grasp/lift; liquid appended for B/C transport',policy_instruction_transport=official.ORIGINAL if summary['condition']=='A' else LIQUID,settings=json.loads(os.environ['BOWL_HYBRID_SETTINGS']),human_reference=os.environ.get('BOWL_HYBRID_REFERENCE'),pairing=summary['state_pairing'],weights_updated=False,guidance_algorithm='shared_geometry_placement_v4',placement_settings=json.loads(os.environ.get('BOWL_PLACEMENT_SETTINGS',json.dumps(vars(PlacementSettings())))))
+    align=[r for r in rows if r.get('phase_before_step')=='PLACE' and r.get('placement_subphase')=='ALIGN']
+    distances=[r['bowl_plate_horizontal_error_m'] for r in rows if r.get('transport_started') and 'bowl_plate_horizontal_error_m' in r]
+    official.write_json(output/'placement_alignment_validation.json',dict(
+        minimum_bowl_plate_horizontal_distance_m=min(distances,default=None),
+        alignment_threshold_achieved=any(r.get('bowl_plate_horizontal_error_m',float('inf'))<=json.loads(os.environ.get('BOWL_PLACEMENT_SETTINGS','{}')).get('align_tolerance_m',.012) for r in rows if 'placement_align_setpoint_m' in r),
+        align_action_steps=sum('placement_align_setpoint_m' in r for r in rows),
+        lower_entered=any(r.get('placement_subphase')=='LOWER' for r in rows),
+        release_entered=any(r['phase']=='RELEASE' for r in rows),
+        libero_success=summary['libero_success'],grasp_lost=summary['grasp_lost'],
+        max_alignment_tilt_deg=max((r['tilt_deg'] for r in align),default=None),
+        max_grasp_rotation_drift_deg=max((r.get('grasp_transform_rotation_drift_deg',0.) for r in rows),default=None),
+        unwanted_rotation_assessment='Inspect orientation trace/video; tilt and grasp drift alone cannot establish unwanted yaw'))
+
+    manifest=json.loads((output/'experiment.json').read_text()); manifest.update(condition=summary['condition'],prompt_design='Original until confirmed grasp/lift; liquid appended for B/C transport',policy_instruction_transport=official.ORIGINAL if summary['condition']=='A' else LIQUID,settings=json.loads(os.environ['BOWL_HYBRID_SETTINGS']),human_reference=os.environ.get('BOWL_HYBRID_REFERENCE'),pairing=summary['state_pairing'],weights_updated=False,guidance_algorithm='shared_geometry_placement_v5_persistent_align',placement_settings=json.loads(os.environ.get('BOWL_PLACEMENT_SETTINGS',json.dumps(vars(PlacementSettings())))))
     manifest['transport_mode']=os.environ.get('BOWL_TRANSPORT_MODE','trajectory')
     if manifest['transport_mode']=='phone_constraints':
         manifest['phone_constraints']=json.loads(os.environ['BOWL_PHONE_CONSTRAINTS'])

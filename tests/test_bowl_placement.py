@@ -27,7 +27,7 @@ class PlacementTests(unittest.TestCase):
         c=self.make(); self.enter(c)
         b=pose([.02,0,1.03],Rotation.from_euler('z',1.2).as_matrix()); e=b@np.linalg.inv(c.relative)
         a,d=c.action(b,e)
-        self.assertLessEqual(np.linalg.norm(a[:3]*.05),.003+1e-12)
+        self.assertLessEqual(np.linalg.norm(a[:3]*.05),.012+1e-12)
         np.testing.assert_allclose(a[3:6],0,atol=1e-12)
         self.assertEqual(a[6],1); self.assertFalse(d['guidance_active'])
     def test_release_requires_support_then_never_closes(self):
@@ -80,3 +80,48 @@ class PlacementTests(unittest.TestCase):
         for r in rows[3:]:r['grasp']=False;r['tilt_deg']=90;r['bowl_position_m'][2]=.5
         summary,acc=analyze(rows);self.assertEqual(summary['transport_end_timestep'],2);self.assertEqual(summary['max_tilt_deg'],2)
         self.assertIsNone(acc[3])
+
+
+class PersistentAlignTests(unittest.TestCase):
+    make=PlacementTests.make
+    def offset_enter(self):
+        c=self.make()
+        for i in range(3): c.observe(row(i,p=(.08,0,1.03)),False,False,.05)
+        return c
+
+    def test_persistent_progression_and_obstruction_bound(self):
+        c=self.offset_enter(); b=pose([.08,0,1.03],np.eye(3));e=b@np.linalg.inv(c.relative)
+        points=[]
+        for _ in range(30):
+            a,d=c.action(b,e);points.append(c.align_setpoint.copy())
+            self.assertLessEqual(np.linalg.norm(c.align_setpoint-e[:3,3]),.012+1e-12)
+            self.assertTrue(np.all(np.abs(a)<=1))
+        self.assertAlmostEqual(points[0][0]-points[1][0],.003)
+        np.testing.assert_allclose(points[-1],points[-2])
+
+    def test_lagging_measurement_converges_within_original_window(self):
+        c=self.offset_enter(); b=pose([.08,0,1.03],np.eye(3));e=b@np.linalg.inv(c.relative)
+        for step in range(3,68):
+            a,d=c.action(b,e)
+            # Analytic lag fixture only: no assertion of MuJoCo performance.
+            e[:3,3]+=.25*(c.align_setpoint-e[:3,3]);b=e@c.relative
+            r=row(step,p=b[:3,3]);r['eef_pose']=e.tolist()
+            c.observe(r,False,False,.05)
+            if c.subphase=='LOWER': break
+        self.assertEqual(c.subphase,'LOWER')
+        self.assertLessEqual(np.linalg.norm(b[:2,3]),.012)
+
+    def test_no_overshoot_near_target(self):
+        c=self.offset_enter(); b=pose([.001,0,1.03],np.eye(3));e=b@np.linalg.inv(c.relative)
+        c.align_setpoint=e[:3,3].copy()
+        c.action(b,e)
+        np.testing.assert_allclose(c.align_setpoint,c.align_target)
+
+    def test_reset_on_leave_and_reenter_align(self):
+        c=self.offset_enter();b=pose([.08,0,1.03],np.eye(3));e=b@np.linalg.inv(c.relative)
+        c.action(b,e);self.assertIsNotNone(c.align_target)
+        c.switch('PLACE','LOWER',row(5))
+        self.assertIsNone(c.align_target);self.assertIsNone(c.align_setpoint)
+        c.switch('PLACE','ALIGN',row(6,p=(.04,0,1.03)))
+        np.testing.assert_allclose(c.align_setpoint,[.08,0,1.05]);self.assertIsNone(c.align_target)
+        c.switch('FAILED','ALIGN',row(7));self.assertIsNone(c.align_setpoint)
