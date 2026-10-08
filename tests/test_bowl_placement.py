@@ -181,3 +181,54 @@ class PersistentLowerTests(unittest.TestCase):
         c,b,e=self.lower();c.action(b,e)
         c.observe(row(1,p=(0,0,1.2)),False,False,.05)
         self.assertEqual(c.failure,'placement_lower_excessive_tracking_error')
+
+
+class PersistentWithdrawTests(unittest.TestCase):
+    make=PlacementTests.make
+    def start(self):
+        c=self.make();c.switch('VERIFY','WITHDRAW',row(0,p=(0,0,1)))
+        e=np.array(row(0,p=(0,0,1))['eef_pose']);return c,e
+
+    def test_progression_open_and_bounded_obstruction(self):
+        c,e=self.start();b=pose([0,0,1],np.eye(3))
+        previous=e[2,3]
+        for i in range(30):
+            a,d=c.action(b,e)
+            self.assertGreaterEqual(c.withdraw_setpoint_z,previous)
+            self.assertLessEqual(c.withdraw_setpoint_z-e[2,3],.012+1e-12)
+            np.testing.assert_array_equal(a[:2],0)
+            self.assertGreaterEqual(a[2],0);self.assertEqual(a[6],-1)
+            self.assertTrue(np.all(np.abs(a)<=1));previous=c.withdraw_setpoint_z
+        self.assertAlmostEqual(previous,e[2,3]+.012)
+
+    def test_no_overshoot_or_downward_or_sideways_command(self):
+        c,e=self.start();b=pose([0,0,1],np.eye(3))
+        for i in range(30):
+            a,d=c.action(b,e);e[2,3]+=.5*(c.withdraw_setpoint_z-e[2,3])
+            self.assertLessEqual(c.withdraw_setpoint_z,c.withdraw_target[2,3])
+        e[2,3]=c.withdraw_target[2,3]+.01;e[0,3]+=.01
+        a,d=c.action(b,e);np.testing.assert_array_equal(a[:3],0);self.assertEqual(a[6],-1)
+
+    def test_completion_threshold_and_reset(self):
+        c,e=self.start()
+        r=row(10,p=(0,0,1),grasp=False,success=True);r['eef_pose']=e.copy().tolist();r['eef_pose'][2][3]+= .049
+        c.observe(r,True,False,.05);self.assertEqual(c.phase,'VERIFY')
+        r['timestep']=11;r['eef_pose'][2][3]=c.withdraw_target[2,3]-.01
+        c.observe(r,True,False,.05);self.assertEqual(c.phase,'DONE');self.assertIsNone(c.withdraw_setpoint_z)
+
+    def test_intentional_release_is_not_loss_and_success_survives_timeout(self):
+        from evaluate_bowl_hybrid import analyze,grasp_diagnostics
+        from bowl_transport_guidance import Settings
+        rows=[]
+        for i,phase in enumerate(['TRANSPORT','PLACE','RELEASE','VERIFY','FAILED']):
+            r=row(i,grasp=i<2,success=i>=2);r.update(sim_time_s=i*.05,phase=phase,failure_reason='placement_withdraw_timeout' if i==4 else None,action=[0]*6+([-1] if i>=2 else [1]),bowl_plate_contact=i>=2)
+            rows.append(r)
+        summary,_=analyze(rows)
+        self.assertFalse(summary['grasp_lost']);self.assertTrue(summary['libero_success'])
+        self.assertTrue(summary['placement_success']);self.assertFalse(summary['controller_completed'])
+        rows[1]['grasp']=False
+        self.assertTrue(analyze(rows)[0]['grasp_lost'])
+        relative=np.eye(4);relative[2,3]=.06
+        released=grasp_diagnostics(relative,np.eye(4),Settings(),True)
+        self.assertFalse(released['slip_detected']);self.assertIsNone(released['grasp_transform_translation_drift_m'])
+        self.assertTrue(grasp_diagnostics(relative,np.eye(4),Settings(),False)['slip_detected'])

@@ -20,6 +20,19 @@ LIQUID=official.ORIGINAL+'. The bowl is full of liquid. Do not spill it.'
 CONTEXT={}
 
 
+def grasp_diagnostics(relative, acquired_relative, settings, deliberately_released=False):
+    translation=float(np.linalg.norm(relative[:3,3]-acquired_relative[:3,3]))
+    angle=float(np.degrees(Rotation.from_matrix(relative[:3,:3]@acquired_relative[:3,:3].T).magnitude()))
+    if deliberately_released:
+        return dict(grasp_transform_translation_drift_m=None,grasp_transform_rotation_drift_deg=None,
+            released_object_relative_translation_change_m=translation,
+            released_object_relative_rotation_change_deg=angle,slip_detected=False,
+            grasp_drift_applicable=False)
+    return dict(grasp_transform_translation_drift_m=translation,grasp_transform_rotation_drift_deg=angle,
+        slip_detected=bool(translation>settings.slip_translation_m or angle>settings.slip_rotation_deg),
+        grasp_drift_applicable=True)
+
+
 class DynamicPrompt(official.PromptProcessor):
     def __init__(self,pipeline,tokenizer,prompt,output):
         super().__init__(pipeline,tokenizer,official.ORIGINAL,output)
@@ -58,7 +71,7 @@ class HybridObserver(official.BowlObserver):
         self.videos={}; self.guidance=None; self.status={}; self.extra={}
 
     def reset(self,*args,**kwargs):
-        self.phases=Phases(self.settings); self.guidance=None; self.extra={}; self.initial_height=None; self.slip_latched=False; self.placement=None
+        self.phases=Phases(self.settings); self.guidance=None; self.extra={}; self.initial_height=None; self.slip_latched=False; self.placement=None; self.deliberate_release=False
         result=super().reset(*args,**kwargs)
         if self.transport_mode=='phone_constraints':
             official.write_json(self.root.parent/'phone_constraints.json',json.loads(os.environ['BOWL_PHONE_CONSTRAINTS']))
@@ -120,12 +133,10 @@ class HybridObserver(official.BowlObserver):
                 preview(self.guidance.reference,self.directory/'aligned_reference.png')
         if self.phases.start is not None:
             relative=np.linalg.inv(eef)@pose(row['bowl_position_m'],row['bowl_rotation_world_from_object'])
-            row['grasp_transform_translation_drift_m']=float(np.linalg.norm(relative[:3,3]-self.gripper_bowl[:3,3]))
-            row['grasp_transform_rotation_drift_deg']=float(np.degrees(Rotation.from_matrix(relative[:3,:3]@self.gripper_bowl[:3,:3].T).magnitude()))
+            row.update(grasp_diagnostics(relative,self.gripper_bowl,self.settings,getattr(self,'deliberate_release',False)))
         if self.step_number>=self.env._max_episode_steps and self.phases.phase not in ('DONE','FAILED'):
             self.phases.phase='FAILED'; self.phases.failure='episode_horizon'
-        if self.phases.start is not None:
-            row['slip_detected']=bool(row['grasp_transform_translation_drift_m']>self.settings.slip_translation_m or row['grasp_transform_rotation_drift_deg']>self.settings.slip_rotation_deg)
+        row['deliberate_release_started']=getattr(self,'deliberate_release',False)
         if self.placement is not None and self.phases.phase=='TRANSPORT' and row.get('slip_detected',False):
             self.phases.phase='FAILED'; self.phases.failure='transport_grasp_transform_slip'
         if self.placement is not None and self.phases.phase!='FAILED':
@@ -189,6 +200,8 @@ class HybridObserver(official.BowlObserver):
             self.extra['executed_rotation_action']=actual[3:6].tolist()
             self.extra['executed_rotation_delta_world_rad']=(((np.clip(actual[3:6],self.controller['input_min'][3:],self.controller['input_max'][3:])-(self.controller['input_max'][3:]+self.controller['input_min'][3:])/2)*(self.controller['output_max'][3:]-self.controller['output_min'][3:])/(self.controller['input_max'][3:]-self.controller['input_min'][3:]))+(self.controller['output_max'][3:]+self.controller['output_min'][3:])/2).tolist()
         self.extra['policy_instruction']=LIQUID if self.phases.start is not None and self.condition!='A' else official.ORIGINAL
+        if self.phases.start is not None and actual[6]<0 and self.phases.phase in ('RELEASE','VERIFY','DONE'):
+            self.deliberate_release=True
         result=super().step(actual)
         if self.placement is not None and self.phases.phase in ('PLACE','RELEASE','VERIFY') and result[2] and self.rows[-1]['libero_success']:
             # Keep the original predicate visible; defer success termination for withdrawal.
@@ -237,14 +250,17 @@ def analyze(rows):
     acc_peak=max(acc_indices,key=lambda i:accelerations[i]) if acc_indices else None
     summary.update(transport_start_timestep=start,transport_end_timestep=end,transport_duration_s=None if start is None else rows[end]['sim_time_s']-rows[start]['sim_time_s'],max_tilt_deg=None if tilt_peak is None else rows[tilt_peak]['tilt_deg'],max_acceleration_m_s2=None if acc_peak is None else accelerations[acc_peak],first_possible_grasp_loss_timestep=loss,tilt_peak_timestep=tilt_peak,acceleration_peak_timestep=acc_peak,tilt_peak_after_possible_grasp_loss=None if tilt_peak is None else loss is not None and tilt_peak>=loss,acceleration_peak_after_possible_grasp_loss=None if acc_peak is None else loss is not None and acc_peak>=loss,slip_detected=any(r.get('slip_detected',False) for r in rows if r.get('phase_before_step')=='TRANSPORT'),acceleration_method='Unsmoothed nonuniform-time central three-point second difference, transport interior only; sampled at 20 Hz, not physics substeps',guidance_disabled=any(r.get('guidance_disabled_reason') for r in rows))
     placement_rows=[r for r in rows if r['phase'] in ('PLACE','RELEASE','VERIFY')]
-    summary.update(final_libero_success=bool(rows[-1]['libero_success']),placement_controller_completed=rows[-1]['phase']=='DONE',transport_end_definition='PLACE entry observation, or last intact-grasp observation before contact loss',placement_attempted=any(r['phase']=='PLACE' for r in rows),release_occurred=any(r['phase'] in ('RELEASE','VERIFY') for r in rows),grasp_lost=any(r['grasp'] is not True for r in rows[start or len(rows):] if r['phase'] not in ('RELEASE','VERIFY','DONE')),placement_entry_timestep=next((r['timestep'] for r in rows if r['phase']=='PLACE'),None),final_bowl_plate_horizontal_error_m=rows[-1].get('bowl_plate_horizontal_error_m'),final_bowl_support_height_error_m=rows[-1].get('bowl_support_height_error_m'),max_placement_tilt_deg=max((r['tilt_deg'] for r in placement_rows),default=None))
+    release_index=next((i for i,r in enumerate(rows) if r.get('deliberate_release_started') or (r.get('action') is not None and r['action'][6]<0 and (r['phase'] in ('RELEASE','VERIFY','DONE') or r.get('phase_before_step') in ('RELEASE','VERIFY')))),len(rows))
+    unintended_loss=start is not None and any(r['grasp'] is not True for r in rows[start:release_index])
+    summary.update(final_libero_success=bool(rows[-1]['libero_success']),placement_controller_completed=rows[-1]['phase']=='DONE',transport_end_definition='PLACE entry observation, or last intact-grasp observation before contact loss',placement_attempted=any(r['phase']=='PLACE' for r in rows),release_occurred=any(r['phase'] in ('RELEASE','VERIFY') for r in rows),grasp_lost=bool(unintended_loss),placement_entry_timestep=next((r['timestep'] for r in rows if r['phase']=='PLACE'),None),final_bowl_plate_horizontal_error_m=rows[-1].get('bowl_plate_horizontal_error_m'),final_bowl_support_height_error_m=rows[-1].get('bowl_support_height_error_m'),max_placement_tilt_deg=max((r['tilt_deg'] for r in placement_rows),default=None))
+    summary.update(controller_completed=rows[-1]['phase']=='DONE',placement_success=bool(release_index<len(rows) and rows[-1]['libero_success'] and rows[-1]['grasp'] is not True and rows[-1].get('bowl_plate_contact',False)),placement_success_definition='Deliberately released bowl remains in plate contact with final LIBERO predicate true')
     return summary,accelerations
 
 
 
 def write_condition_report(output, summary):
     """Fulfil the parent official wrapper's printable report contract."""
-    fields=('libero_success','transport_detected','max_tilt_deg','max_acceleration_m_s2','transport_duration_s','failure_reason')
+    fields=('libero_success','placement_success','controller_completed','transport_detected','max_tilt_deg','max_acceleration_m_s2','transport_duration_s','failure_reason')
     lines=['| Metric | Value |','|---|---|']
     for key in fields:
         value=summary.get(key)
@@ -276,7 +292,7 @@ def process_outputs(output,baseline_root,condition,episodes=1):
         release_entered=any(r['phase']=='RELEASE' for r in rows),
         libero_success=summary['libero_success'],grasp_lost=summary['grasp_lost'],
         max_alignment_tilt_deg=max((r['tilt_deg'] for r in align),default=None),
-        max_grasp_rotation_drift_deg=max((r.get('grasp_transform_rotation_drift_deg',0.) for r in rows),default=None),
+        max_grasp_rotation_drift_deg=max((r['grasp_transform_rotation_drift_deg'] for r in rows if r.get('grasp_transform_rotation_drift_deg') is not None),default=None),
         unwanted_rotation_assessment='Inspect orientation trace/video; tilt and grasp drift alone cannot establish unwanted yaw'))
 
     lower=[r for r in rows if r.get('placement_subphase')=='LOWER']
@@ -291,7 +307,7 @@ def process_outputs(output,baseline_root,condition,episodes=1):
         grasp_lost=summary['grasp_lost'],failure_reason=summary['failure_reason'],
         contact_hold_samples=sum(r.get('placement_lower_contact_hold',False) for r in rows),
         max_lower_tilt_deg=max((r['tilt_deg'] for r in lower),default=None)))
-    manifest=json.loads((output/'experiment.json').read_text()); manifest.update(condition=summary['condition'],prompt_design='Original until confirmed grasp/lift; liquid appended for B/C transport',policy_instruction_transport=official.ORIGINAL if summary['condition']=='A' else LIQUID,settings=json.loads(os.environ['BOWL_HYBRID_SETTINGS']),human_reference=os.environ.get('BOWL_HYBRID_REFERENCE'),pairing=summary['state_pairing'],weights_updated=False,guidance_algorithm='shared_geometry_placement_v6_persistent_lower',placement_settings=json.loads(os.environ.get('BOWL_PLACEMENT_SETTINGS',json.dumps(vars(PlacementSettings())))))
+    manifest=json.loads((output/'experiment.json').read_text()); manifest.update(condition=summary['condition'],prompt_design='Original until confirmed grasp/lift; liquid appended for B/C transport',policy_instruction_transport=official.ORIGINAL if summary['condition']=='A' else LIQUID,settings=json.loads(os.environ['BOWL_HYBRID_SETTINGS']),human_reference=os.environ.get('BOWL_HYBRID_REFERENCE'),pairing=summary['state_pairing'],weights_updated=False,guidance_algorithm='shared_geometry_placement_v7_persistent_withdraw',placement_settings=json.loads(os.environ.get('BOWL_PLACEMENT_SETTINGS',json.dumps(vars(PlacementSettings())))))
     manifest['transport_mode']=os.environ.get('BOWL_TRANSPORT_MODE','trajectory')
     if manifest['transport_mode']=='phone_constraints':
         manifest['phone_constraints']=json.loads(os.environ['BOWL_PHONE_CONSTRAINTS'])

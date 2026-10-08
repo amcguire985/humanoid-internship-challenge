@@ -36,6 +36,7 @@ class Placement:
         self.enter_step=None; self.enter_reason=None; self.phase_step=0; self.failure=None
         self.last_position=None; self.speed=0.; self.release_aperture=None
         self.withdraw_target=None; self.hold_eef=None
+        self.withdraw_setpoint_z=None
         self.align_setpoint=None; self.align_target=None
         self.lower_setpoint=None; self.lower_target=None
         self.lower_history=[]; self.lower_supported=False; self.lower_contact_count=0
@@ -52,6 +53,11 @@ class Placement:
             swing=Rotation.from_rotvec(opening_axis_rotation_vector(r)).as_matrix()
             self.lower_target=(pose(self.goal,swing@r)@np.linalg.inv(self.relative))[:3,3].copy()
             self.lower_setpoint=eef[:3,3].copy()
+        self.withdraw_setpoint_z=None
+        if phase=='VERIFY' and subphase=='WITHDRAW':
+            self.withdraw_target=np.asarray(row['eef_pose'],float).copy()
+            self.withdraw_setpoint_z=float(self.withdraw_target[2,3])
+            self.withdraw_target[2,3]+=self.s.withdraw_m
         self.phase=phase; self.subphase=subphase; self.phase_step=row['timestep']; self.count=0
 
     def observe(self, row, supported, slip, dt):
@@ -177,6 +183,20 @@ class Placement:
                 placement_lower_contact_hold=bool(self.lower_supported),
                 placement_lower_stall_window_steps=3*self.s.confirm_steps,
                 placement_lower_stall_min_descent_m=.1*self.s.height_tolerance_m)
+        if self.phase=='VERIFY' and self.subphase=='WITHDRAW':
+            lead=min(4*self.s.translation_step_m,float(self.controller['output_max'][2]))
+            if lead<=0: raise ValueError('WITHDRAW requires positive Z command capacity')
+            if self.withdraw_setpoint_z is None: self.withdraw_setpoint_z=float(eef[2,3])
+            candidate=min(self.withdraw_setpoint_z+self.s.translation_step_m,float(self.withdraw_target[2,3]))
+            candidate=min(candidate,float(eef[2,3])+lead)
+            self.withdraw_setpoint_z=candidate
+            # Pure upward translation: no lateral correction and no downward
+            # command if the measured gripper has reached/passed the endpoint.
+            limited=eef[:3,3].copy();limited[2]=max(candidate,float(eef[2,3]))
+            align_info.update(placement_withdraw_setpoint_z_m=candidate,
+                placement_withdraw_target_z_m=float(self.withdraw_target[2,3]),
+                placement_withdraw_lead_limit_m=lead,
+                placement_withdraw_tracking_error_m=float(limited[2]-eef[2,3]))
         vector=Rotation.from_matrix(target[:3,:3]@eef[:3,:3].T).as_rotvec(); norm=np.linalg.norm(vector)
         rot=Rotation.from_rotvec(vector*min(1.,self.s.rotation_step_rad/max(norm,1e-12))).as_matrix()@eef[:3,:3]
         action,clipped=desired_pose_to_action(limited,eef[:3,3],rot,eef[:3,:3],self.controller,clip=1.,gripper=gripper)
