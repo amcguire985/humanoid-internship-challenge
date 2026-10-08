@@ -37,7 +37,7 @@ The existing processed data_003 demo_001 contains positions but no object orient
 
 Local preflight estimated mounting rotations successfully. Co-visible pairs retained 236/265, 1331/1646, and 274/307 observations; retained 95th-percentile scatter was about 2.8, 5.6, and 4.6 degrees, with graph closure about 1.1 degrees. These are geometric consistency checks, not confirmation of the top face or gravity.
 
-An explicitly **unverified** draft from the real phone trajectory was exported for reviewed transport interval 5.9Ã¢â‚¬â€œ16.7 seconds: duration 10.8 seconds, timing scale 1. It rejected 32 inconsistent orientation candidates. Assuming ID0 +Z is gravity and ID5 is the top yields approximately 100Ã¢â‚¬â€œ111 degrees tilt. This assumption is unsuitable for the bowl experiment and must be resolved from the recording/setup. The draft and preview remain under ignored `results/bowl_hybrid_preflight/`; the simulator refuses audit-only or unverified references.
+An explicitly **unverified** draft from the real phone trajectory was exported for reviewed transport interval 5.9ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“16.7 seconds: duration 10.8 seconds, timing scale 1. It rejected 32 inconsistent orientation candidates. Assuming ID0 +Z is gravity and ID5 is the top yields approximately 100ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“111 degrees tilt. This assumption is unsuitable for the bowl experiment and must be resolved from the recording/setup. The draft and preview remain under ignored `results/bowl_hybrid_preflight/`; the simulator refuses audit-only or unverified references.
 
 The user confirmed on 2026-10-07 that ID6 is the top face, ID0 lies flat on the table with its printed face upward, and the camera calibration matched. The corrected verified reference preserves the 10.8-second duration and has about 5.69?19.57 degrees tilt. It rejects 32 ambiguous face candidates. The earlier 100?111 degree draft used the wrong top face and is not used. Confirmed mounting/gravity configuration is saved in `config/smolvla/bowl_human_calibration.json`; the preparation cell copies it to Drive. No additional gravity confirmation is required for this recording.
 
@@ -108,3 +108,7 @@ All 15 policy open commands were blocked by guidance, and no sample allowed rele
 `collision_surface_placement_v2` now computes the central plate collision-box top and the upright bowl collision-box bottom. It logs `placement_target.json`, keeps human timing and the 280-step horizon unchanged, and versions the algorithm in the manifest to prevent mixing this repaired intervention with the failed C run. This correction is locally tested but still needs one C retry in Colab. Do not rerun A/B yet.
 
 Two logging/report issues were also fixed: native boolean encoding of the reference-finished flag and creation of the printable Markdown report required by the parent wrapper. These fixes do not change policy actions.
+
+## Orientation diagnosis update
+
+Full-orientation tracking caused unnecessary bowl yaw. Condition C now uses the opening-axis gravity objective and a gradual rotational handoff at release; Condition B remains unchanged. See [the recorded evidence, coordinate audit, code changes, and pending single-rollout validation](BOWL_ROTATION_DIAGNOSIS.md). Earlier full-orientation C results must retain their original algorithm label. Human timed position and acceleration data remain active inputs.

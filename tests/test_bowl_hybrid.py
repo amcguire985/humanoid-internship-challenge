@@ -8,7 +8,7 @@ import numpy as np
 from scipy.spatial.transform import Rotation
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
 from bowl_human_reference import Reference,prepare,rotation
-from bowl_transport_guidance import Guidance,Phases,Settings,pose,physical_placement_goal
+from bowl_transport_guidance import Guidance,Phases,Settings,pose,physical_placement_goal,opening_axis_rotation_vector
 from calibrate_bowl_reference import gravity_rotation
 from evaluate_bowl_hybrid import analyze,DynamicPrompt,CONTEXT,LIQUID,HybridObserver,compare,write_condition_report
 import evaluate_bowl_liquid as official
@@ -101,15 +101,88 @@ class HybridTests(unittest.TestCase):
         _,info=guide.apply(np.ones(7),pose([.1,0,.4],np.eye(3)),eef,.1,.05)
         json.dumps(info,allow_nan=False)
 
-    def test_human_orientation_and_time_change_correction(self):
+    def test_human_timing_retained_but_arbitrary_orientation_is_not_tracked(self):
         start=pose([0,0,.4],np.eye(3)); eef=pose([0,0,.45],np.eye(3)); s=Settings(ramp_s=.01,correction_slew_per_s=10,correction_limit=1,position_blend=1,orientation_blend=1)
         first=Guidance(reference(),start,eef,[.2,0,.4],controller(),s)
         ref=reference(); ref.r=np.repeat(np.eye(3)[None],len(ref.t),axis=0)
         second=Guidance(ref,start,eef,[.2,0,.4],controller(),s)
         a,_=first.apply(np.zeros(7),start,eef,.5,.05); b,_=second.apply(np.zeros(7),start,eef,.5,.05)
-        self.assertGreater(np.linalg.norm(a[3:6]-b[3:6]),.01)
+        np.testing.assert_allclose(a,b,atol=1e-12)
+        np.testing.assert_array_equal(first.reference.p,second.reference.p)
+        np.testing.assert_array_equal(first.reference_velocity,second.reference_velocity)
+        np.testing.assert_array_equal(first.reference_acceleration,second.reference_acceleration)
         later,_=second.apply(np.zeros(7),start,eef,.9,.05)
         self.assertGreater(np.linalg.norm(later[:3]-b[:3]),.01)
+
+    def test_opening_axis_yaw_invariance_and_world_composition(self):
+        for yaw in (-179.,-45.,0.,90.,179.):
+            matrix=Rotation.from_euler('z',yaw,degrees=True).as_matrix()
+            np.testing.assert_allclose(opening_axis_rotation_vector(matrix),0,atol=1e-12)
+        matrix=Rotation.from_euler('xyz',[.2,-.3,.7]).as_matrix()
+        delta=opening_axis_rotation_vector(matrix)
+        np.testing.assert_allclose(Rotation.from_rotvec(delta).as_matrix()@matrix[:,2],[0,0,1],atol=1e-12)
+        self.assertAlmostEqual(delta[2],0,places=12)
+        spun=matrix@Rotation.from_euler('z',1.9).as_matrix()
+        np.testing.assert_allclose(opening_axis_rotation_vector(spun),delta,atol=1e-12)
+        frame=Rotation.from_euler('xyz',[.5,.2,-.8]).as_matrix()
+        np.testing.assert_allclose(opening_axis_rotation_vector(frame@matrix,frame@np.array([0,0,1])),frame@delta,atol=1e-12)
+        inverted=Rotation.from_euler('x',np.pi).as_matrix()
+        np.testing.assert_allclose(Rotation.from_rotvec(opening_axis_rotation_vector(inverted)).as_matrix()@inverted[:,2],[0,0,1],atol=1e-12)
+
+    def test_yaw_reference_does_not_create_tilt_or_grasp_twist_corrections(self):
+        t=np.linspace(0,1,21); p=np.column_stack([.2*t,np.zeros(21),np.zeros(21)])
+        r=Rotation.from_euler('z',np.linspace(-179,179,21)[:,None],degrees=True).as_matrix()
+        ref=Reference(t,p,r)
+        bowl=pose([0,0,.4],np.eye(3)); eef=pose([.02,0,.45],Rotation.from_euler('x',np.pi).as_matrix())
+        guide=Guidance(ref,bowl,eef,[.2,0,.4],controller(),Settings(ramp_s=.01))
+        # Relative grasp yaw drift must not trigger an orientation-restoration objective.
+        drifted_eef=eef.copy(); drifted_eef[:3,:3]=Rotation.from_euler('z',.1).as_matrix()@eef[:3,:3]
+        result,info=guide.apply(np.zeros(7),bowl,drifted_eef,.5,.05)
+        np.testing.assert_allclose(result[3:6],0,atol=1e-12)
+        self.assertFalse(info['human_orientation_used_for_rotation'])
+
+    def test_reference_endpoint_and_quaternion_sign_are_continuous(self):
+        t=np.array([0.,.5,1.]); p=np.column_stack([t,np.zeros(3),np.zeros(3)])
+        q=Rotation.from_euler('z',np.array([179.,180.,181.])[:,None],degrees=True).as_quat(); q[1]*=-1
+        ref=Reference(t,p,Rotation.from_quat(q).as_matrix())
+        grid=np.linspace(0,1,101); _,matrices=ref.sample(grid)
+        increments=(Rotation.from_matrix(matrices[1:])*Rotation.from_matrix(matrices[:-1]).inv()).magnitude()
+        self.assertLess(np.max(increments),np.radians(.03))
+        a,b=ref.sample([1-1e-8,1,1+1e-8])
+        np.testing.assert_allclose(a[1],a[2]); np.testing.assert_allclose(b[1],b[2]); np.testing.assert_allclose(b[0],b[1],atol=1e-8)
+        for m in matrices: np.testing.assert_allclose(opening_axis_rotation_vector(m),0,atol=1e-12)
+
+    def test_osc_world_delta_has_correct_tilt_reducing_sign(self):
+        bowl=pose([0,0,.4],Rotation.from_euler('x',.3).as_matrix())
+        eef=pose([0,0,.45],Rotation.from_euler('xyz',[2.8,.1,.7]).as_matrix())
+        guide=Guidance(reference(),bowl,eef,[.2,0,.4],controller(),Settings(ramp_s=.01))
+        action,info=guide.apply(np.zeros(7),bowl,eef,.5,.05)
+        # Ideal one-step world delta, not a simulator performance prediction.
+        delta=.5*action[3:6]
+        predicted=Rotation.from_rotvec(delta).as_matrix()@bowl[:3,:3]
+        self.assertLess(np.arccos(predicted[2,2]),.3)
+        self.assertAlmostEqual(action[5],0,places=12)
+        np.testing.assert_allclose(np.array(info['desired_eef_pose'])[:3,:3],Rotation.from_rotvec(info['opening_axis_error_world_rad']).as_matrix()@eef[:3,:3],atol=1e-12)
+
+    def test_orientation_analysis_handles_absent_transport(self):
+        from analyze_bowl_rotation import analyze as analyze_rotation
+        with tempfile.TemporaryDirectory() as d:
+            path=Path(d)/'trajectory.jsonl'; path.write_text(json.dumps(dict(phase='FAILED',libero_success=False))+'\n')
+            report=analyze_rotation(path,Path(d)/'diagnostics')
+            self.assertFalse(report['transport_detected']); self.assertTrue((Path(d)/'diagnostics/orientation_diagnosis.json').exists())
+
+    def test_release_handoff_slew_and_no_translation_or_gripper_changes(self):
+        bowl=pose([0,0,.4],np.eye(3)); eef=pose([0,0,.45],np.eye(3))
+        guide=Guidance(reference(),bowl,eef,[.2,0,.4],controller(),Settings())
+        guide.previous_correction=np.array([.1,-.1,.1,.15,-.12,.06]); policy=np.array([.4,-.2,.1,.02,.01,-.03,-1.])
+        previous=guide.previous_correction[3:].copy()
+        for _ in range(8):
+            result,info=guide.release_orientation(policy,.05)
+            np.testing.assert_array_equal(result[:3],policy[:3]); self.assertEqual(result[6],policy[6])
+            correction=np.array(info['correction'])[3:]
+            self.assertLessEqual(np.max(np.abs(correction-previous)),.03000000001)
+            previous=correction; json.dumps(info,allow_nan=False)
+        np.testing.assert_allclose(result,policy,atol=1e-12)
 
     def test_metrics_exclude_pregrasp_and_failed_transport_is_null(self):
         rows=[]

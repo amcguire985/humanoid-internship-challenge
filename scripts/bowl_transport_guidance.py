@@ -1,7 +1,7 @@
 """Small bounded human object-pose intervention for world-frame delta OSC."""
 from dataclasses import dataclass
 import numpy as np
-from scipy.spatial.transform import Rotation, Slerp
+from scipy.spatial.transform import Rotation
 from replay_libero_transport import desired_pose_to_action
 from bowl_human_reference import rotation
 
@@ -10,6 +10,25 @@ def pose(position, orientation):
     result=np.eye(4); result[:3,:3]=rotation(orientation); result[:3,3]=np.asarray(position,float)
     if not np.isfinite(result).all(): raise ValueError('Nonfinite pose')
     return result
+
+
+
+def opening_axis_rotation_vector(bowl_rotation, gravity_up=(0.,0.,1.)):
+    """Shortest world-frame swing of object +Z onto gravity; no yaw objective."""
+    opening=rotation(bowl_rotation)[:,2]
+    gravity=np.asarray(gravity_up,float)
+    if gravity.shape!=(3,) or not np.isfinite(gravity).all() or np.linalg.norm(gravity)<1e-12:
+        raise ValueError('Invalid gravity-up direction')
+    gravity=gravity/np.linalg.norm(gravity)
+    cross=np.cross(opening,gravity); sine=float(np.linalg.norm(cross))
+    cosine=float(np.clip(np.dot(opening,gravity),-1,1))
+    if sine<1e-12:
+        if cosine>0: return np.zeros(3)
+        # Exact inversion has no unique shortest swing; choose a deterministic axis.
+        basis=np.eye(3)[int(np.argmin(np.abs(opening)))]
+        axis=np.cross(opening,basis); axis/=np.linalg.norm(axis)
+        return np.pi*axis
+    return np.arctan2(sine,cosine)*cross/sine
 
 
 def physical_placement_goal(base, bowl_object, plate_object):
@@ -105,7 +124,6 @@ class Guidance:
         self.s=settings.validate(); self.reference=reference.aligned(bowl_pose[:3,3],goal)
         self.gripper_bowl=np.linalg.inv(eef_pose)@bowl_pose
         self.controller=controller; self.previous_correction=np.zeros(6)
-        self.initial_rotation=bowl_pose[:3,:3].copy()
         self.reference_velocity=np.gradient(self.reference.p,self.reference.t,axis=0,edge_order=2)
         self.reference_acceleration=np.gradient(self.reference_velocity,self.reference.t,axis=0,edge_order=2)
 
@@ -117,7 +135,7 @@ class Guidance:
         drift_position=float(np.linalg.norm(relative[:3,3]-self.gripper_bowl[:3,3]))
         drift_angle=float(np.degrees(Rotation.from_matrix(relative[:3,:3]@self.gripper_bowl[:3,:3].T).magnitude()))
         info={'slip_translation_m':drift_position,'slip_rotation_deg':drift_angle,'slip_detected':drift_position>s.slip_translation_m or drift_angle>s.slip_rotation_deg}
-        p,r=self.reference.sample([elapsed]); desired=pose(p[0],r[0])
+        p,r=self.reference.sample([elapsed])
         velocity=[float(np.interp(elapsed,self.reference.t,self.reference_velocity[:,i])) for i in range(3)]
         acceleration=[float(np.interp(elapsed,self.reference.t,self.reference_acceleration[:,i])) for i in range(3)]
         info.update(desired_bowl_velocity_m_s=velocity,desired_bowl_acceleration_m_s2=acceleration,desired_bowl_position_m=p[0].tolist(),desired_bowl_rotation=r[0].tolist(),reference_elapsed_s=float(elapsed),reference_finished=bool(elapsed>=self.reference.t[-1]))
@@ -129,8 +147,20 @@ class Guidance:
         distance=np.linalg.norm(bowl_pose[:2,3]-self.reference.p[-1,:2])
         terminal=np.clip(distance/s.release_radius_m,0,1)
         weight=float(ramp*terminal)
-        desired_rotation=Slerp([0,1],Rotation.from_matrix(np.stack([self.initial_rotation,r[0]])))([ramp]).as_matrix()[0]
+        # Human orientation is recorded for audit, but arbitrary tag yaw/tilt is not a goal.
+        # Keep actual yaw free; apply the shortest gravity-aligning swing to the bowl
+        # and the actual gripper together, avoiding frozen-transform twist correction.
+        opening_error=opening_axis_rotation_vector(bowl_pose[:3,:3])
+        swing=Rotation.from_rotvec(ramp*opening_error).as_matrix()
+        desired_rotation=swing@bowl_pose[:3,:3]
         target=pose(p[0],desired_rotation)@np.linalg.inv(self.gripper_bowl)
+        target[:3,:3]=swing@eef_pose[:3,:3]
+        info.update(orientation_mode='gravity_opening_axis',guidance_mode='transport',
+            orientation_target_bowl_rotation=desired_rotation.tolist(),
+            orientation_target_opening_axis=desired_rotation[:,2].tolist(),
+            opening_axis_error_world_rad=opening_error.tolist(),
+            human_orientation_used_for_rotation=False)
+
         tracking,_=desired_pose_to_action(target[:3,3],eef_pose[:3,3],target[:3,:3],eef_pose[:3,:3],self.controller,clip=1,gripper=action[6])
         # Position targets advance on unscaled human time. This influences both speed and
         # acceleration through feedback, without pretending to impose a physics-level limit.
@@ -147,3 +177,19 @@ class Guidance:
         result=np.clip(result,self.controller['action_min'],self.controller['action_max'])
         info.update(correction=correction.tolist(),guidance_weight=weight,release_allowed=bool(safe_release),gripper_gate_applied=bool(action[6]<0 and not safe_release),desired_eef_pose=target.tolist())
         return result,info
+
+
+    def release_orientation(self, policy_action, dt):
+        """Slew the last rotation correction to zero; leave translation/gripper alone."""
+        action=np.asarray(policy_action,float)
+        if action.shape!=(7,) or not np.isfinite(action).all() or not np.isfinite(dt) or dt<=0:
+            raise ValueError('Invalid release action or control time')
+        previous=self.previous_correction[3:].copy()
+        maximum_change=self.s.correction_slew_per_s*dt
+        correction=previous-np.clip(previous,-maximum_change,maximum_change)
+        self.previous_correction=np.r_[np.zeros(3),correction]
+        result=action.copy()
+        result[3:6]=np.clip(action[3:6]+correction,self.controller['action_min'][3:6],self.controller['action_max'][3:6])
+        return result,dict(correction=self.previous_correction.tolist(),guidance_mode='release_orientation_fade',
+            orientation_mode='gravity_opening_axis',guidance_active=bool(np.any(np.abs(correction)>1e-12)),
+            human_orientation_used_for_rotation=False,release_rotation_correction=correction.tolist())

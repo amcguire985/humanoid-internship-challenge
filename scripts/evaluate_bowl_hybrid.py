@@ -133,7 +133,14 @@ class HybridObserver(official.BowlObserver):
             self.extra['guidance_slip_detected']=self.extra.pop('slip_detected')
             if diagnostics['slip_detected']:
                 self.slip_latched=True; self.extra['guidance_disabled_reason']='rigid_grasp_transform_drift'
+        elif self.condition=='C' and self.phases.phase=='RELEASE' and not self.slip_latched:
+            actual,diagnostics=self.guidance.release_orientation(original,1/self.env._env.env.control_freq)
+            self.extra.update(diagnostics)
         elif self.slip_latched: self.extra['guidance_disabled_reason']='rigid_grasp_transform_drift_latched'
+        if self.condition=='C':
+            self.extra['policy_rotation_action']=original[3:6].tolist()
+            self.extra['executed_rotation_action']=actual[3:6].tolist()
+            self.extra['executed_rotation_delta_world_rad']=(((np.clip(actual[3:6],self.controller['input_min'][3:],self.controller['input_max'][3:])-(self.controller['input_max'][3:]+self.controller['input_min'][3:])/2)*(self.controller['output_max'][3:]-self.controller['output_min'][3:])/(self.controller['input_max'][3:]-self.controller['input_min'][3:]))+(self.controller['output_max'][3:]+self.controller['output_min'][3:])/2).tolist()
         self.extra['policy_instruction']=LIQUID if self.phases.start is not None and self.condition!='A' else official.ORIGINAL
         result=super().step(actual)
         if self.phases.phase=='FAILED' and not result[2]:
@@ -203,7 +210,10 @@ def process_outputs(output,baseline_root,condition,episodes=1):
         writer=csv.writer(f); writer.writerow(['timestep','sim_time_s','phase','tilt_deg','acceleration_m_s2','grasp','x_m','y_m','z_m'])
         for r,a in zip(rows,acceleration): writer.writerow([r['timestep'],r['sim_time_s'],r['phase'],r['tilt_deg'],a,r['grasp'],*r['bowl_position_m']])
     plot_rollout(directory,rows,acceleration,summary)
-    manifest=json.loads((output/'experiment.json').read_text()); manifest.update(condition=summary['condition'],prompt_design='Original until confirmed grasp/lift; liquid appended for B/C transport',policy_instruction_transport=official.ORIGINAL if summary['condition']=='A' else LIQUID,settings=json.loads(os.environ['BOWL_HYBRID_SETTINGS']),human_reference=os.environ.get('BOWL_HYBRID_REFERENCE'),pairing=summary['state_pairing'],weights_updated=False,guidance_algorithm='collision_surface_placement_v2')
+    if summary['condition']=='C':
+        from analyze_bowl_rotation import analyze as analyze_rotation
+        analyze_rotation(directory/'trajectory.jsonl',directory/'orientation_analysis')
+    manifest=json.loads((output/'experiment.json').read_text()); manifest.update(condition=summary['condition'],prompt_design='Original until confirmed grasp/lift; liquid appended for B/C transport',policy_instruction_transport=official.ORIGINAL if summary['condition']=='A' else LIQUID,settings=json.loads(os.environ['BOWL_HYBRID_SETTINGS']),human_reference=os.environ.get('BOWL_HYBRID_REFERENCE'),pairing=summary['state_pairing'],weights_updated=False,guidance_algorithm='gravity_opening_axis_v3' if summary['condition']=='C' else 'collision_surface_placement_v2')
     if summary['condition']=='C':
         refpath=Path(os.environ['BOWL_HYBRID_REFERENCE'])
         manifest['reference_sha256']=hashlib.sha256(refpath.read_bytes()).hexdigest()
@@ -220,16 +230,21 @@ def plot_rollout(directory,rows,acceleration,summary):
     t=np.array([r['sim_time_s']-rows[0]['sim_time_s'] for r in rows]); p=np.array([r['bowl_position_m'] for r in rows])
     desired=np.array([r.get('desired_bowl_position_m',[np.nan]*3) for r in rows])
     tilt=np.array([r['tilt_deg'] for r in rows]); desired_tilt=np.array([np.degrees(np.arccos(np.clip(np.array(r['desired_bowl_rotation'])[2,2],-1,1))) if 'desired_bowl_rotation' in r else np.nan for r in rows])
+    control_tilt=np.array([np.degrees(np.arccos(np.clip(np.array(r['orientation_target_bowl_rotation'])[2,2],-1,1))) if 'orientation_target_bowl_rotation' in r else np.nan for r in rows])
     for name,value,label in [('tilt',tilt,'Bowl tilt (deg)'),('acceleration',acceleration,'Transport acceleration (m/s2)')]:
         fig,ax=plt.subplots(); ax.plot(t,value,label='Actual')
-        if name=='tilt': ax.plot(t,desired_tilt,label='Human target')
+        if name=='tilt':
+            ax.plot(t,desired_tilt,label='Human reference')
+            if np.isfinite(control_tilt).any(): ax.plot(t,control_tilt,label='Opening-axis control target')
         if summary['transport_start_timestep'] is not None: ax.axvspan(t[summary['transport_start_timestep']],t[summary['transport_end_timestep']],alpha=.1,color='green')
         else: ax.text(.5,.9,'No confirmed transport',transform=ax.transAxes,ha='center')
         ax.set(xlabel='Simulator time since reset (s)',ylabel=label); ax.legend(); fig.tight_layout(); fig.savefig(directory/(name+'.png')); plt.close(fig)
     fig,axes=plt.subplots(3,1,sharex=True,figsize=(9,7))
     for i,ax in enumerate(axes): ax.plot(t,p[:,i],label='Actual'); ax.plot(t,desired[:,i],label='Human target'); ax.set_ylabel('xyz'[i]+' (m)')
     axes[0].legend(); axes[-1].set_xlabel('Simulator time (s)'); fig.tight_layout(); fig.savefig(directory/'desired_actual_position.png'); plt.close(fig)
-    fig,ax=plt.subplots(); ax.plot(t,tilt,label='Actual'); ax.plot(t,desired_tilt,label='Human target'); ax.set(xlabel='Simulator time (s)',ylabel='Gravity-relative tilt (deg)'); ax.legend(); fig.tight_layout(); fig.savefig(directory/'desired_actual_orientation.png'); plt.close(fig)
+    fig,ax=plt.subplots(); ax.plot(t,tilt,label='Actual'); ax.plot(t,desired_tilt,label='Human reference')
+    if np.isfinite(control_tilt).any(): ax.plot(t,control_tilt,label='Opening-axis control target')
+    ax.set(xlabel='Simulator time (s)',ylabel='Gravity-relative tilt (deg)'); ax.legend(); fig.tight_layout(); fig.savefig(directory/'desired_actual_orientation.png'); plt.close(fig)
 
 
 def compare(root):
