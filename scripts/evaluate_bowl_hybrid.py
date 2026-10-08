@@ -52,13 +52,16 @@ class HybridObserver(official.BowlObserver):
     def __init__(self,env,root):
         super().__init__(env,root)
         self.condition=os.environ['BOWL_HYBRID_CONDITION']
+        self.transport_mode=os.environ.get('BOWL_TRANSPORT_MODE','trajectory')
         self.settings=Settings(**json.loads(os.environ['BOWL_HYBRID_SETTINGS'])).validate()
-        self.reference=Reference.load(os.environ['BOWL_HYBRID_REFERENCE']) if self.condition=='C' else None
+        self.reference=Reference.load(os.environ['BOWL_HYBRID_REFERENCE']) if self.condition=='C' and self.transport_mode=='trajectory' else None
         self.videos={}; self.guidance=None; self.status={}; self.extra={}
 
     def reset(self,*args,**kwargs):
         self.phases=Phases(self.settings); self.guidance=None; self.extra={}; self.initial_height=None; self.slip_latched=False; self.placement=None
         result=super().reset(*args,**kwargs)
+        if self.transport_mode=='phone_constraints':
+            official.write_json(self.root.parent/'phone_constraints.json',json.loads(os.environ['BOWL_PHONE_CONSTRAINTS']))
         self.controller=inspect_controller(self.env._env)
         official.write_json(self.directory/'controller.json',{k:v.tolist() for k,v in self.controller.items()})
         if abs(self.env._env.env.control_freq-20)>1e-6: raise ValueError('Expected validated 20 Hz controller')
@@ -106,7 +109,10 @@ class HybridObserver(official.BowlObserver):
                 generate(bowl[:3,3],approach,bowl[:3,:3],
                     duration=float(os.environ['BOWL_SYNTHETIC_DURATION'])).save(path)
                 self.reference=Reference.load(path)
-            if self.condition in ('C','D1'):
+            if self.condition=='C' and self.transport_mode=='phone_constraints':
+                from bowl_phone_constraints import MotionConstraints
+                self.guidance=MotionConstraints(json.loads(os.environ['BOWL_PHONE_CONSTRAINTS']),self.controller,self.settings,row['action'],1/base.control_freq)
+            if self.condition in ('C','D1') and self.transport_mode=='trajectory':
                 reference_goal=self.reference.p[-1] if self.condition=='D1' else goal
                 self.guidance=Guidance(self.reference,bowl,eef,reference_goal,self.controller,self.settings)
                 self.guidance.reference.save(self.directory/'aligned_reference.csv')
@@ -162,7 +168,13 @@ class HybridObserver(official.BowlObserver):
             row=self.rows[-1]; dt=1/self.env._env.env.control_freq
             bowl=pose(row['bowl_position_m'],row['bowl_rotation_world_from_object'])
             elapsed=row['sim_time_s']-self.phases.start[1]
-            actual,diagnostics=self.guidance.apply(original,bowl,self.eef_pose(),elapsed,dt)
+            if getattr(self,'transport_mode','trajectory')=='phone_constraints':
+                if len(self.rows)>1:
+                    dt=row['sim_time_s']-self.rows[-2]['sim_time_s']
+                actual,diagnostics=self.guidance.apply(original,bowl[:3,:3],dt,elapsed)
+                diagnostics['slip_detected']=False  # Existing observer independently enforces grasp drift.
+            else:
+                actual,diagnostics=self.guidance.apply(original,bowl,self.eef_pose(),elapsed,dt)
             self.extra.update(diagnostics,guidance_active=not diagnostics['slip_detected'])
             self.extra['guidance_slip_detected']=self.extra.pop('slip_detected')
             if diagnostics['slip_detected']:
@@ -255,6 +267,9 @@ def process_outputs(output,baseline_root,condition,episodes=1):
         for r,a in zip(rows,acceleration): writer.writerow([r['timestep'],r['sim_time_s'],r['phase'],r['tilt_deg'],a,r['grasp'],*r['bowl_position_m']])
     plot_rollout(directory,rows,acceleration,summary)
     manifest=json.loads((output/'experiment.json').read_text()); manifest.update(condition=summary['condition'],prompt_design='Original until confirmed grasp/lift; liquid appended for B/C transport',policy_instruction_transport=official.ORIGINAL if summary['condition']=='A' else LIQUID,settings=json.loads(os.environ['BOWL_HYBRID_SETTINGS']),human_reference=os.environ.get('BOWL_HYBRID_REFERENCE'),pairing=summary['state_pairing'],weights_updated=False,guidance_algorithm='shared_geometry_placement_v4',placement_settings=json.loads(os.environ.get('BOWL_PLACEMENT_SETTINGS',json.dumps(vars(PlacementSettings())))))
+    manifest['transport_mode']=os.environ.get('BOWL_TRANSPORT_MODE','trajectory')
+    if manifest['transport_mode']=='phone_constraints':
+        manifest['phone_constraints']=json.loads(os.environ['BOWL_PHONE_CONSTRAINTS'])
     if summary['condition']=='C':
         refpath=Path(os.environ['BOWL_HYBRID_REFERENCE'])
         manifest['reference_sha256']=hashlib.sha256(refpath.read_bytes()).hexdigest()
@@ -323,6 +338,7 @@ def compare(root):
         if manifest['checkpoint_sha256']!=manifests[0]['checkpoint_sha256']: raise ValueError('Checkpoint mismatch')
         if manifest['settings']!=manifests[0]['settings']: raise ValueError('Different controller settings')
         if manifest.get('placement_settings')!=manifests[0].get('placement_settings'): raise ValueError('Different placement settings')
+        if manifest.get('transport_mode','trajectory')!=manifests[0].get('transport_mode','trajectory'): raise ValueError('Different transport modes; compare separately')
         if manifest.get('guidance_algorithm')!=manifests[0].get('guidance_algorithm'): raise ValueError('Different guidance algorithm versions; preserve the earlier failed run separately')
     # Quantify divergence at phase entry rather than claiming shared grasp state.
     grasp_poses={}
@@ -360,6 +376,7 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--hybrid-condition',choices=['A','B','C','D1'],required=True)
     parser.add_argument('--human-reference',type=Path)
+    parser.add_argument('--transport-mode',choices=['trajectory','phone_constraints'],default='trajectory')
     parser.add_argument('--synthetic-duration',type=float,default=10.8)
     parser.add_argument('--placement-config',type=Path,default=Path('config/smolvla/bowl_placement.json'))
     parser.add_argument('--guidance-config',type=Path,default=Path('config/smolvla/bowl_hybrid.json'))
@@ -372,6 +389,15 @@ def main():
             parser.error('--synthetic-duration must be finite and at least 0.1 seconds')
         settings.orientation_enabled=False
         os.environ['BOWL_SYNTHETIC_DURATION']=str(args.synthetic_duration)
+    os.environ['BOWL_TRANSPORT_MODE']=args.transport_mode
+    if args.transport_mode=='phone_constraints':
+        if args.hybrid_condition!='C' or not args.human_reference:
+            parser.error('phone_constraints requires C and --human-reference')
+        from bowl_phone_constraints import extract
+        limits=extract(Reference.load(args.human_reference))
+        limits.update(source=str(args.human_reference),source_sha256=hashlib.sha256(args.human_reference.read_bytes()).hexdigest(),source_metadata_sha256=hashlib.sha256(Path(str(args.human_reference)+'.json').read_bytes()).hexdigest())
+        os.environ['BOWL_PHONE_CONSTRAINTS']=json.dumps(limits)
+        print('Extracted phone constraints:',json.dumps(limits,indent=2),flush=True)
     os.environ['BOWL_PLACEMENT_SETTINGS']=json.dumps(vars(placement_settings))
     if args.hybrid_condition=='C':
         if not args.human_reference: parser.error('C requires --human-reference')
