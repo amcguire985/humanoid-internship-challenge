@@ -210,9 +210,6 @@ def process_outputs(output,baseline_root,condition,episodes=1):
         writer=csv.writer(f); writer.writerow(['timestep','sim_time_s','phase','tilt_deg','acceleration_m_s2','grasp','x_m','y_m','z_m'])
         for r,a in zip(rows,acceleration): writer.writerow([r['timestep'],r['sim_time_s'],r['phase'],r['tilt_deg'],a,r['grasp'],*r['bowl_position_m']])
     plot_rollout(directory,rows,acceleration,summary)
-    if summary['condition']=='C':
-        from analyze_bowl_rotation import analyze as analyze_rotation
-        analyze_rotation(directory/'trajectory.jsonl',directory/'orientation_analysis')
     manifest=json.loads((output/'experiment.json').read_text()); manifest.update(condition=summary['condition'],prompt_design='Original until confirmed grasp/lift; liquid appended for B/C transport',policy_instruction_transport=official.ORIGINAL if summary['condition']=='A' else LIQUID,settings=json.loads(os.environ['BOWL_HYBRID_SETTINGS']),human_reference=os.environ.get('BOWL_HYBRID_REFERENCE'),pairing=summary['state_pairing'],weights_updated=False,guidance_algorithm='gravity_opening_axis_v3' if summary['condition']=='C' else 'collision_surface_placement_v2')
     if summary['condition']=='C':
         refpath=Path(os.environ['BOWL_HYBRID_REFERENCE'])
@@ -220,6 +217,15 @@ def process_outputs(output,baseline_root,condition,episodes=1):
         manifest['reference_metadata']=json.loads(Path(str(refpath)+'.json').read_text())
     official.write_json(output/'experiment.json',manifest)
     write_condition_report(output,summary)
+    if summary['condition']=='C':
+        from analyze_bowl_rotation import analyze as analyze_rotation
+        try:
+            analyze_rotation(directory/'trajectory.jsonl',directory/'orientation_analysis')
+        except Exception as exc:
+            # Optional plots must not invalidate a completed rollout or its primary report.
+            official.write_json(output/'orientation_analysis_error.json',dict(error_type=type(exc).__name__,error=str(exc),simulation_rerun_needed=False))
+            print('Orientation analysis failed; rollout and summary are saved:',str(exc),file=sys.stderr,flush=True)
+
     print(json.dumps(summary,indent=2),flush=True)
 
 

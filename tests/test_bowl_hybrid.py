@@ -171,6 +171,18 @@ class HybridTests(unittest.TestCase):
             report=analyze_rotation(path,Path(d)/'diagnostics')
             self.assertFalse(report['transport_detected']); self.assertTrue((Path(d)/'diagnostics/orientation_diagnosis.json').exists())
 
+    def test_orientation_analysis_allows_disabled_guidance_without_target(self):
+        from analyze_bowl_rotation import analyze as analyze_rotation
+        with tempfile.TemporaryDirectory() as d:
+            rows=[]
+            for i in range(3):
+                rows.append(dict(timestep=i,sim_time_s=i*.05,phase='TRANSPORT' if i<2 else 'FAILED',bowl_rotation_world_from_object=np.eye(3).tolist(),bowl_quaternion_wxyz=[1,0,0,0],eef_pose=np.eye(4).tolist(),tilt_deg=0.,grasp=True,libero_success=False,action=[0]*7,policy_action=[0]*7,desired_bowl_rotation=np.eye(3).tolist(),guidance_disabled_reason='rigid_grasp_transform_drift'))
+            path=Path(d)/'trajectory.jsonl'; path.write_text('\n'.join(json.dumps(r) for r in rows)+'\n')
+            report=analyze_rotation(path,Path(d)/'diagnostics')
+            self.assertEqual(report['reference_samples_without_control_target'],3)
+            self.assertIsNone(report['max_rotational_correction'])
+            self.assertTrue((Path(d)/'diagnostics/orientation_signals.csv').exists())
+
     def test_release_handoff_slew_and_no_translation_or_gripper_changes(self):
         bowl=pose([0,0,.4],np.eye(3)); eef=pose([0,0,.45],np.eye(3))
         guide=Guidance(reference(),bowl,eef,[.2,0,.4],controller(),Settings())

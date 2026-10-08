@@ -9,7 +9,7 @@ unset PYTHONPATH
 EVAL_ENV=/content/libero-official-env
 CHECKPOINT=/content/smolvla-libero-official-checkpoint
 BASELINE=/content/drive/MyDrive/humanoid_results/libero_official_bowl_20261007_204110
-REFERENCE=/content/drive/MyDrive/humanoid_results/bowl_human_reference/reference.csv
+REFERENCE="${BOWL_HUMAN_REFERENCE:-/content/drive/MyDrive/humanoid_results/bowl_human_reference/reference.csv}"
 # First integration check: exactly ONE C rollout. A/B are a later separate step.
 CONDITIONS="${BOWL_CONDITIONS:-C}"
 RUN_ROOT="${BOWL_RUN_ROOT:-/content/drive/MyDrive/humanoid_results/bowl_hybrid_$(date -u +%Y%m%d_%H%M%S)}"

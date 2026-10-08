@@ -32,11 +32,15 @@ def analyze(path,output):
             for j,axis in enumerate('xyz'): sample[name+'_rotation_'+axis]=None if vector is None else vector[j+3]
         if 'desired_bowl_rotation' in r:
             human=np.array(r['desired_bowl_rotation']); sample['human_yaw_deg'],sample['human_tilt_deg']=yaw_tilt(human)
-            applied=np.array(r['orientation_target_bowl_rotation']) if 'orientation_target_bowl_rotation' in r else np.array(r['desired_eef_pose'])[:3,:3]@gb_rotation
-            sample['applied_target_yaw_deg'],sample['applied_target_tilt_deg']=yaw_tilt(applied)
+            applied=None
+            if 'orientation_target_bowl_rotation' in r: applied=np.array(r['orientation_target_bowl_rotation'])
+            elif 'desired_eef_pose' in r: applied=np.array(r['desired_eef_pose'])[:3,:3]@gb_rotation
+            if applied is not None:
+                sample['applied_target_yaw_deg'],sample['applied_target_tilt_deg']=yaw_tilt(applied)
             if i>0 and 'desired_bowl_rotation' in rows[i-1]: sample['human_orientation_step_deg']=float(np.degrees(Rotation.from_matrix(human@np.array(rows[i-1]['desired_bowl_rotation']).T).magnitude()))
-            reconstructed=np.array(r['policy_action'])[:6]+np.array(r['correction'])
-            reconstruction_errors.append(float(np.max(np.abs(reconstructed-np.array(r['action'])[:6]))))
+            if r.get('policy_action') is not None and r.get('correction') is not None and r.get('action') is not None:
+                reconstructed=np.array(r['policy_action'])[:6]+np.array(r['correction'])
+                reconstruction_errors.append(float(np.max(np.abs(reconstructed-np.array(r['action'])[:6]))))
         samples.append(sample)
     output=Path(output); output.mkdir(parents=True,exist_ok=True)
     with (output/'orientation_signals.csv').open('w',newline='') as f:
@@ -45,11 +49,13 @@ def analyze(path,output):
     release=next((i for i,r in enumerate(rows) if r['phase']=='RELEASE'),None)
     prior=release if release is not None else len(rows)-1
     next_step=prior+1 if prior+1<len(rows) else None
-    first=human_samples[0]
-    mismatch=float((first['human_yaw_deg']-samples[start]['bowl_yaw_deg']+180)%360-180)
+    first=human_samples[0] if human_samples else None
+    mismatch=None if first is None else float((first['human_yaw_deg']-samples[start]['bowl_yaw_deg']+180)%360-180)
     def yaw_path(key,subset):
+        if not subset: return None
         values=np.array([s[key] for s in subset]); return float(np.degrees(np.unwrap(np.radians(values))[-1]-np.unwrap(np.radians(values))[0]))
-    report=dict(source=str(path),source_sha256=hashlib.sha256(Path(path).read_bytes()).hexdigest(),transport_start_step=start,release_step=release,initial_bowl_yaw_deg=samples[start]['bowl_yaw_deg'],first_human_yaw_deg=first['human_yaw_deg'],initial_yaw_mismatch_deg=mismatch,bowl_yaw_change_during_guidance_deg=yaw_path('bowl_yaw_deg',samples[start:prior+1]),human_yaw_change_during_guidance_deg=yaw_path('human_yaw_deg',human_samples),max_human_adjacent_orientation_step_deg=max(s['human_orientation_step_deg'] or 0 for s in samples),quaternion_wxyz_matrix_max_error=max(q_errors),policy_plus_correction_command_max_error=max(reconstruction_errors,default=0),max_rotational_correction=max(float(np.max(np.abs(r['correction'][3:6]))) for r in guided),rotational_correction_at_limit_samples=sum(bool(np.any(np.abs(r['correction'][3:6])>=.15-1e-9)) for r in guided),correction_gravity_component_sum=sum(float(r['correction'][5]) for r in guided),policy_gravity_component_sum=sum(float(r['policy_action'][5]) for r in guided),release_correction_before=None if release is None else rows[release].get('correction'),release_correction_after=None if next_step is None else rows[next_step].get('correction',[0]*6),max_relative_rotation_drift_before_step_200_deg=max(r.get('grasp_transform_rotation_drift_deg',0) for r in rows[start:201]),placement_tilt_at_step_240_deg=rows[240]['tilt_deg'] if len(rows)>240 else None,release_tilt_deg=None if release is None else rows[release]['tilt_deg'],final_tilt_deg=rows[-1]['tilt_deg'],final_grasp=rows[-1]['grasp'],libero_success=any(r['libero_success'] for r in rows),missing_signals=['Internal OSC goals/torques and per-contact forces were not recorded; exact controller.json and correctly paired camera videos must be checked separately','Human orientation after RELEASE is absent from this trace; logged last used target is preserved'],video_identity='This report uses JSONL only; pair any video with its exact run before interpreting frame timing')
+    report=dict(source=str(path),source_sha256=hashlib.sha256(Path(path).read_bytes()).hexdigest(),transport_start_step=start,release_step=release,initial_bowl_yaw_deg=samples[start]['bowl_yaw_deg'],first_human_yaw_deg=None if first is None else first['human_yaw_deg'],initial_yaw_mismatch_deg=mismatch,bowl_yaw_change_during_guidance_deg=yaw_path('bowl_yaw_deg',samples[start:prior+1]),human_yaw_change_during_guidance_deg=yaw_path('human_yaw_deg',human_samples),max_human_adjacent_orientation_step_deg=max(s['human_orientation_step_deg'] or 0 for s in samples),quaternion_wxyz_matrix_max_error=max(q_errors),policy_plus_correction_command_max_error=max(reconstruction_errors,default=0),max_rotational_correction=max((float(np.max(np.abs(r['correction'][3:6]))) for r in guided),default=None),rotational_correction_at_limit_samples=sum(bool(np.any(np.abs(r['correction'][3:6])>=.15-1e-9)) for r in guided),correction_gravity_component_sum=sum(float(r['correction'][5]) for r in guided),policy_gravity_component_sum=sum(float(r['policy_action'][5]) for r in guided),release_correction_before=None if release is None else rows[release].get('correction'),release_correction_after=None if next_step is None else rows[next_step].get('correction',[0]*6),max_relative_rotation_drift_before_step_200_deg=max(r.get('grasp_transform_rotation_drift_deg',0) for r in rows[start:201]),placement_tilt_at_step_240_deg=rows[240]['tilt_deg'] if len(rows)>240 else None,release_tilt_deg=None if release is None else rows[release]['tilt_deg'],final_tilt_deg=rows[-1]['tilt_deg'],final_grasp=rows[-1]['grasp'],libero_success=any(r['libero_success'] for r in rows),missing_signals=['Internal OSC goals/torques and per-contact forces were not recorded; exact controller.json and correctly paired camera videos must be checked separately','Human orientation after RELEASE is absent from this trace; logged last used target is preserved'],video_identity='This report uses JSONL only; pair any video with its exact run before interpreting frame timing')
+    report['reference_samples_without_control_target']=sum(s['human_yaw_deg'] is not None and s['applied_target_yaw_deg'] is None for s in samples)
     report['max_tilt_last_40_steps_deg']=max(r['tilt_deg'] for r in rows[-40:])
     report['last_40_steps_definition']='Diagnostic fixed sample window, includes release and post-release; not the transport metric'
     report['max_tilt_from_release_deg']=None if release is None else max(r['tilt_deg'] for r in rows[release:])
