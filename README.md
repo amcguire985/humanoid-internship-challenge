@@ -136,7 +136,7 @@ The C runner checks the original baseline before starting. It expects these file
 - `sanity_manifest.json`
 - `libero_spatial_2/eval_info.json`
 
-> **ADD DOWNLOAD 6 — Reproduction inputs.** Replace this box with a link to a public GitHub Release or public download containing the baseline files and saved successful C run, with their original directory layout. A suitable link label is “Download reproduction inputs”.
+[Download original phone recording](humanoid_project_videos.zip)
 
 **These saved baseline files are an external dependency. A public download must be supplied with the submission; a code checkout alone is insufficient.** Preserve the directory layout when restoring them to Drive. They record the original checkpoint, environment, and task settings used by the experiment.
 
