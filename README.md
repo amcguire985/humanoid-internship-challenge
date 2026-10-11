@@ -136,7 +136,7 @@ The C runner checks the original baseline before starting. It expects these file
 - `sanity_manifest.json`
 - `libero_spatial_2/eval_info.json`
 
-[Download original phone recording](humanoid_project_videos.zip)
+[Download original phone recording](sha256:4a822c324e2a36160db9ce55101fe2574d04bcd620bbce6118b9e78ac2c3a068)
 
 **These saved baseline files are an external dependency. A public download must be supplied with the submission; a code checkout alone is insufficient.** Preserve the directory layout when restoring them to Drive. They record the original checkpoint, environment, and task settings used by the experiment.
 
