@@ -1,14 +1,14 @@
 # Pick and place without spilling
 
-**I developed a low-cost way to use phone-recorded human demonstrations to adapt robot movement to task-specific constraints.**
+**I developed a method that uses phone-recorded human demonstrations to adapt robot movement to task-specific constraints.**
 
-A phone and printed markers make collecting movement data simple and inexpensive. The aim is to use that data to adjust how a robot carries out a task for the situation at hand. This could be useful when object orientation and acceleration matter: carrying open containers, keeping samples upright, or moving delicate items without sudden changes in motion.
+A phone and printed markers make collecting movement data simple and inexpensive. The aim is to use that data to adjust how a robot carries out a task with specific constraints. This could be useful when object orientation and acceleration matter: carrying open containers, keeping samples upright, or assembling components that require specific orientation.
 
 I tested the idea by adding a “do not spill” constraint to a bowl-to-plate task. I used a human demonstration to set acceleration and tilt limits, then applied these to a pretrained robot model during carrying. Acceleration fell, while tilt changed little because the original movement already kept the bowl reasonably upright. Repeated tests showed fewer successful placements, so the remaining challenge is to adapt the movement while still completing the task reliably.
 
 ## Human guidance reduced a measure of spill risk
 
-The goal is to carry the bowl without spilling, rather than simply minimise acceleration. Sudden changes in movement can disturb the liquid, while tilting the bowl can bring it closer to spilling over the rim. I therefore measured acceleration and tilt to assess the movement.
+The goal is to carry the bowl without spilling, acceleration and tilt were used as measurable proxies for that goal. Sudden changes in movement can disturb the liquid, while tilting the bowl can bring it closer to spilling over the rim.
 
 I compared three cases on a bowl-to-plate task in LIBERO:
 
@@ -20,25 +20,19 @@ I compared three cases on a bowl-to-plate task in LIBERO:
 
 ### Matched robot runs
 
-> **ADD VIDEO 1 — B/C simulation comparison.** Replace this box with the GitHub-uploaded video URL on its own line. Use the matched successful B and C runs from the results table, labelled and shown at the same playback speed.
+https://github.com/user-attachments/assets/b0865b5a-45b4-4e3d-8105-54bc25475e28
+
+https://github.com/user-attachments/assets/682110dd-8835-479c-881f-53b95f7e3a8f
 
 *B: liquid instruction only. C: the same instruction with phone-derived movement limits. Both runs complete placement.*
 
 In the matched B/C comparison, human guidance reduced maximum sampled acceleration by **69%**, suggesting less abrupt movement that could disturb the liquid. Tilt changed little: the original movement already kept the bowl reasonably upright and within the tilt allowance derived from the demonstration.
 
-A provides context; its controller settings differ from the matched B/C runs. Each case above represents one run. Figures are rounded to two significant figures; percentage changes use the unrounded results.
-
-The simulation contains no liquid. These measurements indicate spill risk; they do not establish whether liquid would actually spill.
+A provides context; its controller settings differ from the matched B/C runs. Each case above represents one run. Figures are rounded to two significant figures.
 
 ### Bowl motion during carrying
 
-> **ADD FIGURE 2 — Matched B/C acceleration and tilt traces.** Save the image as `docs/media/bc_transport_traces.png` and replace this box with the image line shown below.
-
-```markdown
 ![Bowl acceleration and tilt during matched B/C carrying](docs/media/bc_transport_traces.png)
-```
-
-*Align both traces at carrying onset. Use the same axes and units for B and C, and mark the end of carrying. Acceleration is sampled from simulator bowl positions.*
 
 ### Repeated tests confirmed the acceleration reduction, with lower task success
 
@@ -54,13 +48,6 @@ I then compared B and C across five additional starting states, using the same m
 
 C reduced acceleration in all four pairs that reached carrying, with a **66% reduction in the mean maximum**. Tilt remained similar, consistent with the original movement already being within the demonstration-derived allowance. The fifth pair did not reach carrying and has no acceleration or tilt measurements.
 
-> **ADD FIGURE 3 — Acceleration across the repeated B/C tests.** Copy the batch output `paired_acceleration.png` to `docs/media/paired_acceleration.png` and replace this box with the image line below.
-
-```markdown
-![Maximum sampled acceleration for each measured B/C pair](docs/media/paired_acceleration.png)
-```
-
-*All four pairs with carrying measurements are shown. Task success is reported separately in the table above.*
 
 The guidance improved the acceleration measure of spill risk, but fewer completed placements mean it has not yet achieved the full goal: careful movement and successful delivery. A longer time allowance would help test whether incomplete runs are caused by the episode deadline or by problems with placement.
 
@@ -72,15 +59,9 @@ I recorded myself moving a tagged object with a phone camera. Printed AprilTags 
 
 ### Phone demonstration and recovered motion
 
-> **ADD VIDEO 4 — Annotated phone demonstration.** Replace this box with the GitHub-uploaded video URL on its own line. Include detected markers and object axes, and identify the reviewed carrying interval used to extract the constraints.
+![Annotated phone demonstration](docs/media/annotated_demo.gif)
 
-*The phone recording supplies object position and orientation relative to the table.*
-
-> **ADD FIGURE 5 — Human reference trajectory.** Save the generated `bowl_human_reference/reference.png` as `docs/media/human_reference.png` and replace this box with the image line below.
-
-```markdown
 ![Object movement recovered from the phone demonstration](docs/media/human_reference.png)
-```
 
 *Recovered movement from the demonstration used by C. Label position, time, and tilt with their units wherever shown.*
 
