@@ -1,0 +1,155 @@
+{
+  "video": "videos\\data_003.MOV",
+  "calibration": "results\\camera_calibration_landscape\\calibration.json",
+  "frames_processed": 1729,
+  "tag_groups": {
+    "world": [
+      0,
+      1
+    ],
+    "object": [
+      4,
+      5,
+      6
+    ],
+    "hand": [],
+    "target": [
+      2
+    ]
+  },
+  "family": "Standard41h12",
+  "tag_size_convention": "full-pattern",
+  "pose_tag_sizes_m": {
+    "0": 0.03333333333333333,
+    "1": 0.03333333333333333,
+    "4": 0.022222222222222223,
+    "5": 0.022222222222222223,
+    "6": 0.022222222222222223,
+    "2": 0.03333333333333333
+  },
+  "input_world_size_m": 0.06,
+  "input_body_size_m": 0.04,
+  "registered_world_ids": [
+    0,
+    1
+  ],
+  "world_tag_transforms": {
+    "0": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "1": [
+      [
+        0.9847722489446721,
+        -0.0704622992694424,
+        0.15892980239752189,
+        -0.03778444148176491
+      ],
+      [
+        0.04746132483168825,
+        0.9884189056181254,
+        0.14413705166225316,
+        0.1383105125696604
+      ],
+      [
+        -0.1672454494259043,
+        -0.13439914954466634,
+        0.9767117426590084,
+        -0.0668514593553654
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  },
+  "tracked_frames_by_id": {
+    "4": 1672,
+    "5": 307,
+    "6": 1703,
+    "2": 1721
+  },
+  "gap_filling": false,
+  "temporal_filtering": false,
+  "reprojection_threshold_rejection": false,
+  "hand_object_inference": false,
+  "video_size": [
+    1920,
+    1080
+  ],
+  "fps": 29.986125563648976,
+  "calibration_fit": "center-crop",
+  "input_target_size_m": 0.06,
+  "effective_camera_matrix": [
+    [
+      1463.4421760557275,
+      0.0,
+      956.8109339418322
+    ],
+    [
+      0.0,
+      1462.8855824606012,
+      547.9786305126403
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "distortion_coefficients": [
+    0.14116762611443548,
+    -0.581488041160407,
+    -0.00025193970627592095,
+    -0.0009098059794901401,
+    0.8416433923459204
+  ],
+  "world_registration": "First co-visible positive-depth poses per edge; fixed registration to ID0. Lowest-error current world tag supplies camera pose; no temporal averaging.",
+  "limitations": [
+    "Metric accuracy depends on calibrated recording mode, crop model and measured tag sizes.",
+    "Cube outputs are face-tag centres, not a fused cube centre. Opposite faces share IDs and cannot be identified from ID alone.",
+    "Wrist outputs are individual tag centres, not a shared wrist frame. Curvature violates planar PnP.",
+    "Raw pose errors and planar ambiguity are retained. World-registration errors and source switches can cause offsets.",
+    "Missing observations remain blank. Disconnected world tags cannot supply an ID0 reference."
+  ],
+  "cube_center": {
+    "edge_m": 0.045,
+    "frames_tracked": 1729,
+    "method": "Face centre minus 22.5 mm outward normal; select lowest-reprojection-error current face, no averaging or temporal filtering.",
+    "face_labels": {
+      "4": "initial camera-facing face",
+      "5": "initial top face",
+      "6": "third orthogonal face"
+    },
+    "assumptions": [
+      "Tags centred on each face and flush with the cube surface.",
+      "Decoded tag z axis points outward on every face, including opposite faces."
+    ],
+    "orientation_exported": false,
+    "orientation_reason": "Decoded in-plane mounting rotations and face association are unspecified."
+  }
+}

@@ -79,7 +79,7 @@ def run(a):
     frames, times, raw = [], [], []
     writer = None
     if not a.no_video:
-        writer = cv2.VideoWriter(str(a.output / 'annotated.mp4'), cv2.VideoWriter_fourcc(*'mp4v'), fps, (width, height))
+        writer = cv2.VideoWriter(str(a.video_output), cv2.VideoWriter_fourcc(*'mp4v'), fps, (width, height))
         if not writer.isOpened():
             cap.release()
             raise RuntimeError('Cannot open annotated video writer')
@@ -162,7 +162,7 @@ def run(a):
         write_csv(output / 'trajectory.csv', rows, trajectory_fields)
         plot_trajectory(rows, output, f'ID{tag_id} tag centre (raw)', 'ID0 world')
         coverage[tag_id] = sum(row['status'] == 'tracked' for row in rows)
-    summary = dict(video=str(a.video), calibration=str(a.calibration), frames_processed=len(frames),
+    summary = dict(video=a.video.name, annotated_video=str(a.video_output) if not a.no_video else None, calibration=str(a.calibration), frames_processed=len(frames),
                    tag_groups=groups, family=a.family, tag_size_convention=a.tag_size_convention, pose_tag_sizes_m=sizes,
                    input_world_size_m=a.world_size, input_body_size_m=a.body_size,
                    registered_world_ids=sorted(layout), world_tag_transforms={i: t.tolist() for i, t in layout.items()},

@@ -1,0 +1,149 @@
+{
+  "processing": {
+    "goal_object_offset": [
+      -0.09,
+      0.09,
+      0.0
+    ],
+    "goal_offset_verified": true,
+    "goal_coplanar": true,
+    "goal_center_height": 0.0225,
+    "goal_radius": 0.06,
+    "stationary_duration": 0.3
+  },
+  "demonstrations": [
+    {
+      "start_time": 0.0,
+      "end_time": 13.906666666666668,
+      "pickup_time": 3.8350000000000004,
+      "release_time": 12.505,
+      "start": [
+        -0.2310308842098861,
+        0.2536174193096386,
+        -0.09342320820768618
+      ],
+      "end": [
+        -0.3070422057624155,
+        0.047237149548953444,
+        -0.09819216597249131
+      ],
+      "direction": "object -> target",
+      "review_reason": "Seven complete alternating transfers confirmed in 2-second video contact sheets and 1-second placement review. Approximate pickup-to-release brackets include visible carrying and release. Automatic stationary segmentation is incomplete due occlusion and pose jitter. Timing annotations are reviewable, not contact ground truth.",
+      "phase_overrides": {}
+    },
+    {
+      "start_time": 13.906666666666668,
+      "end_time": 24.011666666666667,
+      "pickup_time": 14.206666666666667,
+      "release_time": 21.01,
+      "start": [
+        -0.3070422057624155,
+        0.047237149548953444,
+        -0.09819216597249131
+      ],
+      "end": [
+        -0.15929136599815957,
+        -0.1413951160340839,
+        -0.0056691119156370125
+      ],
+      "direction": "target -> object",
+      "review_reason": "Seven complete alternating transfers confirmed in 2-second video contact sheets and 1-second placement review. Approximate pickup-to-release brackets include visible carrying and release. Automatic stationary segmentation is incomplete due occlusion and pose jitter. Timing annotations are reviewable, not contact ground truth.",
+      "phase_overrides": {}
+    },
+    {
+      "start_time": 24.011666666666667,
+      "end_time": 38.985,
+      "pickup_time": 26.21166666666667,
+      "release_time": 34.983333333333334,
+      "start": [
+        -0.15929136599815957,
+        -0.1413951160340839,
+        -0.0056691119156370125
+      ],
+      "end": [
+        -0.35340474158196866,
+        0.017610442314572882,
+        -0.11099832427185445
+      ],
+      "direction": "object -> target",
+      "review_reason": "Seven complete alternating transfers confirmed in 2-second video contact sheets and 1-second placement review. Approximate pickup-to-release brackets include visible carrying and release. Automatic stationary segmentation is incomplete due occlusion and pose jitter. Timing annotations are reviewable, not contact ground truth.",
+      "phase_overrides": {}
+    },
+    {
+      "start_time": 38.985,
+      "end_time": 54.99166666666667,
+      "pickup_time": 41.485,
+      "release_time": 51.59,
+      "start": [
+        -0.35340474158196866,
+        0.017610442314572882,
+        -0.11099832427185445
+      ],
+      "end": [
+        -0.3439502665782036,
+        0.23517348860277806,
+        -0.14131822777753728
+      ],
+      "direction": "target -> object",
+      "review_reason": "Seven complete alternating transfers confirmed in 2-second video contact sheets and 1-second placement review. Approximate pickup-to-release brackets include visible carrying and release. Automatic stationary segmentation is incomplete due occlusion and pose jitter. Timing annotations are reviewable, not contact ground truth.",
+      "phase_overrides": {}
+    },
+    {
+      "start_time": 54.99166666666667,
+      "end_time": 66.99833333333333,
+      "pickup_time": 56.29333333333334,
+      "release_time": 64.99666666666667,
+      "start": [
+        -0.34405301955107986,
+        0.23609338032471902,
+        -0.13476222434825666
+      ],
+      "end": [
+        -0.3956968716440191,
+        0.011187280230766374,
+        -0.11310907143519794
+      ],
+      "direction": "object -> target",
+      "review_reason": "Seven complete alternating transfers confirmed in 2-second video contact sheets and 1-second placement review. Approximate pickup-to-release brackets include visible carrying and release. Automatic stationary segmentation is incomplete due occlusion and pose jitter. Timing annotations are reviewable, not contact ground truth.",
+      "phase_overrides": {}
+    },
+    {
+      "start_time": 66.99833333333333,
+      "end_time": 79.50333333333334,
+      "pickup_time": 67.79833333333333,
+      "release_time": 77.00166666666667,
+      "start": [
+        -0.3956968716440191,
+        0.011187280230766374,
+        -0.11310907143519794
+      ],
+      "end": [
+        -0.027169429608277368,
+        0.33102623585288526,
+        -0.027272124072236267
+      ],
+      "direction": "target -> object",
+      "review_reason": "Seven complete alternating transfers confirmed in 2-second video contact sheets and 1-second placement review. Approximate pickup-to-release brackets include visible carrying and release. Automatic stationary segmentation is incomplete due occlusion and pose jitter. Timing annotations are reviewable, not contact ground truth.",
+      "phase_overrides": {}
+    },
+    {
+      "start_time": 79.50333333333334,
+      "end_time": 91.375,
+      "pickup_time": 79.70333333333333,
+      "release_time": 90.20833333333334,
+      "start": [
+        -0.02709523284552263,
+        0.33125642593887905,
+        -0.02893696086141024
+      ],
+      "end": [
+        -0.3353548875561295,
+        0.022413854349523366,
+        -0.07981451479602722
+      ],
+      "direction": "object -> target",
+      "review_reason": "Seven complete alternating transfers confirmed in 2-second video contact sheets and 1-second placement review. Approximate pickup-to-release brackets include visible carrying and release. Automatic stationary segmentation is incomplete due occlusion and pose jitter. Timing annotations are reviewable, not contact ground truth.",
+      "phase_overrides": {}
+    }
+  ]
+}

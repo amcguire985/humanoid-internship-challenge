@@ -1,0 +1,206 @@
+[
+  {
+    "demo_id": "demo_001",
+    "direction": "object -> target",
+    "start_position": [
+      -0.209170712298483,
+      0.2882412340382706,
+      -0.0914651513757749
+    ],
+    "end_goal_position": [
+      -0.3570216243294384,
+      0.04994184596338081,
+      -0.07889764766926746
+    ],
+    "start_to_goal_distance_m": 0.28072127225179305,
+    "maximum_lift_m": 0.21593616192916382,
+    "grasp_time_seconds": 5.301666666666667,
+    "release_time_seconds": 18.508333333333333,
+    "transport_start_time_seconds": 5.903333333333333,
+    "transport_end_time_seconds": 16.708333333333336,
+    "transport_duration_seconds": 10.805000000000003,
+    "suitable_for_retargeting": true,
+    "source_tracking_and_timing_suitable": true,
+    "suitability_scope": "Source samples and timing only; rollout_inputs.json includes geometry and annotation-review gates.",
+    "blocking_reasons": [],
+    "phase_boundary_sources": {
+      "pickup_time": {
+        "source": "manual",
+        "requested_time_seconds": 5.3,
+        "effective_time_seconds": 5.301666666666667
+      },
+      "release_time": {
+        "source": "manual",
+        "requested_time_seconds": 18.5,
+        "effective_time_seconds": 18.508333333333333
+      },
+      "transport_start": {
+        "source": "manual",
+        "requested_time_seconds": 5.9,
+        "effective_time_seconds": 5.903333333333333
+      },
+      "transport_end": {
+        "source": "manual",
+        "requested_time_seconds": 16.7,
+        "effective_time_seconds": 16.708333333333336
+      }
+    },
+    "automatic_estimates": {
+      "pickup_time": 0.1,
+      "transport_start": 4.9350000000000005,
+      "transport_end": 11.138333333333334,
+      "release_time": 22.01
+    },
+    "manual_annotations": {
+      "grasp_time_seconds": 5.3,
+      "release_time_seconds": 18.5,
+      "transport_start_time_seconds": 5.9,
+      "transport_end_time_seconds": 16.7
+    },
+    "geometry_limitations": [
+      "Motion timings do not measure grasp/contact.",
+      "Inherited landscape calibration/crop and world Z gravity direction remain unverified."
+    ],
+    "source_demo": "results/data_003_demos/demo_001",
+    "annotation_path": "config/data_003_annotations/demo_001.json",
+    "prepared_demo": "results/data_003_annotated/demo_001",
+    "annotation_sha256": "a05416b91416dd01c231103730bf9c9a631ffb801964828b4226681457028ded",
+    "direction_mapping": "Align this demo start-to-end task axis with LIBERO object-start-to-target; preserve temporal order and lift/lateral shape, including target -> object strategies."
+  },
+  {
+    "demo_id": "demo_002",
+    "direction": "target -> object",
+    "start_position": [
+      -0.3570216243294384,
+      0.04994184596338081,
+      -0.07889764766926746
+    ],
+    "end_goal_position": [
+      -0.3512425876794558,
+      0.34997038453204576,
+      -0.12360089424406107
+    ],
+    "start_to_goal_distance_m": 0.3033956187465098,
+    "maximum_lift_m": 0.12916032534869926,
+    "grasp_time_seconds": 24.511666666666667,
+    "release_time_seconds": 36.483333333333334,
+    "transport_start_time_seconds": 25.41166666666667,
+    "transport_end_time_seconds": 35.483333333333334,
+    "transport_duration_seconds": 10.071666666666665,
+    "suitable_for_retargeting": true,
+    "source_tracking_and_timing_suitable": true,
+    "suitability_scope": "Source samples and timing only; rollout_inputs.json includes geometry and annotation-review gates.",
+    "blocking_reasons": [],
+    "phase_boundary_sources": {
+      "pickup_time": {
+        "source": "manual",
+        "requested_time_seconds": 24.5,
+        "effective_time_seconds": 24.511666666666667
+      },
+      "release_time": {
+        "source": "manual",
+        "requested_time_seconds": 36.5,
+        "effective_time_seconds": 36.483333333333334
+      },
+      "transport_start": {
+        "source": "manual",
+        "requested_time_seconds": 25.4,
+        "effective_time_seconds": 25.41166666666667
+      },
+      "transport_end": {
+        "source": "manual",
+        "requested_time_seconds": 35.5,
+        "effective_time_seconds": 35.483333333333334
+      }
+    },
+    "automatic_estimates": {
+      "pickup_time": 22.310000000000002,
+      "transport_start": 26.678333333333335,
+      "transport_end": 31.18166666666667,
+      "release_time": 39.985
+    },
+    "manual_annotations": {
+      "grasp_time_seconds": 24.5,
+      "release_time_seconds": 36.5,
+      "transport_start_time_seconds": 25.4,
+      "transport_end_time_seconds": 35.5
+    },
+    "geometry_limitations": [
+      "Motion timings do not measure grasp/contact.",
+      "Inherited landscape calibration/crop and world Z gravity direction remain unverified."
+    ],
+    "source_demo": "results/data_003_demos/demo_002",
+    "annotation_path": "config/data_003_annotations/demo_002.json",
+    "prepared_demo": "results/data_003_annotated/demo_002",
+    "annotation_sha256": "cac5dc56e7960b1bce24766cdde9b5e8fb1a2ea1495ca312d0d7a90d90af0990",
+    "direction_mapping": "Align this demo start-to-end task axis with LIBERO object-start-to-target; preserve temporal order and lift/lateral shape, including target -> object strategies."
+  },
+  {
+    "demo_id": "demo_003",
+    "direction": "object -> target",
+    "start_position": [
+      -0.3512425876794558,
+      0.34997038453204576,
+      -0.12360089424406107
+    ],
+    "end_goal_position": [
+      -0.3455190773576847,
+      0.05432991391094802,
+      -0.07036877579860995
+    ],
+    "start_to_goal_distance_m": 0.3004491718638248,
+    "maximum_lift_m": 0.18927348288542056,
+    "grasp_time_seconds": 41.085,
+    "release_time_seconds": 54.99166666666667,
+    "transport_start_time_seconds": 42.48666666666667,
+    "transport_end_time_seconds": 53.19166666666667,
+    "transport_duration_seconds": 10.704999999999998,
+    "suitable_for_retargeting": true,
+    "source_tracking_and_timing_suitable": true,
+    "suitability_scope": "Source samples and timing only; rollout_inputs.json includes geometry and annotation-review gates.",
+    "blocking_reasons": [],
+    "phase_boundary_sources": {
+      "pickup_time": {
+        "source": "manual",
+        "requested_time_seconds": 41.1,
+        "effective_time_seconds": 41.085
+      },
+      "release_time": {
+        "source": "manual",
+        "requested_time_seconds": 55.0,
+        "effective_time_seconds": 54.99166666666667
+      },
+      "transport_start": {
+        "source": "manual",
+        "requested_time_seconds": 42.5,
+        "effective_time_seconds": 42.48666666666667
+      },
+      "transport_end": {
+        "source": "manual",
+        "requested_time_seconds": 53.2,
+        "effective_time_seconds": 53.19166666666667
+      }
+    },
+    "automatic_estimates": {
+      "pickup_time": 39.985,
+      "transport_start": 43.45333333333333,
+      "transport_end": 47.08833333333334,
+      "release_time": 53.99166666666667
+    },
+    "manual_annotations": {
+      "grasp_time_seconds": 41.1,
+      "release_time_seconds": 55.0,
+      "transport_start_time_seconds": 42.5,
+      "transport_end_time_seconds": 53.2
+    },
+    "geometry_limitations": [
+      "Motion timings do not measure grasp/contact.",
+      "Inherited landscape calibration/crop and world Z gravity direction remain unverified."
+    ],
+    "source_demo": "results/data_003_demos/demo_003",
+    "annotation_path": "config/data_003_annotations/demo_003.json",
+    "prepared_demo": "results/data_003_annotated/demo_003",
+    "annotation_sha256": "419bdf574769bfa4c4f01773890d75f9279e320a7c3af9edc534462941d2c546",
+    "direction_mapping": "Align this demo start-to-end task axis with LIBERO object-start-to-target; preserve temporal order and lift/lateral shape, including target -> object strategies."
+  }
+]

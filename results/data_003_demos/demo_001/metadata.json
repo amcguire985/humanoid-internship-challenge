@@ -1,0 +1,144 @@
+{
+  "pickup_to_release_path_length": 1.47674240334454,
+  "pickup_to_release_duration": 13.705000000000002,
+  "object_start_position": [
+    -0.209170712298483,
+    0.2882412340382706,
+    -0.0914651513757749
+  ],
+  "goal_position": [
+    -0.3570216243294384,
+    0.04994184596338081,
+    -0.07889764766926746
+  ],
+  "final_object_position": [
+    -0.3648000097195441,
+    0.04746600709018011,
+    -0.06946594385249381
+  ],
+  "start_sample_time": 0.0,
+  "final_sample_time": 22.01,
+  "task_displacement": [
+    -0.1478509120309554,
+    -0.23829938807488982,
+    0.012567503706507444
+  ],
+  "start_to_goal_distance": 0.28072127225179305,
+  "final_placement_error": 0.012473575842171503,
+  "final_planar_placement_error": 0.008162907411153327,
+  "final_inside_goal_region": true,
+  "final_distance_outside_goal_region": 0.0,
+  "final_goal_height_error": 0.009431703816773648,
+  "max_lift_height": 0.21844081504444962,
+  "max_lift_height_entire_clip": 0.21844081504444962,
+  "transport_path_length": 0.41743527722234325,
+  "transport_duration": 5.635,
+  "transport_observed_duration": 5.635,
+  "average_transport_speed": 0.07407901991523394,
+  "maximum_transport_speed": 0.21096990949673228,
+  "transport_complete": true,
+  "pickup_time": 5.503333333333334,
+  "transport_start": 5.503333333333334,
+  "transport_end": 11.138333333333334,
+  "release_time": 19.208333333333336,
+  "id": "demo_001",
+  "direction": "object -> target",
+  "planar_distance_m": 0.28043981626233505,
+  "world_xy_direction_deg": -121.81719572800571,
+  "maximum_lift_m": 0.21593616192916382,
+  "path_length_m": 1.47674240334454,
+  "automatic_phase_estimates": {
+    "pickup_time": 0.1,
+    "transport_start": 4.9350000000000005,
+    "transport_end": 11.138333333333334,
+    "release_time": 22.01
+  },
+  "phase_review_notes": [
+    "Pickup lacks a sustained adjacent stationary period; estimated motion onset only.",
+    "Release lacks a sustained adjacent stationary period; estimated motion end only.",
+    "Lowering begins away from the goal region; placement label is based on height motion only."
+  ],
+  "rejection_reasons": [],
+  "reject": false,
+  "missing_active_frames": 0,
+  "interpolated_frames": 0,
+  "parameters": {
+    "goal_object_offset": [
+      -0.09,
+      0.09,
+      0.0
+    ],
+    "goal_offset_frame": "goal_tag",
+    "goal_offset_verified": true,
+    "goal_coplanar": true,
+    "goal_center_height": 0.0225,
+    "vertical_axis": "z",
+    "vertical_sign": 1,
+    "vertical_verified": false,
+    "calibration_verified": false,
+    "max_reprojection_error": 3.0,
+    "max_speed": 2.0,
+    "max_gap_frames": 3,
+    "max_gap_span": 0.15,
+    "smoothing_window": 7,
+    "stationary_speed": 0.03,
+    "vertical_speed": 0.03,
+    "min_motion_duration": 0.2,
+    "stationary_duration": 0.3,
+    "goal_radius": 0.06,
+    "max_goal_scatter": 0.02,
+    "min_coverage": 0.9,
+    "phase_overrides": {
+      "pickup_time": 5.503333333333334,
+      "release_time": 19.208333333333336,
+      "transport_start": 5.503333333333334,
+      "transport_end": 11.138333333333334
+    },
+    "phase_override_reason": "Three complete alternating transfers independently verified in video contact sheet and denser placement review; final release is visible before clip ends. Pickup is approximate measured lift onset; release is approximate video annotation. Stationary detector merges transfers because resting position jitter exceeds its threshold. Endpoints use measured resting medians. Inner transport phases remain automatic and need semantic review.",
+    "grasp_time_seconds": null,
+    "release_time_seconds": null,
+    "transport_start_time_seconds": null,
+    "transport_end_time_seconds": null
+  },
+  "selection": {
+    "start_time": 0.0,
+    "end_time": 22.01,
+    "pickup_time": 5.503333333333334,
+    "release_time": 19.208333333333336,
+    "start": [
+      -0.209170712298483,
+      0.2882412340382706,
+      -0.0914651513757749
+    ],
+    "end": [
+      -0.3570216243294384,
+      0.04994184596338081,
+      -0.07889764766926746
+    ],
+    "direction": "object -> target",
+    "phase_overrides": {},
+    "review_reason": "Three complete alternating transfers independently verified in video contact sheet and denser placement review; final release is visible before clip ends. Pickup is approximate measured lift onset; release is approximate video annotation. Stationary detector merges transfers because resting position jitter exceeds its threshold. Endpoints use measured resting medians. Inner transport phases remain automatic and need semantic review."
+  },
+  "target_anchor": [
+    -0.3960693721933891,
+    0.015276699363226953,
+    0.0225
+  ],
+  "coordinate_frame_convention": "W is ID0 centre: +X decoded corner0 to corner1; +Y corner3 to corner0; +Z out of printed face. Standard41 corners reordered [1,0,3,2] for OpenCV IPPE. W_T_tag = inverse(C_T_W) @ C_T_tag. World ID1 is registered to ID0. World axes are not gravity-calibrated. Object centre = face centre minus edge/2 along outward tag Z; common object orientation is unspecified.",
+  "source_video": "videos\\data_003.MOV",
+  "source_tracking": "results\\data_003_raw",
+  "usable_for_retargeting": false,
+  "geometry_review_required": true,
+  "phase_boundary_sources": {
+    "pickup_time": "reviewed_motion_bracket",
+    "transport_start": "automatic_clamped_to_carry_interval",
+    "transport_end": "automatic_clamped_to_carry_interval",
+    "release_time": "reviewed_motion_bracket"
+  },
+  "active_tracking_gaps": [],
+  "normalization": "Start origin; longitudinal toward measured endpoint, lateral left, signed world Z; divide lengths by planar displacement. Missing rows preserved. No endpoint correction.",
+  "limitations": [
+    "Motion timings do not measure grasp/contact.",
+    "Inherited landscape calibration/crop and world Z gravity direction remain unverified."
+  ]
+}

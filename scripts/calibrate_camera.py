@@ -30,6 +30,8 @@ def main():
     obj *= a.square_size
     video_metadata = None
     if a.video:
+        from video_paths import resolve_video
+        a.video = resolve_video(a.video)
         cap = cv2.VideoCapture(str(a.video))
         if not cap.isOpened():
             raise IOError(f"Could not open {a.video}")

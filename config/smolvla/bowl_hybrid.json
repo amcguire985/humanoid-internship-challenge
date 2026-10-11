@@ -1,0 +1,18 @@
+{
+  "position_blend": 0.25,
+  "orientation_blend": 0.35,
+  "correction_limit": 0.15,
+  "correction_slew_per_s": 0.6,
+  "ramp_s": 1.0,
+  "position_gain": 0.6,
+  "orientation_gain": 0.4,
+  "slip_translation_m": 0.025,
+  "slip_rotation_deg": 20.0,
+  "lift_m": 0.02,
+  "confirm_steps": 3,
+  "grasp_timeout_steps": 180,
+  "loss_steps": 3,
+  "release_radius_m": 0.06,
+  "release_height_m": 0.07,
+  "orientation_enabled": true
+}

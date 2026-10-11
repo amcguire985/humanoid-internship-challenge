@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "task": "pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate",
+  "benchmark": "libero_spatial",
+  "task_index": 0,
+  "seed": 0,
+  "rollouts_per_demo": 1,
+  "automatic_retries": false,
+  "robot_config": "config/libero_pick_place.json",
+  "mapping_config": "config/libero_retarget.json",
+  "nominal_preflight": "results/libero_xy_trials_10/preflight.json",
+  "require_manual_transport_bounds": true,
+  "prepared_root": "results/data_003_annotated",
+  "rollout_output": "results/data_003_robot_rollouts",
+  "baseline_dataset": "results/libero_robot_dataset",
+  "combined_dataset": "results/libero_robot_dataset_multi_demo",
+  "baseline_episode_ids": [
+    "episode_001",
+    "episode_002"
+  ],
+  "image_resolution": 128,
+  "demos": [
+    {
+      "demo_id": "demo_001",
+      "episode_id": "episode_004",
+      "direction": "object -> target",
+      "source_demo": "results/data_003_demos/demo_001",
+      "annotation_file": "config/data_003_annotations/demo_001.json",
+      "prepared_demo": "results/data_003_annotated/demo_001",
+      "transport_step_budget": 5000
+    },
+    {
+      "demo_id": "demo_002",
+      "episode_id": "episode_005",
+      "direction": "target -> object",
+      "source_demo": "results/data_003_demos/demo_002",
+      "annotation_file": "config/data_003_annotations/demo_002.json",
+      "prepared_demo": "results/data_003_annotated/demo_002",
+      "transport_step_budget": 5500
+    },
+    {
+      "demo_id": "demo_003",
+      "episode_id": "episode_006",
+      "direction": "object -> target",
+      "source_demo": "results/data_003_demos/demo_003",
+      "annotation_file": "config/data_003_annotations/demo_003.json",
+      "prepared_demo": "results/data_003_annotated/demo_003",
+      "transport_step_budget": 8000
+    }
+  ],
+  "transport_budget_reason": "The manually reviewed transports exceed the baseline 2000-step timeout after the validated speed limiting. Only the per-demo TRANSPORT step budget is extended; controller logic, robot contact phases, speed and workspace limits remain unchanged."
+}

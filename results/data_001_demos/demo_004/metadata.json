@@ -1,0 +1,165 @@
+{
+  "pickup_to_release_path_length": 0.6396122500520227,
+  "pickup_to_release_duration": 5.335000000000001,
+  "object_start_position": [
+    -0.39266042404174495,
+    0.020876443950323068,
+    -0.09868908133114929
+  ],
+  "goal_position": [
+    -0.08347722035210026,
+    0.25519444970269123,
+    -0.05954261207297655
+  ],
+  "final_object_position": [
+    -0.08325836611552731,
+    0.2552483654145743,
+    -0.059313001232255684
+  ],
+  "start_sample_time": 40.985,
+  "final_sample_time": 50.99,
+  "task_displacement": [
+    0.3091832036896447,
+    0.23431800575236816,
+    0.039146469258172736
+  ],
+  "start_to_goal_distance": 0.3899123328633505,
+  "final_placement_error": 0.0003217533512340284,
+  "final_planar_placement_error": 0.0002253976061403162,
+  "final_inside_goal_region": true,
+  "final_distance_outside_goal_region": 0.0,
+  "final_goal_height_error": 0.00022961084072086607,
+  "max_lift_height": 0.14762786107325107,
+  "max_lift_height_entire_clip": 0.14762786107325107,
+  "transport_path_length": 0.22848576876431276,
+  "transport_duration": 1.9666666666666686,
+  "transport_observed_duration": 1.7999999999999972,
+  "average_transport_speed": 0.12693653820239617,
+  "maximum_transport_speed": 0.4086941926345743,
+  "transport_complete": false,
+  "pickup_time": 42.82,
+  "transport_start": 42.82,
+  "transport_end": 44.78666666666667,
+  "release_time": 48.155,
+  "id": "demo_004",
+  "direction": "target -> object",
+  "planar_distance_m": 0.38794223959702967,
+  "world_xy_direction_deg": 37.157082410242346,
+  "maximum_lift_m": 0.14609297730681067,
+  "path_length_m": 0.6396122500520227,
+  "automatic_phase_estimates": {
+    "pickup_time": 40.985,
+    "transport_start": 41.620000000000005,
+    "transport_end": 44.78666666666667,
+    "release_time": 46.68833333333334
+  },
+  "phase_review_notes": [
+    "Pickup lacks a sustained adjacent stationary period; estimated motion onset only.",
+    "Release lacks a sustained adjacent stationary period; estimated motion end only.",
+    "Lowering begins away from the goal region; placement label is based on height motion only."
+  ],
+  "rejection_reasons": [
+    "Unfilled tracking gap during pickup-to-release; reject for retargeting."
+  ],
+  "reject": true,
+  "missing_active_frames": 24,
+  "interpolated_frames": 11,
+  "parameters": {
+    "goal_object_offset": [
+      -0.09,
+      0.09,
+      0.0
+    ],
+    "goal_offset_frame": "goal_tag",
+    "goal_offset_verified": true,
+    "goal_coplanar": true,
+    "goal_center_height": 0.0225,
+    "vertical_axis": "z",
+    "vertical_sign": 1,
+    "vertical_verified": false,
+    "calibration_verified": false,
+    "max_reprojection_error": 3.0,
+    "max_speed": 2.0,
+    "max_gap_frames": 3,
+    "max_gap_span": 0.15,
+    "smoothing_window": 7,
+    "stationary_speed": 0.03,
+    "vertical_speed": 0.03,
+    "min_motion_duration": 0.2,
+    "stationary_duration": 0.3,
+    "goal_radius": 0.06,
+    "max_goal_scatter": 0.02,
+    "min_coverage": 0.9,
+    "phase_overrides": {
+      "pickup_time": 42.82,
+      "release_time": 48.155,
+      "transport_start": 42.82,
+      "transport_end": 44.78666666666667
+    },
+    "phase_override_reason": "Transfer identity/direction reviewed in video contact sheet and full measured trajectory. Motion onset/end timings are approximate; edit phase_overrides for contact-reviewed boundaries. Early quiet detection failed due pose jitter; seven transfers selected explicitly.",
+    "grasp_time_seconds": null,
+    "release_time_seconds": null,
+    "transport_start_time_seconds": null,
+    "transport_end_time_seconds": null
+  },
+  "selection": {
+    "start_time": 40.985,
+    "end_time": 50.99,
+    "pickup_time": 42.82,
+    "release_time": 48.155,
+    "start": [
+      -0.39266042404174495,
+      0.020876443950323068,
+      -0.09868908133114929
+    ],
+    "end": [
+      -0.08347722035210026,
+      0.25519444970269123,
+      -0.05954261207297655
+    ],
+    "direction": "target -> object",
+    "review_reason": "Transfer identity/direction reviewed in video contact sheet and full measured trajectory. Motion onset/end timings are approximate; edit phase_overrides for contact-reviewed boundaries. Early quiet detection failed due pose jitter; seven transfers selected explicitly.",
+    "phase_overrides": {}
+  },
+  "target_anchor": [
+    -0.42562285134875605,
+    -0.0018974833293795845,
+    0.0225
+  ],
+  "coordinate_frame_convention": "W is ID0 centre: +X decoded corner0 to corner1; +Y corner3 to corner0; +Z out of printed face. Standard41 corners reordered [1,0,3,2] for OpenCV IPPE. W_T_tag = inverse(C_T_W) @ C_T_tag. World ID1 is registered to ID0. World axes are not gravity-calibrated. Object centre = face centre minus edge/2 along outward tag Z; common object orientation is unspecified.",
+  "source_video": "videos\\data_001.MOV",
+  "source_tracking": "results\\data_001_raw",
+  "usable_for_retargeting": false,
+  "geometry_review_required": true,
+  "phase_boundary_sources": {
+    "pickup_time": "reviewed_motion_bracket",
+    "transport_start": "automatic_clamped_to_carry_interval",
+    "transport_end": "automatic_clamped_to_carry_interval",
+    "release_time": "reviewed_motion_bracket"
+  },
+  "active_tracking_gaps": [
+    {
+      "start_time_s": 43.720000000000006,
+      "end_time_s": 43.82,
+      "missing_frames": 4,
+      "missing_duration_s": 0.13333333333332575
+    },
+    {
+      "start_time_s": 46.72166666666667,
+      "end_time_s": 46.82166666666667,
+      "missing_frames": 4,
+      "missing_duration_s": 0.13333333333333286
+    },
+    {
+      "start_time_s": 47.555,
+      "end_time_s": 48.055,
+      "missing_frames": 16,
+      "missing_duration_s": 0.5333333333333314
+    }
+  ],
+  "normalization": "Start origin; longitudinal toward measured endpoint, lateral left, signed world Z; divide lengths by planar displacement. Missing rows preserved. No endpoint correction.",
+  "limitations": [
+    "Motion timings do not measure grasp/contact.",
+    "Inherited landscape calibration/crop and world Z gravity direction remain unverified."
+  ]
+}

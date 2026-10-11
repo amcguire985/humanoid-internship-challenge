@@ -1,0 +1,142 @@
+{
+  "pickup_to_release_path_length": 0.690069301559275,
+  "pickup_to_release_duration": 4.934999999999995,
+  "object_start_position": [
+    -0.08347722035210026,
+    0.25519444970269123,
+    -0.05954261207297655
+  ],
+  "goal_position": [
+    -0.3617231118832773,
+    0.019901587592878786,
+    -0.09422517308248267
+  ],
+  "final_object_position": [
+    -0.3622233491619746,
+    0.020698068637808695,
+    -0.09244971329139025
+  ],
+  "start_sample_time": 50.99,
+  "final_sample_time": 60.995000000000005,
+  "task_displacement": [
+    -0.27824589153117707,
+    -0.23529286210981243,
+    -0.03468256100950612
+  ],
+  "start_to_goal_distance": 0.36604151014876013,
+  "final_placement_error": 0.0020091980638346756,
+  "final_planar_placement_error": 0.0009405420723875492,
+  "final_inside_goal_region": true,
+  "final_distance_outside_goal_region": 0.0,
+  "final_goal_height_error": 0.0017754597910924208,
+  "max_lift_height": 0.13648510496655153,
+  "max_lift_height_entire_clip": 0.13648510496655153,
+  "transport_path_length": 0.4260275778020455,
+  "transport_duration": 2.4016666666666637,
+  "transport_observed_duration": 2.4016666666666637,
+  "average_transport_speed": 0.1773883044283328,
+  "maximum_transport_speed": 0.3569022075304078,
+  "transport_complete": true,
+  "pickup_time": 52.525000000000006,
+  "transport_start": 54.025000000000006,
+  "transport_end": 56.42666666666667,
+  "release_time": 57.46,
+  "id": "demo_005",
+  "direction": "object -> target",
+  "planar_distance_m": 0.36439471334503026,
+  "world_xy_direction_deg": -139.78116257860805,
+  "maximum_lift_m": 0.1367147158072724,
+  "path_length_m": 0.690069301559275,
+  "automatic_phase_estimates": {
+    "pickup_time": 52.55833333333334,
+    "transport_start": 54.025000000000006,
+    "transport_end": 56.42666666666667,
+    "release_time": 60.26166666666667
+  },
+  "phase_review_notes": [
+    "Release lacks a sustained adjacent stationary period; estimated motion end only."
+  ],
+  "rejection_reasons": [],
+  "reject": false,
+  "missing_active_frames": 0,
+  "interpolated_frames": 0,
+  "parameters": {
+    "goal_object_offset": [
+      -0.09,
+      0.09,
+      0.0
+    ],
+    "goal_offset_frame": "goal_tag",
+    "goal_offset_verified": true,
+    "goal_coplanar": true,
+    "goal_center_height": 0.0225,
+    "vertical_axis": "z",
+    "vertical_sign": 1,
+    "vertical_verified": false,
+    "calibration_verified": false,
+    "max_reprojection_error": 3.0,
+    "max_speed": 2.0,
+    "max_gap_frames": 3,
+    "max_gap_span": 0.15,
+    "smoothing_window": 7,
+    "stationary_speed": 0.03,
+    "vertical_speed": 0.03,
+    "min_motion_duration": 0.2,
+    "stationary_duration": 0.3,
+    "goal_radius": 0.06,
+    "max_goal_scatter": 0.02,
+    "min_coverage": 0.9,
+    "phase_overrides": {
+      "pickup_time": 52.525000000000006,
+      "release_time": 57.46,
+      "transport_start": 54.025000000000006,
+      "transport_end": 56.42666666666667
+    },
+    "phase_override_reason": "Transfer identity/direction reviewed in video contact sheet and full measured trajectory. Motion onset/end timings are approximate; edit phase_overrides for contact-reviewed boundaries. Early quiet detection failed due pose jitter; seven transfers selected explicitly.",
+    "grasp_time_seconds": null,
+    "release_time_seconds": null,
+    "transport_start_time_seconds": null,
+    "transport_end_time_seconds": null
+  },
+  "selection": {
+    "start_time": 50.99,
+    "end_time": 60.995000000000005,
+    "pickup_time": 52.525000000000006,
+    "release_time": 57.46,
+    "start": [
+      -0.08347722035210026,
+      0.25519444970269123,
+      -0.05954261207297655
+    ],
+    "end": [
+      -0.3617231118832773,
+      0.019901587592878786,
+      -0.09422517308248267
+    ],
+    "direction": "object -> target",
+    "review_reason": "Transfer identity/direction reviewed in video contact sheet and full measured trajectory. Motion onset/end timings are approximate; edit phase_overrides for contact-reviewed boundaries. Early quiet detection failed due pose jitter; seven transfers selected explicitly.",
+    "phase_overrides": {}
+  },
+  "target_anchor": [
+    -0.42562285134875605,
+    -0.0018974833293795845,
+    0.0225
+  ],
+  "coordinate_frame_convention": "W is ID0 centre: +X decoded corner0 to corner1; +Y corner3 to corner0; +Z out of printed face. Standard41 corners reordered [1,0,3,2] for OpenCV IPPE. W_T_tag = inverse(C_T_W) @ C_T_tag. World ID1 is registered to ID0. World axes are not gravity-calibrated. Object centre = face centre minus edge/2 along outward tag Z; common object orientation is unspecified.",
+  "source_video": "videos\\data_001.MOV",
+  "source_tracking": "results\\data_001_raw",
+  "usable_for_retargeting": false,
+  "geometry_review_required": true,
+  "phase_boundary_sources": {
+    "pickup_time": "reviewed_motion_bracket",
+    "transport_start": "automatic_clamped_to_carry_interval",
+    "transport_end": "automatic_clamped_to_carry_interval",
+    "release_time": "reviewed_motion_bracket"
+  },
+  "active_tracking_gaps": [],
+  "normalization": "Start origin; longitudinal toward measured endpoint, lateral left, signed world Z; divide lengths by planar displacement. Missing rows preserved. No endpoint correction.",
+  "limitations": [
+    "Motion timings do not measure grasp/contact.",
+    "Inherited landscape calibration/crop and world Z gravity direction remain unverified."
+  ]
+}

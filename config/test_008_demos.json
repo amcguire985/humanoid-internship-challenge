@@ -1,0 +1,35 @@
+{
+  "processing": {
+    "goal_object_offset": [
+      -0.09,
+      0.09,
+      0.0
+    ],
+    "goal_offset_verified": true,
+    "goal_coplanar": true,
+    "goal_center_height": 0.0225,
+    "goal_radius": 0.06,
+    "stationary_duration": 0.3
+  },
+  "demonstrations": [
+    {
+      "start_time": 0.0,
+      "end_time": 7.666666666666667,
+      "pickup_time": 2.166666666666667,
+      "release_time": 6.75,
+      "start": [
+        -0.1204901899440523,
+        0.2920744668036019,
+        0.006679490462867189
+      ],
+      "end": [
+        -0.2671655020909817,
+        0.0919008666235122,
+        0.009024498735226932
+      ],
+      "direction": "object -> target",
+      "phase_overrides": {},
+      "review_reason": "One complete object-to-target transfer confirmed in half-second video review, including visible release before the end. Pickup is measured-motion onset; release is an approximate video annotation at 6.75s. Stationary endpoint detection failed due noisy/missing placed poses; robust final-resting endpoint uses 6.8-7.65s observations."
+    }
+  ]
+}
