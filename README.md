@@ -1,14 +1,14 @@
 # Pick and place without spilling
 
-**I developed a low-cost way to use phone-recorded human demonstrations to adapt robot movement to task-specific constraints.**
+**I developed a method that uses phone-recorded human demonstrations to adapt robot movement to task-specific constraints.**
 
-A phone and printed markers make collecting movement data simple and inexpensive. The aim is to use that data to adjust how a robot carries out a task for the situation at hand. This could be useful when object orientation and acceleration matter: carrying open containers, keeping samples upright, or moving delicate items without sudden changes in motion.
+A phone and printed markers make collecting movement data simple and inexpensive. The aim is to use that data to adjust how a robot carries out a task with specific constraints. This could be useful when object orientation and acceleration matter: carrying open containers, keeping samples upright, or assembling components that require specific orientation.
 
 I tested the idea by adding a “do not spill” constraint to a bowl-to-plate task. I used a human demonstration to set acceleration and tilt limits, then applied these to a pretrained robot model during carrying. Acceleration fell, while tilt changed little because the original movement already kept the bowl reasonably upright. Repeated tests showed fewer successful placements, so the remaining challenge is to adapt the movement while still completing the task reliably.
 
 ## Human guidance reduced a measure of spill risk
 
-The goal is to carry the bowl without spilling, rather than simply minimise acceleration. Sudden changes in movement can disturb the liquid, while tilting the bowl can bring it closer to spilling over the rim. I therefore measured acceleration and tilt to assess the movement.
+The goal is to carry the bowl without spilling, acceleration and tilt were used as measurable proxies for that goal. Sudden changes in movement can disturb the liquid, while tilting the bowl can bring it closer to spilling over the rim.
 
 I compared three cases on a bowl-to-plate task in LIBERO:
 
@@ -20,7 +20,9 @@ I compared three cases on a bowl-to-plate task in LIBERO:
 
 ### Matched robot runs
 
-> **ADD VIDEO 1 — B/C simulation comparison.** Replace this box with the GitHub-uploaded video URL on its own line. Use the matched successful B and C runs from the results table, labelled and shown at the same playback speed.
+https://github.com/user-attachments/assets/b0865b5a-45b4-4e3d-8105-54bc25475e28
+
+https://github.com/user-attachments/assets/682110dd-8835-479c-881f-53b95f7e3a8f
 
 *B: liquid instruction only. C: the same instruction with phone-derived movement limits. Both runs complete placement.*
 
